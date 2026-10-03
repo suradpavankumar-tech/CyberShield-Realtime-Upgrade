@@ -26,6 +26,7 @@ def create_email_header_scan(
         findings=result["findings"],
         evidence={
             **result["evidence"],
+            "headers": result["headers"],
             "received": result["received"],
         },
         recommendations=result["recommendations"],
