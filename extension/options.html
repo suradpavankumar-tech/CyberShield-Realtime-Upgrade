@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CyberShield Extension Settings</title>
+  <style>
+    body { margin: 0; padding: 32px; background: #07111f; color: #e8f0f8; font-family: Inter, system-ui, sans-serif; }
+    main { max-width: 620px; margin: auto; background: #0b1726; border: 1px solid #193047; border-radius: 16px; padding: 24px; }
+    h1 { margin-top: 0; } p { color: #9db3c0; line-height: 1.5; }
+    label { display:block; margin: 18px 0 7px; font-size: 12px; color:#8ca7b7; font-weight:700; }
+    input { width:100%; padding:11px; box-sizing:border-box; border-radius:9px; border:1px solid #29465c; background:#08131f; color:#e8f0f8; }
+    button { margin-top:18px; padding:11px 16px; border:0; border-radius:9px; background:#0ea5b7; font-weight:700; cursor:pointer; }
+    #status { margin-top:12px; color:#7dd3fc; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>CyberShield URL Guard</h1>
+  <p>Configure the CyberShield API and your own authenticated session token. No API keys or backend secrets are bundled with this extension.</p>
+  <label for="api">CyberShield API base URL</label>
+  <input id="api" placeholder="https://your-api.example.com/api/v1">
+  <label for="token">CyberShield JWT</label>
+  <input id="token" type="password" autocomplete="off" placeholder="Paste your access token">
+  <button id="save" type="button">Save settings</button>
+  <div id="status" aria-live="polite"></div>
+</main>
+<script src="options.js"></script>
+</body>
+</html>
