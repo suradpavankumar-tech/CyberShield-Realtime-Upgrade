@@ -16,6 +16,11 @@ import Analytics from "../pages/Analytics";
 import ScanDetail from "../pages/ScanDetail";
 import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
+import EmailHeaderAnalyzer from "../pages/EmailHeaderAnalyzer";
+import MobileScanner from "../pages/MobileScanner";
+import UrlGuard from "../pages/UrlGuard";
+import VulnerabilityScanner from "../pages/VulnerabilityScanner";
+import SecurityAwareness from "../pages/SecurityAwareness";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -80,6 +85,12 @@ function AppRoutes() {
             element={<Scanner />}
           />
 
+
+          <Route path="/email-headers" element={<EmailHeaderAnalyzer />} />
+          <Route path="/mobile-scanner" element={<MobileScanner />} />
+          <Route path="/url-guard" element={<UrlGuard />} />
+          <Route path="/vulnerability-scanner" element={<VulnerabilityScanner />} />
+          <Route path="/security-awareness" element={<SecurityAwareness />} />
 
           {/* History */}
 
