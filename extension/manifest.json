@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "CyberShield URL Guard",
+  "version": "0.1.0",
+  "description": "Analyze the current browser URL with the CyberShield URL intelligence engine.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "action": {
+    "default_title": "Scan current URL with CyberShield",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html"
+}
