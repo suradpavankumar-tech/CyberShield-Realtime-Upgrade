@@ -168,6 +168,55 @@ def complete_security_campaign(
     return _response(db, campaign)
 
 
+@router.get("/{campaign_id}/training")
+def get_training_module(
+    campaign_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    campaign = get_user_campaign(db, current_user, campaign_id)
+    if campaign is None:
+        raise HTTPException(status_code=404, detail="Security campaign not found.")
+
+    lessons = {
+        "phishing": [
+            "Verify the sender and domain before acting.",
+            "Hover over links and inspect the destination before opening them.",
+            "Treat urgency, threats, and unusual requests for sensitive information as warning signs.",
+            "Use an independent channel to verify unexpected payment or account requests.",
+        ],
+        "social-engineering": [
+            "Pause when a message creates urgency or authority pressure.",
+            "Verify unusual requests through a trusted independent channel.",
+            "Do not disclose passwords, OTPs, recovery codes, or financial information.",
+            "Report suspicious messages using your organization's approved process.",
+        ],
+        "account-security": [
+            "Use unique passwords and a password manager.",
+            "Enable multi-factor authentication where available.",
+            "Never share one-time passwords or recovery codes.",
+            "Review unexpected login and password-reset notifications carefully.",
+        ],
+    }
+    key = campaign.training_topic.strip().lower()
+    content = lessons.get(
+        key,
+        [
+            "Pause before acting on unexpected security-related requests.",
+            "Verify the source independently before sharing information or opening links.",
+            "Use your organization's reporting process when something looks suspicious.",
+        ],
+    )
+    return {
+        "campaign_id": campaign.id,
+        "topic": campaign.training_topic,
+        "lessons": content,
+        "safe_simulation": True,
+        "credential_collection": False,
+        "malware_delivery": False,
+    }
+
+
 @router.delete("/{campaign_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_security_campaign(
     campaign_id: int,
