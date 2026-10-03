@@ -46,6 +46,16 @@ const navigation = [
     ],
   },
   {
+    label: "SECURITY TOOLS",
+    items: [
+      { name: "Email Header Analyzer", path: "/email-headers", icon: MailCheck },
+      { name: "Mobile Permission Scanner", path: "/mobile-scanner", icon: Smartphone },
+      { name: "URL Guard", path: "/url-guard", icon: Globe2 },
+      { name: "Vulnerability Scanner", path: "/vulnerability-scanner", icon: Radar },
+      { name: "Security Awareness", path: "/security-awareness", icon: GraduationCap },
+    ],
+  },
+  {
     label: "INVESTIGATE",
     items: [
       {
