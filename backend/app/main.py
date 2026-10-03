@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.auth import router as auth_router
 from app.api.analysis import router as analysis_router
+from app.api.email_headers import router as email_headers_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -11,8 +12,8 @@ app = FastAPI(
         "CyberShield — Intelligent Phishing & "
         "Scam Risk Assessment Platform"
     ),
-    version="0.2.0",
-    debug=settings.DEBUG
+    version="0.3.0",
+    debug=settings.DEBUG,
 )
 
 cors_origins = [
@@ -30,32 +31,23 @@ app.add_middleware(
 )
 
 
-
-
-
-@app.get(
-    "/",
-    tags=["System"]
-)
+@app.get("/", tags=["System"])
 def root():
-
     return {
         "name": "CyberShield",
         "message": "CyberShield API is running",
-        "version": "0.2.0"
+        "version": "0.3.0",
     }
 
 
-@app.get(
-    "/health",
-    tags=["System"]
-)
+@app.get("/health", tags=["System"])
 def health_check():
-
     return {
         "status": "healthy",
-        "service": "cybershield-api"
+        "service": "cybershield-api",
     }
+
 
 app.include_router(auth_router)
 app.include_router(analysis_router)
+app.include_router(email_headers_router)
