@@ -8,6 +8,11 @@ import {
   ScanSearch,
   Settings,
   Shield,
+  MailCheck,
+  Smartphone,
+  Globe2,
+  Radar,
+  GraduationCap,
   UserRound,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
