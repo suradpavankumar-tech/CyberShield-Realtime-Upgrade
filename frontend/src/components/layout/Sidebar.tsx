@@ -64,6 +64,11 @@ const navigation = [
         icon: History,
       },
       {
+        name: "Security Activity",
+        path: "/security-history",
+        icon: Shield,
+      },
+      {
         name: "Analytics",
         path: "/analytics",
         icon: BarChart3,
