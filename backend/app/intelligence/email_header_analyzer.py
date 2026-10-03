@@ -3,8 +3,6 @@ from __future__ import annotations
 import re
 from email import policy
 from email.parser import Parser
-from urllib.parse import urlparse
-
 
 AUTH_KEYS = ("spf", "dkim", "dmarc")
 ADDRESS_HEADERS = ("from", "to", "cc", "reply-to", "return-path", "message-id", "date")
@@ -18,7 +16,7 @@ def _domain(value: str | None) -> str | None:
 
 
 def _auth_result(value: str, mechanism: str) -> str | None:
-    match = re.search(rf"\\b{re.escape(mechanism)}\\s*=\\s*([A-Za-z]+)", value, re.I)
+    match = re.search(rf"\b{re.escape(mechanism)}\s*=\s*([A-Za-z]+)", value, re.I)
     return match.group(1).lower() if match else None
 
 
