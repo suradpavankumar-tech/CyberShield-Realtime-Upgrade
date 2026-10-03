@@ -96,7 +96,7 @@ def record_campaign_event(
     event = CampaignEvent(
         recipient_id=recipient.id,
         event_type=event_type.value,
-        metadata=metadata or {},
+        event_metadata=metadata or {},
     )
     recipient.event_count += 1
 
