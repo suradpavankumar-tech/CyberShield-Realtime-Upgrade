@@ -21,6 +21,7 @@ import MobileScanner from "../pages/MobileScanner";
 import UrlGuard from "../pages/UrlGuard";
 import VulnerabilityScanner from "../pages/VulnerabilityScanner";
 import SecurityAwareness from "../pages/SecurityAwareness";
+import SecurityHistory from "../pages/SecurityHistory";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register";
