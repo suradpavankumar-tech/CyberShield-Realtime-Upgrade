@@ -1,0 +1,78 @@
+import { Download, Globe2, ShieldCheck } from "lucide-react";
+
+const steps = [
+  "Open chrome://extensions",
+  "Enable Developer mode and Load unpacked",
+  "Select the repository's extension folder",
+];
+
+export default function UrlGuard() {
+  return (
+    <section className="p-5 sm:p-6">
+      <div className="mx-auto max-w-[1100px]">
+        <Globe2 className="text-cyan-400" />
+
+        <p className="mt-3 text-xs uppercase tracking-[.18em] text-cyan-400">
+          Browser protection
+        </p>
+
+        <h1 className="text-3xl font-bold text-white">
+          CyberShield URL Guard
+        </h1>
+
+        <p className="mt-2 text-sm text-slate-500">
+          Use the Manifest V3 extension to send the active browser URL to
+          CyberShield's authoritative URL analysis engine.
+        </p>
+
+        <div className="mt-6 rounded-2xl border border-white/10 bg-[#0a1220] p-6">
+          <div className="flex items-center gap-3">
+            <ShieldCheck className="text-emerald-400" />
+            <div>
+              <p className="text-sm font-bold text-white">
+                Backend-authoritative protection
+              </p>
+              <p className="text-xs text-slate-500">
+                No second phishing engine is maintained in the extension.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {steps.map((step, index) => (
+              <div
+                key={step}
+                className="rounded-xl bg-white/[.03] p-4"
+              >
+                <p className="text-[9px] text-cyan-300">
+                  STEP {index + 1}
+                </p>
+                <p className="mt-2 text-xs leading-5 text-slate-400">
+                  {step}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 rounded-xl border border-cyan-400/10 bg-cyan-400/[.03] p-4">
+            <div className="flex items-center gap-2">
+              <Download size={15} className="text-cyan-300" />
+              <p className="text-xs font-semibold text-white">
+                Extension location
+              </p>
+            </div>
+
+            <p className="mt-2 font-mono text-[11px] text-slate-500">
+              extension/
+            </p>
+
+            <p className="mt-2 text-[10px] text-slate-600">
+              Configure your own CyberShield API URL and authenticated JWT in
+              the extension settings. No backend secrets are bundled.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

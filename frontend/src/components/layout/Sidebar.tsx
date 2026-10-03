@@ -8,6 +8,11 @@ import {
   ScanSearch,
   Settings,
   Shield,
+  MailCheck,
+  Smartphone,
+  Globe2,
+  Radar,
+  GraduationCap,
   UserRound,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -41,12 +46,27 @@ const navigation = [
     ],
   },
   {
+    label: "SECURITY TOOLS",
+    items: [
+      { name: "Email Header Analyzer", path: "/email-headers", icon: MailCheck },
+      { name: "Mobile Permission Scanner", path: "/mobile-scanner", icon: Smartphone },
+      { name: "URL Guard", path: "/url-guard", icon: Globe2 },
+      { name: "Vulnerability Scanner", path: "/vulnerability-scanner", icon: Radar },
+      { name: "Security Awareness", path: "/security-awareness", icon: GraduationCap },
+    ],
+  },
+  {
     label: "INVESTIGATE",
     items: [
       {
         name: "Scan History",
         path: "/history",
         icon: History,
+      },
+      {
+        name: "Security Activity",
+        path: "/security-history",
+        icon: Shield,
       },
       {
         name: "Analytics",

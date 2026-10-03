@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     CORS_ORIGINS: str = ""
+    # Keep false for internet-facing deployments. Enable only when the operator explicitly authorizes private-network scanning.
+    ALLOW_PRIVATE_SCAN_TARGETS: bool = False
 
     model_config = SettingsConfigDict(
         env_file=".env",

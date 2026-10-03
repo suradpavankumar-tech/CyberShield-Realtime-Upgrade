@@ -1,0 +1,30 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, sans-serif;
+  background: #07111f;
+}
+* { box-sizing: border-box; }
+body { margin: 0; width: 370px; min-height: 520px; background: #07111f; color: #e8f0f8; }
+.app { padding: 18px; }
+header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.brand-mark { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: #0b3142; border: 1px solid #1a7087; color: #67e8f9; font-weight: 800; }
+h1 { margin: 0; font-size: 17px; }
+header p { margin: 2px 0 0; color: #7f9aab; font-size: 12px; }
+.url-card, .result { background: #0b1726; border: 1px solid #193047; border-radius: 14px; padding: 14px; }
+.label { display: block; color: #6f8a9c; font-size: 10px; font-weight: 700; letter-spacing: .08em; margin-bottom: 5px; }
+.url { color: #b8cad7; font-size: 12px; line-height: 1.45; word-break: break-all; max-height: 66px; overflow: auto; }
+button { width: 100%; border: 0; border-radius: 11px; padding: 11px 12px; margin-top: 10px; cursor: pointer; font-weight: 700; }
+.primary { background: #0ea5b7; color: #031018; }
+.primary:disabled { opacity: .55; cursor: wait; }
+.secondary { background: #102234; color: #a9c1cf; border: 1px solid #1b3449; }
+.status { min-height: 28px; margin: 10px 2px; color: #9db3c0; font-size: 12px; }
+.score-row { display: flex; justify-content: space-between; align-items: center; }
+.score-row strong { font-size: 34px; margin-right: 2px; }
+.pill { padding: 5px 9px; border-radius: 999px; background: #162838; color: #bdeaf2; font-size: 11px; font-weight: 800; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+.grid > div { background: #091421; border-radius: 10px; padding: 10px; }
+.grid strong { font-size: 12px; word-break: break-word; }
+.result p { color: #b8cad7; font-size: 12px; line-height: 1.45; }
+ul { margin: 5px 0 0; padding-left: 18px; color: #b8cad7; font-size: 11px; line-height: 1.45; }
+.hidden { display: none; }
+footer { margin-top: 14px; text-align: center; color: #536d7c; font-size: 9px; }

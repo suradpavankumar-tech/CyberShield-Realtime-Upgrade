@@ -39,11 +39,15 @@ def get_current_user(
 
         if user_id is None:
             raise credentials_exception
+        try:
+            user_id = int(user_id)
+        except (TypeError, ValueError) as exc:
+            raise credentials_exception from exc
 
     except JWTError:
         raise credentials_exception
 
-    user = db.get(User, int(user_id))
+    user = db.get(User, user_id)
 
     if user is None:
         raise credentials_exception
