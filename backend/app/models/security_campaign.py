@@ -61,7 +61,7 @@ class CampaignEvent(Base):
         ForeignKey("campaign_recipients.id", ondelete="CASCADE"), nullable=False, index=True
     )
     event_type: Mapped[str] = mapped_column(String(30), nullable=False, index=True)
-    metadata: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    event_metadata: Mapped[dict | None] = mapped_column("metadata", JSON, nullable=True)
     occurred_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False, index=True
     )
