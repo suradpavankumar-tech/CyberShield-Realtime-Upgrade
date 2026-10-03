@@ -1,7 +1,5 @@
 from datetime import datetime
-
 from pydantic import BaseModel, Field
-
 
 class MobilePermissionFinding(BaseModel):
     permission: str
@@ -11,7 +9,6 @@ class MobilePermissionFinding(BaseModel):
     description: str
     score: int
     rationale: str
-
 
 class MobileScanResponse(BaseModel):
     scan_id: int
@@ -28,7 +25,6 @@ class MobileScanResponse(BaseModel):
     created_at: datetime
     completed_at: datetime | None = None
 
-
 class MobileScanSummary(BaseModel):
     scan_id: int
     filename: str
@@ -39,7 +35,6 @@ class MobileScanSummary(BaseModel):
     confidence: int | None
     created_at: datetime
     completed_at: datetime | None = None
-
 
 class MobileScanListResponse(BaseModel):
     total: int
