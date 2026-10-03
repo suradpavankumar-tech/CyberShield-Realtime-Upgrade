@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CyberShield URL Guard</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="brand-mark">CS</div>
+      <div>
+        <h1>CyberShield</h1>
+        <p>URL Guard</p>
+      </div>
+    </header>
+    <section class="url-card">
+      <span class="label">CURRENT URL</span>
+      <div id="current-url" class="url">Reading current tab…</div>
+    </section>
+    <button id="scan" class="primary" type="button">Analyze current URL</button>
+    <button id="settings" class="secondary" type="button">Extension settings</button>
+    <section id="status" class="status" aria-live="polite"></section>
+    <section id="result" class="result hidden">
+      <div class="score-row">
+        <div>
+          <span class="label">RISK SCORE</span>
+          <strong id="score">—</strong><span>/100</span>
+        </div>
+        <span id="level" class="pill">—</span>
+      </div>
+      <div class="grid">
+        <div><span class="label">CATEGORY</span><strong id="category">—</strong></div>
+        <div><span class="label">CONFIDENCE</span><strong id="confidence">—</strong></div>
+      </div>
+      <div>
+        <span class="label">RECOMMENDATION</span>
+        <p id="recommendation">—</p>
+      </div>
+      <div>
+        <span class="label">INDICATORS</span>
+        <ul id="indicators"></ul>
+      </div>
+    </section>
+    <footer>Backend-authoritative analysis • No credentials are hardcoded</footer>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>
