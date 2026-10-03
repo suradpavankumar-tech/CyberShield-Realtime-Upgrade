@@ -5,6 +5,7 @@ from app.core.config import settings
 from app.api.auth import router as auth_router
 from app.api.analysis import router as analysis_router
 from app.api.email_headers import router as email_headers_router
+from app.api.mobile import router as mobile_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -51,3 +52,4 @@ def health_check():
 app.include_router(auth_router)
 app.include_router(analysis_router)
 app.include_router(email_headers_router)
+app.include_router(mobile_router)
