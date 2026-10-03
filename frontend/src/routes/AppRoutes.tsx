@@ -100,6 +100,11 @@ function AppRoutes() {
             element={<History />}
           />
 
+          <Route
+            path="/security-history"
+            element={<SecurityHistory />}
+          />
+
 
           {/* Analytics */}
 
