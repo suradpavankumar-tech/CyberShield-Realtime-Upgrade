@@ -32,11 +32,7 @@ These values are stored in Chrome extension local storage. Treat the JWT as a se
 6. Browse to an HTTP(S) page and click the CyberShield extension icon.
 7. Select Analyze current URL.
 
-## Backend CORS
-
-The browser extension makes a cross-origin request to the CyberShield API. The deployed API must therefore allow the extension origin in its CORS configuration.
-
-For local development, configure the backend CORS_ORIGINS environment variable for the extension origin shown by Chrome after loading the unpacked extension. Do not use a wildcard CORS policy just to make the extension work.
+The extension declares HTTP(S) host permissions so its extension context can call the configured CyberShield backend. Keep the configured backend restricted to the intended CyberShield deployment.
 
 ## Failure handling
 
