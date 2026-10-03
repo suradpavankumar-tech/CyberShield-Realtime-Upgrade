@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+.pytest_cache/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large ML training datasets
+ml/url/datasets/phiusiil_urls.csv
+ml/url/datasets/url_only_dataset.csv
+ml/url/datasets/url_ml_dataset.csv
