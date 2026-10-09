@@ -23,6 +23,7 @@ import {
 
 import RiskScore from "../components/ui/RiskScore";
 import ThreatIndicators from "../components/ui/ThreatIndicators";
+import RiskFusionBreakdown from "../components/analysis/RiskFusionBreakdown";
 
 import {
   deleteScan,
@@ -1228,6 +1229,19 @@ function ScanDetail() {
                   }
                 />
 
+              </div>
+
+
+              {/* RiskFusion Multi-Signal Breakdown */}
+              <div className="mt-5">
+                <RiskFusionBreakdown
+                  inputType={scan.input_type}
+                  threatCategory={scan.threat_category}
+                  indicators={scan.indicators}
+                  analysisDetails={(scan as any).details || (scan as any).analysis_details}
+                  riskScore={scan.risk_score}
+                  confidence={scan.confidence ?? undefined}
+                />
               </div>
 
 

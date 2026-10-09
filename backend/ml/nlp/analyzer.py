@@ -3,7 +3,8 @@ from ml.nlp.predict import (
 )
 
 from ml.nlp.category_detector import (
-    detect_scam_category
+    detect_scam_category,
+    extract_explainable_phrases,
 )
 
 
@@ -14,6 +15,8 @@ HIGH_RISK_CATEGORIES = {
     "PRIZE_SCAM",
     "DELIVERY_SCAM",
     "DIGITAL_ARREST_SCAM",
+    "ELECTRICITY_BILL_SCAM",
+    "LOAN_HARASSMENT_SCAM",
     "INVESTMENT_SCAM",
     "CREDENTIAL_PHISHING",
 }
@@ -234,9 +237,16 @@ def calculate_final_risk(
     if (
         category_name in HIGH_RISK_CATEGORIES
         and category_confidence >= 90
-        and behavioral_score >= 15
     ):
-
+        final_score = max(
+            final_score,
+            75
+        )
+    elif (
+        category_name in HIGH_RISK_CATEGORIES
+        and category_confidence >= 80
+        and behavioral_score >= 10
+    ):
         final_score = max(
             final_score,
             70
@@ -435,11 +445,31 @@ def analyze_message(
         )
     )
 
+    explainable_phrases = extract_explainable_phrases(message)
+
     indicators = build_indicators(
         behavioral,
         category,
         behavioral_signals
     )
+
+    for item in explainable_phrases:
+        indicators.append({
+            "type": "EXPLAINABLE_TRIGGER",
+            "severity": item["severity"],
+            "name": f"Trigger: {item['category']}",
+            "description": f"Detected suspicious pattern: '{item['phrase']}'. {item['explanation']}",
+            "phrase": item["phrase"],
+            "explanation": item["explanation"],
+        })
+
+    # If critical trigger phrases are present (e.g. UPI PIN or Digital Arrest), ensure risk is elevated
+    if any(item.get("severity") == "CRITICAL" for item in explainable_phrases):
+        final_score = max(final_score, 85)
+        risk_level = "HIGH"
+    elif any(item.get("severity") == "HIGH" for item in explainable_phrases) and category.get("confidence", 0) >= 80:
+        final_score = max(final_score, 75)
+        risk_level = "HIGH"
 
     return {
 
@@ -457,8 +487,6 @@ def analyze_message(
 
         "behavioral_score":
             behavioral_score,
-
-        
 
         "nlp_risk_score": final_score,
 
@@ -481,6 +509,9 @@ def analyze_message(
             category[
                 "matched_keywords"
             ],
+
+        "explainable_phrases":
+            explainable_phrases,
 
         "behavioral_features":
             behavioral,

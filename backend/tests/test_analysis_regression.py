@@ -91,3 +91,41 @@ def test_empty_message_is_rejected():
 def test_empty_email_is_rejected():
     with pytest.raises(ValueError):
         analyze_email("")
+
+
+def test_digital_arrest_scam_is_high_risk_and_explainable():
+    message = (
+        "CBI Cyber Crime Cell notice: An arrest warrant has been issued in your name. "
+        "You are placed under digital arrest. Connect to Skype video call immediately "
+        "or police will reach your house."
+    )
+    result = analyze_message(message)
+    assert result["risk_level"] == "HIGH"
+    assert result["scam_category"] == "DIGITAL_ARREST_SCAM"
+    assert "explainable_phrases" in result
+    assert len(result["explainable_phrases"]) > 0
+    # verify at least one explainable phrase triggered
+    phrases = [ep["phrase"] for ep in result["explainable_phrases"]]
+    assert any("digital arrest" in p.lower() or "arrest warrant" in p.lower() for p in phrases)
+
+
+def test_electricity_bill_scam_is_high_risk_and_explainable():
+    message = (
+        "Dear consumer, your electricity power will be disconnected tonight at 9:30 PM "
+        "because previous month bill was not updated. Immediately call electricity officer at 9876543210."
+    )
+    result = analyze_message(message)
+    assert result["risk_level"] == "HIGH"
+    assert result["scam_category"] == "ELECTRICITY_BILL_SCAM"
+    assert len(result["explainable_phrases"]) > 0
+    assert any("electricity" in ep["explanation"].lower() or "power" in ep["phrase"].lower() for ep in result["explainable_phrases"])
+
+
+def test_upi_collect_request_scam():
+    message = (
+        "You have won cash prize of Rs 50,000! Enter your UPI PIN in Google Pay to receive money in your account."
+    )
+    result = analyze_message(message)
+    assert result["risk_level"] == "HIGH"
+    assert result["scam_category"] in {"UPI_SCAM", "LOTTERY_SCAM"}
+    assert len(result["explainable_phrases"]) > 0

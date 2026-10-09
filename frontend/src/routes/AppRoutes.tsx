@@ -22,6 +22,8 @@ import UrlGuard from "../pages/UrlGuard";
 import VulnerabilityScanner from "../pages/VulnerabilityScanner";
 import SecurityAwareness from "../pages/SecurityAwareness";
 import SecurityHistory from "../pages/SecurityHistory";
+import FraudEmergencyAssistant from "../pages/FraudEmergencyAssistant";
+import QRShield from "../pages/QRShield";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -92,6 +94,8 @@ function AppRoutes() {
           <Route path="/url-guard" element={<UrlGuard />} />
           <Route path="/vulnerability-scanner" element={<VulnerabilityScanner />} />
           <Route path="/security-awareness" element={<SecurityAwareness />} />
+          <Route path="/emergency" element={<FraudEmergencyAssistant />} />
+          <Route path="/qr-shield" element={<QRShield />} />
 
           {/* History */}
 

@@ -28,6 +28,7 @@ import type {
   AnalysisResponse,
   InputType,
 } from "../types/analysis";
+import RiskFusionBreakdown from "../components/analysis/RiskFusionBreakdown";
 
 type ScannerMode = {
   type: InputType;
@@ -714,21 +715,16 @@ function Scanner() {
               </div>
             )}
 
-            {result.analysis_details?.live && (
-              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {[
-                  ["DNS", result.analysis_details.live.dns?.status || "Unavailable"],
-                  ["TLS", result.analysis_details.live.tls?.status || "Unavailable"],
-                  ["Reputation", result.analysis_details.live.reputation?.status === "AVAILABLE" ? result.analysis_details.live.reputation?.verdict : "Unavailable"],
-                  ["Redirects", result.analysis_details.live.redirects?.cross_domain ? "Cross-domain" : "No cross-domain redirect"],
-                ].map(([label, value]) => (
-                  <div key={label} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-                    <p className="text-[9px] uppercase tracking-[0.14em] text-slate-600">{label}</p>
-                    <p className="mt-2 text-sm font-semibold text-white">{value}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="mt-5">
+              <RiskFusionBreakdown
+                inputType={result.input_type}
+                riskScore={result.risk_score}
+                riskLevel={result.risk_level}
+                verdict={result.verdict}
+                analysisDetails={result.analysis_details}
+                indicators={result.indicators}
+              />
+            </div>
 
             {/* Failed analysis information */}
             {isFailed && (

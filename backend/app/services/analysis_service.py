@@ -280,6 +280,21 @@ def create_scan(
 
             scan.error_message = None
 
+            scan.analysis_details = {
+                "scam_category": result["scam_category"],
+                "category_confidence": result["category_confidence"],
+                "category_keywords": result.get("category_keywords", []),
+                "explainable_phrases": result.get("explainable_phrases", []),
+                "behavioral_score": result.get("behavioral_score", 0),
+                "ml_probability": result.get("ml_probability", 0),
+            }
+
+            scan.verdict = (
+                f"{result['scam_category']} detected with {result['category_confidence']}% confidence"
+                if result["scam_category"] != "OTHER"
+                else ("High-risk scam tactics detected" if scan.risk_level == "HIGH" else "No overt scam tactics detected")
+            )
+
             scan.completed_at = (
                 datetime.now(timezone.utc)
             )

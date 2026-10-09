@@ -14,6 +14,8 @@ import {
   Radar,
   GraduationCap,
   UserRound,
+  AlertOctagon,
+  QrCode,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -36,12 +38,27 @@ const navigation = [
     ],
   },
   {
+    label: "EMERGENCY RESPONSE",
+    items: [
+      {
+        name: "Fraud Emergency (1930)",
+        path: "/emergency",
+        icon: AlertOctagon,
+      },
+    ],
+  },
+  {
     label: "ANALYZE",
     items: [
       {
         name: "Threat Scanner",
         path: "/scanner",
         icon: ScanSearch,
+      },
+      {
+        name: "QRShield (QR Scanner)",
+        path: "/qr-shield",
+        icon: QrCode,
       },
     ],
   },
