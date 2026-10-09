@@ -17,13 +17,14 @@ import ScanDetail from "../pages/ScanDetail";
 import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
 import EmailHeaderAnalyzer from "../pages/EmailHeaderAnalyzer";
-import MobileScanner from "../pages/MobileScanner";
 import UrlGuard from "../pages/UrlGuard";
 import VulnerabilityScanner from "../pages/VulnerabilityScanner";
 import SecurityAwareness from "../pages/SecurityAwareness";
 import SecurityHistory from "../pages/SecurityHistory";
 import FraudEmergencyAssistant from "../pages/FraudEmergencyAssistant";
 import QRShield from "../pages/QRShield";
+import AppShield from "../pages/AppShield";
+import ThreatPulse from "../pages/ThreatPulse";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -90,12 +91,14 @@ function AppRoutes() {
 
 
           <Route path="/email-headers" element={<EmailHeaderAnalyzer />} />
-          <Route path="/mobile-scanner" element={<MobileScanner />} />
+          <Route path="/mobile-scanner" element={<AppShield />} />
+          <Route path="/app-shield" element={<AppShield />} />
           <Route path="/url-guard" element={<UrlGuard />} />
           <Route path="/vulnerability-scanner" element={<VulnerabilityScanner />} />
           <Route path="/security-awareness" element={<SecurityAwareness />} />
           <Route path="/emergency" element={<FraudEmergencyAssistant />} />
           <Route path="/qr-shield" element={<QRShield />} />
+          <Route path="/threat-pulse" element={<ThreatPulse />} />
 
           {/* History */}
 

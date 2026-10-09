@@ -16,6 +16,7 @@ import {
   UserRound,
   AlertOctagon,
   QrCode,
+  Activity,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -66,7 +67,7 @@ const navigation = [
     label: "SECURITY TOOLS",
     items: [
       { name: "Email Header Analyzer", path: "/email-headers", icon: MailCheck },
-      { name: "Mobile Permission Scanner", path: "/mobile-scanner", icon: Smartphone },
+      { name: "AppShield (APK Forensics)", path: "/app-shield", icon: Smartphone },
       { name: "URL Guard", path: "/url-guard", icon: Globe2 },
       { name: "Vulnerability Scanner", path: "/vulnerability-scanner", icon: Radar },
       { name: "Security Awareness", path: "/security-awareness", icon: GraduationCap },
@@ -75,6 +76,11 @@ const navigation = [
   {
     label: "INVESTIGATE",
     items: [
+      {
+        name: "ThreatPulse (Live Radar)",
+        path: "/threat-pulse",
+        icon: Activity,
+      },
       {
         name: "Scan History",
         path: "/history",

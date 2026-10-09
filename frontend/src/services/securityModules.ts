@@ -220,3 +220,50 @@ export async function getTraining(id: number) {
     )
   ).data;
 }
+
+export interface ThreatCampaign {
+  id: string;
+  title: string;
+  category: string;
+  severity: string;
+  status: string;
+  weekly_change_pct: number;
+  threat_vector: string;
+  target_audience: string;
+  summary: string;
+  modus_operandi: string;
+  red_flags: string[];
+  containment_action: string;
+  source: string;
+  last_updated: string;
+}
+
+export interface ThreatPulseResponse {
+  status: string;
+  national_threat_level: string;
+  updated_at: string;
+  telemetry: {
+    total_threats_analyzed: number;
+    critical_threat_ratio_pct: number;
+    active_campaign_count: number;
+    emergency_helpline: string;
+    official_portal: string;
+  };
+  campaigns: ThreatCampaign[];
+  threat_categories: Array<{
+    category: string;
+    share_pct: number;
+    trend: string;
+    severity: string;
+  }>;
+  advisory_sources: Array<{
+    name: string;
+    agency: string;
+    verified: boolean;
+  }>;
+}
+
+export async function getThreatPulseTrends() {
+  return (await api.get<ThreatPulseResponse>("/threat-pulse/trends")).data;
+}
+
