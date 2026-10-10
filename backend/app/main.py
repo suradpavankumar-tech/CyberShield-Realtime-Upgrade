@@ -68,10 +68,42 @@ for p in possible_dist_paths:
         dist_path = p
         break
 
+@app.get("/api/v1/system/debug-paths", tags=["System"])
+def debug_paths():
+    import os
+    res = {
+        "cwd": os.getcwd(),
+        "file": str(Path(__file__).resolve()),
+        "dist_path": str(dist_path) if dist_path else None,
+        "exists_dist_path": bool(dist_path and dist_path.exists()) if dist_path else False,
+        "possible_paths": [],
+    }
+    for p in possible_dist_paths:
+        res["possible_paths"].append({
+            "path": str(p),
+            "exists": p.exists(),
+            "has_index": (p / "index.html").exists() if p.exists() else False,
+        })
+    try:
+        res["dir_app"] = os.listdir("/app") if os.path.exists("/app") else []
+    except Exception as e:
+        res["dir_app"] = str(e)
+    try:
+        res["dir_cwd"] = os.listdir(".") if os.path.exists(".") else []
+    except Exception as e:
+        res["dir_cwd"] = str(e)
+    return res
+
 @app.get("/", tags=["System"])
 def root():
-    if dist_path and (dist_path / "index.html").exists():
-        return FileResponse(str(dist_path / "index.html"))
+    target = dist_path
+    if not target or not (target / "index.html").exists():
+        for p in possible_dist_paths:
+            if p.exists() and (p / "index.html").exists():
+                target = p
+                break
+    if target and (target / "index.html").exists():
+        return FileResponse(str(target / "index.html"))
     return {"name": "CyberShield", "message": "CyberShield API is running", "version": "0.5.0"}
 
 @app.get("/health", tags=["System"])

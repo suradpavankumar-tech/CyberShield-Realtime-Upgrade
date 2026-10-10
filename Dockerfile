@@ -37,6 +37,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 COPY backend/ ./backend/
 COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+COPY --from=frontend-builder /app/frontend/dist ./backend/dist
+COPY --from=frontend-builder /app/frontend/dist ./dist
 
 RUN mkdir -p /app/backend/data
 
