@@ -77,7 +77,7 @@ export default function QRShield() {
     };
   }, []);
 
-  const stopCamera = () => {
+  function stopCamera() {
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current);
       animFrameRef.current = null;
@@ -87,7 +87,7 @@ export default function QRShield() {
       streamRef.current = null;
     }
     setCameraActive(false);
-  };
+  }
 
   const startCamera = async () => {
     setError(null);
@@ -103,7 +103,7 @@ export default function QRShield() {
         setCameraActive(true);
         requestAnimationFrame(tickCamera);
       }
-    } catch (err: any) {
+    } catch {
       setError("Unable to access camera. Please allow camera permissions or upload an image instead.");
       setCameraActive(false);
     }
@@ -137,7 +137,7 @@ export default function QRShield() {
     animFrameRef.current = requestAnimationFrame(tickCamera);
   };
 
-  const handleImageFile = (file: File) => {
+  function handleImageFile(file: File) {
     setError(null);
     setAnalysisResult(null);
     setDecodedData(null);
