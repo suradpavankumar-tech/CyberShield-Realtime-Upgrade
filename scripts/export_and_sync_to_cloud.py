@@ -78,28 +78,27 @@ def export_and_sync():
     print(f"[+] Loaded {len(indicators)} threat indicators from local database.")
 
     # 4. Fetch Email Header Scans
-    cur.execute("SELECT id, user_id, sender, recipient, subject, spf_status, dkim_status, dmarc_status, risk_score, risk_level, header_content, findings FROM email_header_scans ORDER BY id;")
+    cur.execute("SELECT id, user_id, raw_headers, status, risk_score, risk_level, confidence, threat_category, findings, evidence, recommendations FROM email_header_scans ORDER BY id;")
     eh_rows = cur.fetchall()
     eh_scans = []
     for r in eh_rows:
         eh_scans.append({
             "id": r[0],
             "user_id": r[1],
-            "sender": r[2],
-            "recipient": r[3],
-            "subject": r[4],
-            "spf_status": r[5],
-            "dkim_status": r[6],
-            "dmarc_status": r[7],
-            "risk_score": r[8],
-            "risk_level": r[9],
-            "header_content": r[10],
-            "findings": r[11] if isinstance(r[11], dict) else None,
+            "raw_headers": r[2],
+            "status": r[3],
+            "risk_score": r[4],
+            "risk_level": r[5],
+            "confidence": r[6],
+            "threat_category": r[7],
+            "findings": r[8] if isinstance(r[8], list) else None,
+            "evidence": r[9] if isinstance(r[9], dict) else None,
+            "recommendations": r[10] if isinstance(r[10], list) else None,
         })
     print(f"[+] Loaded {len(eh_scans)} email header scans.")
 
     # 5. Fetch Vulnerability Scans
-    cur.execute("SELECT id, user_id, target, port_spec, status, risk_score, risk_level, findings, services, evidence, recommendations FROM vulnerability_scans ORDER BY id;")
+    cur.execute("SELECT id, user_id, target, port_spec, authorization_note, status, risk_score, risk_level, confidence, findings, services, evidence, recommendations, error_message FROM vulnerability_scans ORDER BY id;")
     v_rows = cur.fetchall()
     v_scans = []
     for r in v_rows:
@@ -108,18 +107,21 @@ def export_and_sync():
             "user_id": r[1],
             "target": r[2],
             "port_spec": r[3],
-            "status": r[4],
-            "risk_score": r[5],
-            "risk_level": r[6],
-            "findings": r[7] if isinstance(r[7], list) else None,
-            "services": r[8] if isinstance(r[8], list) else None,
-            "evidence": r[9] if isinstance(r[9], dict) else None,
-            "recommendations": r[10] if isinstance(r[10], list) else None,
+            "authorization_note": r[4],
+            "status": r[5],
+            "risk_score": r[6],
+            "risk_level": r[7],
+            "confidence": r[8],
+            "findings": r[9] if isinstance(r[9], list) else None,
+            "services": r[10] if isinstance(r[10], list) else None,
+            "evidence": r[11] if isinstance(r[11], dict) else None,
+            "recommendations": r[12] if isinstance(r[12], list) else None,
+            "error_message": r[13],
         })
     print(f"[+] Loaded {len(v_scans)} vulnerability scans.")
 
     # 6. Fetch Security Campaigns
-    cur.execute("SELECT id, user_id, name, campaign_type, difficulty, status, template_id, subject, sender_profile, total_recipients, metrics FROM security_campaigns ORDER BY id;")
+    cur.execute("SELECT id, user_id, name, description, template_name, status, training_topic FROM security_campaigns ORDER BY id;")
     c_rows = cur.fetchall()
     c_scans = []
     for r in c_rows:
@@ -127,14 +129,10 @@ def export_and_sync():
             "id": r[0],
             "user_id": r[1],
             "name": r[2],
-            "campaign_type": r[3],
-            "difficulty": r[4],
+            "description": r[3],
+            "template_name": r[4],
             "status": r[5],
-            "template_id": r[6],
-            "subject": r[7],
-            "sender_profile": r[8],
-            "total_recipients": r[9],
-            "metrics": r[10] if isinstance(r[10], dict) else None,
+            "training_topic": r[6],
         })
     print(f"[+] Loaded {len(c_scans)} security campaigns.")
 

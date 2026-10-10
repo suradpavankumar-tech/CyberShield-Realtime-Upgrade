@@ -213,16 +213,15 @@ def sync_database(payload: DatabaseSyncPayload):
                 new_eh = EmailHeaderScan(
                     id=eh["id"],
                     user_id=eh["user_id"],
-                    sender=eh.get("sender"),
-                    recipient=eh.get("recipient"),
-                    subject=eh.get("subject"),
-                    spf_status=eh.get("spf_status"),
-                    dkim_status=eh.get("dkim_status"),
-                    dmarc_status=eh.get("dmarc_status"),
-                    risk_score=eh.get("risk_score", 0),
-                    risk_level=eh.get("risk_level", "LOW"),
-                    header_content=eh.get("header_content", ""),
+                    raw_headers=eh.get("raw_headers", ""),
+                    status=eh.get("status", "COMPLETED"),
+                    risk_score=eh.get("risk_score"),
+                    risk_level=eh.get("risk_level"),
+                    confidence=eh.get("confidence"),
+                    threat_category=eh.get("threat_category"),
                     findings=eh.get("findings"),
+                    evidence=eh.get("evidence"),
+                    recommendations=eh.get("recommendations"),
                 )
                 db.add(new_eh)
                 stats["email_header_scans"] += 1
@@ -237,13 +236,16 @@ def sync_database(payload: DatabaseSyncPayload):
                     user_id=v["user_id"],
                     target=v.get("target", ""),
                     port_spec=v.get("port_spec", "1-1024"),
+                    authorization_note=v.get("authorization_note", "Synced from local"),
                     status=v.get("status", "COMPLETED"),
-                    risk_score=v.get("risk_score", 0),
-                    risk_level=v.get("risk_level", "LOW"),
+                    risk_score=v.get("risk_score"),
+                    risk_level=v.get("risk_level"),
+                    confidence=v.get("confidence"),
                     findings=v.get("findings"),
                     services=v.get("services"),
                     evidence=v.get("evidence"),
                     recommendations=v.get("recommendations"),
+                    error_message=v.get("error_message"),
                 )
                 db.add(new_v)
                 stats["vulnerability_scans"] += 1
@@ -257,14 +259,10 @@ def sync_database(payload: DatabaseSyncPayload):
                     id=c["id"],
                     user_id=c["user_id"],
                     name=c.get("name", "Campaign"),
-                    campaign_type=c.get("campaign_type", "PHISHING_SIMULATION"),
-                    difficulty=c.get("difficulty", "INTERMEDIATE"),
-                    status=c.get("status", "COMPLETED"),
-                    template_id=c.get("template_id"),
-                    subject=c.get("subject", ""),
-                    sender_profile=c.get("sender_profile"),
-                    total_recipients=c.get("total_recipients", 0),
-                    metrics=c.get("metrics"),
+                    description=c.get("description"),
+                    template_name=c.get("template_name", "generic"),
+                    status=c.get("status", "DRAFT"),
+                    training_topic=c.get("training_topic", "General"),
                 )
                 db.add(new_c)
                 stats["security_campaigns"] += 1
