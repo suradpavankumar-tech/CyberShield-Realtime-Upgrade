@@ -22,6 +22,11 @@ export interface AppSettings {
   deepRedirectUnpack: boolean;
   zeroKnowledgeTelemetry: boolean;
   soundAlerts: boolean;
+  threatSensitivity: "STANDARD" | "AGGRESSIVE" | "ZERO_TRUST";
+  dataRetention: "30_DAYS" | "90_DAYS" | "1_YEAR" | "INDEFINITE";
+  alertThreshold: "CRITICAL_ONLY" | "HIGH_AND_CRITICAL" | "ALL";
+  webhookUrl: string;
+  externalLookupEnabled: boolean;
 }
 
 
@@ -34,15 +39,20 @@ export const defaultSettings: AppSettings = {
   deepRedirectUnpack: true,
   zeroKnowledgeTelemetry: true,
   soundAlerts: false,
+  threatSensitivity: "AGGRESSIVE",
+  dataRetention: "90_DAYS",
+  alertThreshold: "HIGH_AND_CRITICAL",
+  webhookUrl: "",
+  externalLookupEnabled: true,
 };
 
 
 interface SettingsContextValue {
   settings: AppSettings;
 
-  updateSetting: (
-    key: keyof AppSettings,
-    value: boolean,
+  updateSetting: <K extends keyof AppSettings>(
+    key: K,
+    value: AppSettings[K],
   ) => void;
 
   saveSettings: () => void;
@@ -276,9 +286,9 @@ export function SettingsProvider({
 
   const updateSetting =
     useCallback(
-      (
-        key: keyof AppSettings,
-        value: boolean,
+      <K extends keyof AppSettings>(
+        key: K,
+        value: AppSettings[K],
       ) => {
 
         setSettings(
@@ -312,7 +322,8 @@ export function SettingsProvider({
 
             if (
               key ===
-              "compactInterface"
+              "compactInterface" &&
+              typeof value === "boolean"
             ) {
 
               applyCompactInterface(
