@@ -11,9 +11,11 @@ from app.database.database import get_db
 from app.dependencies.auth import get_current_user
 from app.models.user import User
 from app.schemas.auth import (
+    ChangePasswordRequest,
     LoginRequest,
     RegisterRequest,
     TokenResponse,
+    UpdateProfileRequest,
     UserResponse
 )
 
@@ -116,3 +118,45 @@ def get_me(
     current_user: User = Depends(get_current_user)
 ):
     return current_user
+
+
+@router.put(
+    "/profile",
+    response_model=UserResponse,
+    summary="Update User Profile"
+)
+def update_profile(
+    data: UpdateProfileRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Update the authenticated user's profile information.
+    """
+    current_user.full_name = data.full_name.strip()
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+
+@router.put(
+    "/change-password",
+    summary="Change User Password"
+)
+def change_password(
+    data: ChangePasswordRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Safely update password after verifying current credential.
+    """
+    if not verify_password(data.current_password, current_user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Current password is incorrect"
+        )
+
+    current_user.password_hash = hash_password(data.new_password)
+    db.commit()
+    return {"message": "Password updated successfully"}

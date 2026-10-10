@@ -17,6 +17,11 @@ export interface AppSettings {
   autoRefresh: boolean;
   securityNotifications: boolean;
   compactInterface: boolean;
+  strictPhishingBlock: boolean;
+  homoglyphDefense: boolean;
+  deepRedirectUnpack: boolean;
+  zeroKnowledgeTelemetry: boolean;
+  soundAlerts: boolean;
 }
 
 
@@ -24,6 +29,11 @@ export const defaultSettings: AppSettings = {
   autoRefresh: true,
   securityNotifications: true,
   compactInterface: false,
+  strictPhishingBlock: true,
+  homoglyphDefense: true,
+  deepRedirectUnpack: true,
+  zeroKnowledgeTelemetry: true,
+  soundAlerts: false,
 };
 
 

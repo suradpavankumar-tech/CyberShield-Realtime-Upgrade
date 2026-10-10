@@ -64,3 +64,38 @@ export async function getCurrentUser(): Promise<User> {
 
   return response.data;
 }
+
+/**
+ * Update authenticated user profile.
+ *
+ * Backend:
+ * PUT /api/v1/auth/profile
+ */
+export async function updateProfile(payload: {
+  full_name: string;
+}): Promise<User> {
+  const response = await api.put<User>(
+    "/auth/profile",
+    payload,
+  );
+
+  return response.data;
+}
+
+/**
+ * Change authenticated user password.
+ *
+ * Backend:
+ * PUT /api/v1/auth/change-password
+ */
+export async function changePassword(payload: {
+  current_password: string;
+  new_password: string;
+}): Promise<{ message: string }> {
+  const response = await api.put<{ message: string }>(
+    "/auth/change-password",
+    payload,
+  );
+
+  return response.data;
+}
