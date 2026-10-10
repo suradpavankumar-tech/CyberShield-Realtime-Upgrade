@@ -21,27 +21,238 @@
 
 html {
   min-width: 320px;
-  background: #060b14;
+  background: #030712;
+  color: #f1f5f9;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #060b14;
+  background: #030712;
+  color: #f1f5f9;
+  overflow-x: hidden;
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
+/* ==================================================
+   CYBER SCROLLBARS
+================================================== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-button {
-  cursor: pointer;
+::-webkit-scrollbar-track {
+  background: rgba(3, 7, 18, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.25);
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.25);
+  background: rgba(0, 240, 255, 0.3);
+  color: #ffffff;
+}
+
+/* ==================================================
+   CYBER FIELD KEYFRAME ANIMATIONS
+================================================== */
+@keyframes cyber-radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cyber-scanline-down {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(1000%);
+    opacity: 0;
+  }
+}
+
+@keyframes cyber-pulse-neon {
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.6));
+  }
+  50% {
+    opacity: 0.7;
+    filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.2));
+  }
+}
+
+@keyframes cyber-beacon-blink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 12px currentColor;
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.85);
+    box-shadow: 0 0 2px currentColor;
+  }
+}
+
+@keyframes cyber-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes cyber-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* ==================================================
+   CYBER FIELD UTILITY & HUD CLASSES
+================================================== */
+
+/* Main canvas background with high-tech grid & glowing radial ambient spots */
+.cyber-canvas-bg {
+  background-color: #030712;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(14, 165, 233, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+  background-attachment: fixed;
+}
+
+/* Tactical cyber card styling with glassmorphism and subtle border glow */
+.cyber-card {
+  position: relative;
+  background: rgba(8, 16, 30, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cyber-card:hover {
+  border-color: rgba(0, 240, 255, 0.35);
+  box-shadow: 0 8px 32px -2px rgba(0, 0, 0, 0.7), 0 0 20px -4px rgba(0, 240, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Tactical Corner Brackets for Military/SOC display cards */
+.cyber-corner-bracket {
+  position: relative;
+}
+
+.cyber-corner-bracket::before,
+.cyber-corner-bracket::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  pointer-events: none;
+  z-index: 10;
+  border-color: rgba(0, 240, 255, 0.45);
+  transition: border-color 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+.cyber-corner-bracket::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+
+.cyber-corner-bracket::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+.cyber-corner-bracket:hover::before,
+.cyber-corner-bracket:hover::after {
+  border-color: rgba(0, 240, 255, 0.9);
+  width: 10px;
+  height: 10px;
+}
+
+/* Animated radar sweeper component */
+.cyber-radar-beam {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 240, 255, 0.35) 60deg, transparent 65deg);
+  animation: cyber-radar-sweep 3s linear infinite;
+  pointer-events: none;
+}
+
+/* Active status blinking beacons */
+.cyber-beacon-green {
+  color: #10b981;
+  animation: cyber-beacon-blink 1.8s ease-in-out infinite;
+}
+
+.cyber-beacon-cyan {
+  color: #00f0ff;
+  animation: cyber-beacon-blink 2s ease-in-out infinite;
+}
+
+.cyber-beacon-red {
+  color: #ef4444;
+  animation: cyber-beacon-blink 1.2s ease-in-out infinite;
+}
+
+.cyber-beacon-amber {
+  color: #f59e0b;
+  animation: cyber-beacon-blink 1.5s ease-in-out infinite;
+}
+
+/* Shimmering gradient text for high-tech brand logos */
+.cyber-text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #67e8f9 50%, #00f0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cyber-text-glow {
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+}
+
+/* High-tech tactical scanline overlay */
+.cyber-scanline-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.8), transparent);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+  animation: cyber-scanline-down 4s ease-in-out infinite;
+  pointer-events: none;
 }

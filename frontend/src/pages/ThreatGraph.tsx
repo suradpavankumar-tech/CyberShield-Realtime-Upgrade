@@ -143,51 +143,51 @@ export default function ThreatGraph() {
     <section className="p-5 sm:p-6">
       <div className="mx-auto max-w-[1400px] space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-5">
           <div className="flex items-center gap-3.5">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/20">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/30">
               <Network size={26} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-400">
-                  ThreatGraph™ Intelligence
+                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-cyan-400">
+                  // THREATGRAPH™ INFRASTRUCTURE RADAR
                 </span>
-                <span className="rounded-full bg-cyan-400/10 px-2 py-0.5 text-[9px] font-bold text-cyan-300">
-                  Interactive Node Network
+                <span className="rounded-full border border-cyan-500/30 bg-cyan-400/10 px-2 py-0.5 font-mono text-[9px] font-bold text-cyan-300">
+                  INTERACTIVE MESH
                 </span>
               </div>
-              <h1 className="text-2xl font-bold tracking-tight text-white">
-                Connected Threat Infrastructure & Relationship Graph
+              <h1 className="text-2xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                Threat Infrastructure &amp; Relationship Graph
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 font-mono">
             <span className="text-xs text-slate-400">
-              Correlated Assets: <strong className="text-white">{graphData?.node_count || 0} Nodes</strong>
+              Correlated Assets: <strong className="text-cyan-300">{graphData?.node_count || 0} Nodes</strong>
             </span>
           </div>
         </div>
 
         {/* Input & Target Bar */}
-        <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5 space-y-4">
+        <div className="cyber-card cyber-corner-bracket p-5 space-y-4">
           <div className="flex flex-col md:flex-row gap-3">
             <div className="relative flex-1">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-500/70" />
               <input
                 type="text"
                 placeholder="Enter URL, domain, or hostname to map infrastructure..."
                 value={targetInput}
                 onChange={(e) => setTargetInput(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-[#060b14] pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:border-cyan-400 focus:outline-none"
+                className="w-full rounded-xl border border-cyan-500/20 bg-[#040812] pl-10 pr-4 py-2.5 font-mono text-xs text-white placeholder-slate-500 focus:border-cyan-400 focus:shadow-[0_0_12px_rgba(0,240,255,0.2)] focus:outline-none"
               />
             </div>
             <button
               type="button"
               onClick={() => handleAnalyze()}
               disabled={loading}
-              className="flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-6 py-2.5 text-xs font-bold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-50"
+              className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-2.5 font-mono text-xs font-bold text-slate-950 shadow-[0_0_15px_rgba(0,240,255,0.3)] transition hover:from-cyan-300 hover:to-blue-400 disabled:opacity-50"
             >
               {loading ? (
                 <>
@@ -202,16 +202,16 @@ export default function ThreatGraph() {
 
           {/* Quick Select Recent Targets */}
           {recentTargets.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-white/5">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
-                <History size={12} /> Recent Scans:
+            <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-white/5 font-mono">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+                <History size={12} className="text-cyan-400" /> Recent Scans:
               </span>
               {recentTargets.slice(0, 5).map((rt) => (
                 <button
                   key={rt.scan_id}
                   type="button"
                   onClick={() => handleSelectScan(rt.scan_id, rt.target)}
-                  className="rounded-lg border border-white/5 bg-white/[0.02] px-2.5 py-1 text-[11px] text-slate-300 hover:border-cyan-400/40 hover:text-white transition truncate max-w-[220px]"
+                  className="rounded-lg border border-cyan-500/20 bg-white/[0.02] px-2.5 py-1 text-[11px] text-slate-300 hover:border-cyan-400 hover:bg-cyan-500/10 hover:text-white transition truncate max-w-[220px]"
                 >
                   {rt.target}
                 </button>
@@ -220,8 +220,8 @@ export default function ThreatGraph() {
           )}
 
           {error && (
-            <div className="flex items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertTriangle size={14} className="shrink-0" />
+            <div className="flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 p-3 font-mono text-xs text-red-300">
+              <AlertTriangle size={14} className="shrink-0 text-red-400" />
               <span>{error}</span>
             </div>
           )}
@@ -232,7 +232,7 @@ export default function ThreatGraph() {
           {/* Canvas Box */}
           <div
             ref={containerRef}
-            className="relative h-[600px] overflow-hidden rounded-2xl border border-white/10 bg-[#060b14] p-4 flex flex-col justify-between"
+            className="cyber-card cyber-corner-bracket relative h-[600px] overflow-hidden p-4 flex flex-col justify-between"
           >
             {/* Top Toolbar */}
             <div className="z-10 flex items-center justify-between">
@@ -382,7 +382,7 @@ export default function ThreatGraph() {
           </div>
 
           {/* Forensic Metadata Drawer */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-6 space-y-5">
+          <div className="cyber-card cyber-corner-bracket p-6 space-y-5">
             {selectedNode ? (
               <div className="space-y-4">
                 <div className="flex items-center justify-between border-b border-white/5 pb-3">

@@ -13,18 +13,21 @@ function ThreatTrendChart({
   );
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
+    <div className="cyber-card cyber-corner-bracket p-5">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-          Threat activity
-        </p>
+        <div className="flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 cyber-beacon-cyan" />
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+            // SOC RADAR: TREND ANALYTICS
+          </p>
+        </div>
 
-        <h2 className="mt-1 text-lg font-semibold text-white">
-          7-day investigation trend
+        <h2 className="mt-1 text-lg font-bold text-white tracking-tight">
+          Temporal Investigation Trend
         </h2>
 
-        <p className="mt-1 text-xs text-slate-500">
-          Daily scan volume and classified risk levels
+        <p className="mt-1 font-mono text-[11px] text-slate-400">
+          Daily investigation velocity &amp; categorized severity distribution
         </p>
       </div>
 

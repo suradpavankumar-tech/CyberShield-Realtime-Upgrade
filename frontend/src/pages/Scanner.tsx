@@ -304,31 +304,28 @@ function Scanner() {
         {/* Header */}
         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-400">
-              <ScanSearch size={15} />
-
-              Security investigation
+            <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400">
+              <span className="cyber-beacon-cyan inline-block h-2 w-2 rounded-full bg-cyan-400" />
+              // TARGET TRIAGE ENGINE // SECTOR 02 // REAL-TIME FUSION
             </div>
 
-            <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Analyze suspicious content
+            <h1 className="mt-2 text-3xl font-black tracking-tight text-white drop-shadow-[0_0_20px_rgba(0,240,255,0.2)] sm:text-4xl">
+              Forensic Signal Investigation
             </h1>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Investigate URLs, messages, and emails using
-              CyberShield&apos;s real risk-analysis pipeline.
+            <p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-400 sm:text-sm">
+              Inspect URLs, messages, and emails through CyberShield&apos;s multi-engine heuristics, WHOIS enrichment, and neural threat fusion.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 rounded-xl border border-emerald-400/10 bg-emerald-400/[0.025] px-3 py-2.5">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
-
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 font-mono shadow-[0_0_12px_rgba(52,211,153,0.15)]">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
             </span>
 
-            <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-300">
-              Analysis engine ready
+            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-300">
+              ENGINES ONLINE // 0-LATENCY
             </span>
           </div>
         </div>
@@ -337,47 +334,43 @@ function Scanner() {
         <div className="mt-7 grid gap-3 md:grid-cols-3">
           {modes.map((mode) => {
             const Icon = mode.icon;
-
-            const active =
-              mode.type === inputType;
+            const active = mode.type === inputType;
 
             return (
               <button
                 key={mode.type}
                 type="button"
-                onClick={() =>
-                  changeMode(mode.type)
-                }
+                onClick={() => changeMode(mode.type)}
                 disabled={scanning}
-                className={`group rounded-2xl border p-5 text-left transition ${
+                className={`cyber-card cyber-corner-bracket group relative overflow-hidden p-5 text-left transition-all duration-300 hover:-translate-y-0.5 ${
                   active
-                    ? "border-cyan-400/25 bg-cyan-400/[0.055]"
-                    : "border-white/10 bg-[#0a1220] hover:border-white/15 hover:bg-white/[0.025]"
+                    ? "border-cyan-400/50 bg-cyan-500/[0.08] shadow-[0_0_20px_rgba(0,240,255,0.2)]"
+                    : "hover:border-cyan-500/30"
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:scale-110 ${
                       active
-                        ? "bg-cyan-400/10 text-cyan-300"
-                        : "bg-white/[0.04] text-slate-500"
+                        ? "bg-cyan-400/20 text-cyan-300 ring-cyan-400/40 shadow-[0_0_12px_rgba(0,240,255,0.3)]"
+                        : "bg-white/[0.04] text-slate-400 ring-white/10"
                     }`}
                   >
                     <Icon size={19} />
                   </div>
 
                   {active && (
-                    <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-cyan-300">
-                      Selected
+                    <span className="rounded-full border border-cyan-400/40 bg-cyan-400/20 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-cyan-300 shadow-[0_0_8px_rgba(0,240,255,0.4)]">
+                      ARMED
                     </span>
                   )}
                 </div>
 
-                <h2 className="mt-4 text-sm font-semibold text-white">
-                  {mode.label} analysis
+                <h2 className="mt-4 font-mono text-sm font-bold text-white tracking-wide">
+                  {mode.label} Vector
                 </h2>
 
-                <p className="mt-1.5 text-xs leading-5 text-slate-600">
+                <p className="mt-1.5 text-xs leading-5 text-slate-400">
                   {mode.description}
                 </p>
               </button>
@@ -389,25 +382,34 @@ function Scanner() {
         <div className="mt-5 grid gap-5 xl:grid-cols-[1fr_390px]">
 
           {/* Input panel */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a1220]">
-            <div className="border-b border-white/10 p-5 sm:p-6">
+          <div className="cyber-card cyber-corner-bracket relative overflow-hidden">
+            <div
+              className={`pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent ${
+                scanning ? "cyber-radar-beam opacity-100" : "opacity-30"
+              }`}
+            />
+
+            <div className="border-b border-white/[0.08] p-5 sm:p-6">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                    Investigation input
-                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 cyber-beacon-cyan" />
+                    <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                      // INVESTIGATION INPUT // TARGET BUFFER
+                    </p>
+                  </div>
 
-                  <h2 className="mt-1 text-lg font-semibold text-white">
-                    {currentMode.label} intelligence
+                  <h2 className="mt-1 text-lg font-bold text-white tracking-tight">
+                    {currentMode.label} Intelligence Payload
                   </h2>
                 </div>
 
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300 ring-1 ring-cyan-400/20">
                   <currentMode.icon size={17} />
                 </div>
               </div>
 
-              <p className="mt-2 max-w-2xl text-xs leading-5 text-slate-600">
+              <p className="mt-2 max-w-2xl text-xs leading-5 text-slate-400">
                 {currentMode.description}
               </p>
             </div>
@@ -418,13 +420,13 @@ function Scanner() {
             >
               <label
                 htmlFor="scanner-content"
-                className="mb-2 block text-xs font-semibold text-slate-400"
+                className="mb-2 block font-mono text-xs font-semibold text-slate-300"
               >
                 {inputType === "URL"
-                  ? "Suspicious URL"
+                  ? "// SUSPICIOUS URL TARGET"
                   : inputType === "MESSAGE"
-                    ? "Message content"
-                    : "Raw email content"}
+                    ? "// SUSPICIOUS MESSAGE CONTENT"
+                    : "// RAW EMAIL RFC-822 HEADERS & BODY"}
               </label>
 
               <textarea
@@ -442,38 +444,38 @@ function Scanner() {
                     ? 15
                     : 10
                 }
-                className="w-full resize-y rounded-xl border border-white/10 bg-[#070d18] px-4 py-3.5 text-sm leading-6 text-slate-200 outline-none transition placeholder:text-slate-700 focus:border-cyan-400/30 focus:ring-2 focus:ring-cyan-400/5 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full resize-y rounded-xl border border-cyan-500/20 bg-[#040812] px-4 py-3.5 font-mono text-xs leading-6 text-slate-200 outline-none transition placeholder:text-slate-600 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] focus:ring-1 focus:ring-cyan-400/40 disabled:cursor-not-allowed disabled:opacity-60"
               />
 
-              <div className="mt-2 flex items-center justify-between text-[10px] text-slate-700">
+              <div className="mt-2 flex items-center justify-between font-mono text-[10px] text-slate-500">
                 <span>
                   {inputType === "URL"
-                    ? "Submit the complete URL including https://"
+                    ? "Target must include scheme (http:// or https://)"
                     : inputType === "EMAIL"
-                      ? "Headers and body improve investigation context."
-                      : "Include the complete suspicious message where possible."}
+                      ? "Include headers (Received, Return-Path, DKIM-Signature) for maximum forensics"
+                      : "Paste raw text payload with all character sequences intact"}
                 </span>
 
-                <span>
+                <span className="text-cyan-400">
                   {characterCount.toLocaleString()}{" "}
-                  characters
+                  chars
                 </span>
               </div>
 
               {/* API / validation error */}
               {error && (
-                <div className="mt-4 flex items-start gap-3 rounded-xl border border-red-400/15 bg-red-400/[0.035] p-4">
+                <div className="mt-4 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/[0.08] p-4 font-mono shadow-[0_0_15px_rgba(244,63,94,0.15)]">
                   <AlertTriangle
                     size={17}
-                    className="mt-0.5 shrink-0 text-red-300"
+                    className="mt-0.5 shrink-0 text-red-400"
                   />
 
                   <div>
-                    <p className="text-xs font-semibold text-red-300">
-                      Investigation could not be completed
+                    <p className="text-xs font-bold text-red-300">
+                      // INVESTIGATION REJECTED / PIPELINE ERROR
                     </p>
 
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                    <p className="mt-1 text-xs leading-5 text-slate-400">
                       {error}
                     </p>
                   </div>
@@ -491,10 +493,9 @@ function Scanner() {
                       !result &&
                       !error)
                   }
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-xs font-semibold text-slate-500 transition hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 font-mono text-xs font-semibold text-slate-400 transition hover:border-white/20 hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <RotateCcw size={14} />
-
                   Clear workspace
                 </button>
 
@@ -504,7 +505,7 @@ function Scanner() {
                     scanning ||
                     !content.trim()
                   }
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 text-xs font-bold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-3 font-mono text-xs font-bold text-slate-950 shadow-[0_0_15px_rgba(0,240,255,0.3)] transition hover:from-cyan-300 hover:to-blue-400 hover:shadow-[0_0_25px_rgba(0,240,255,0.5)] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {scanning ? (
                     <>
@@ -512,14 +513,12 @@ function Scanner() {
                         size={15}
                         className="animate-spin"
                       />
-
-                      Analyzing...
+                      Evaluating Signals…
                     </>
                   ) : (
                     <>
                       <ScanSearch size={15} />
-
-                      Analyze {inputType}
+                      Execute {inputType} Forensics
                     </>
                   )}
                 </button>
@@ -529,20 +528,19 @@ function Scanner() {
 
           {/* Investigation information */}
           <div className="space-y-5">
-
-            <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
+            <div className="cyber-card cyber-corner-bracket p-5">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-400/10 text-violet-300">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-400/10 text-violet-300 ring-1 ring-violet-400/20">
                   <Sparkles size={17} />
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                    Analysis pipeline
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                    // ANALYSIS PIPELINE
                   </p>
 
-                  <h3 className="mt-1 text-sm font-semibold text-white">
-                    Multi-signal investigation
+                  <h3 className="mt-1 text-sm font-bold text-white tracking-tight">
+                    Multi-Signal Neural Engine
                   </h3>
                 </div>
               </div>

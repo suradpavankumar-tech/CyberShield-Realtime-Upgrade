@@ -31,7 +31,7 @@ interface SidebarProps {
 
 const navigation = [
   {
-    label: "OVERVIEW",
+    label: "// 01 COMMAND",
     items: [
       {
         name: "Dashboard",
@@ -41,7 +41,7 @@ const navigation = [
     ],
   },
   {
-    label: "EMERGENCY RESPONSE",
+    label: "// 02 RAPID INCIDENT",
     items: [
       {
         name: "Fraud Emergency (1930)",
@@ -51,7 +51,7 @@ const navigation = [
     ],
   },
   {
-    label: "ANALYZE",
+    label: "// 03 NEUTRALIZE & SCAN",
     items: [
       {
         name: "Threat Scanner",
@@ -66,7 +66,7 @@ const navigation = [
     ],
   },
   {
-    label: "SECURITY TOOLS",
+    label: "// 04 SECURITY TOOLS",
     items: [
       { name: "BrowserShield (Web Guard)", path: "/browser-shield", icon: Globe2 },
       { name: "IdentityShield (Breaches)", path: "/identity-shield", icon: UserCheck },
@@ -78,7 +78,7 @@ const navigation = [
     ],
   },
   {
-    label: "INVESTIGATE",
+    label: "// 05 FORENSIC RADAR",
     items: [
       {
         name: "ThreatGraph (Topology)",
@@ -108,7 +108,7 @@ const navigation = [
     ],
   },
   {
-    label: "SYSTEM",
+    label: "// 06 SOC OPERATIONS",
     items: [
       {
         name: "Profile",
@@ -143,7 +143,7 @@ function Sidebar({
   return (
     <aside
       className={[
-        "relative flex h-screen w-full flex-col border-r border-white/10 bg-[#080f1c]",
+        "relative flex h-screen w-full flex-col border-r border-cyan-500/20 bg-[#040914]/95 backdrop-blur-2xl shadow-[4px_0_30px_rgba(0,0,0,0.5)]",
         "transition-all duration-300",
       ].join(" ")}
     >
@@ -153,7 +153,7 @@ function Sidebar({
       ================================================== */}
       <div
         className={[
-          "flex h-16 shrink-0 items-center border-b border-white/10",
+          "flex h-16 shrink-0 items-center border-b border-cyan-500/15 relative",
           collapsed
             ? "justify-center px-2"
             : "justify-between px-4",
@@ -168,18 +168,19 @@ function Sidebar({
               : "gap-3",
           ].join(" ")}
         >
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-400 ring-1 ring-cyan-400/20">
-            <Shield size={20} />
+          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-400 ring-1 ring-cyan-500/30">
+            <Shield size={20} className="relative z-10" />
+            <div className="cyber-radar-beam opacity-40" />
           </div>
 
           {!collapsed && (
             <div className="min-w-0">
-              <div className="text-sm font-bold tracking-wide text-white">
-                CyberShield
+              <div className="text-sm font-black tracking-wider text-white">
+                CYBER<span className="text-cyan-400 cyber-text-glow">SHIELD</span>
               </div>
 
-              <div className="text-[8px] font-medium uppercase tracking-[0.18em] text-slate-500">
-                AI Threat Intelligence
+              <div className="font-mono text-[8px] uppercase tracking-[0.2em] text-slate-500">
+                SOC DEFENSE v2.0
               </div>
             </div>
           )}
@@ -205,7 +206,7 @@ function Sidebar({
           onClick={onToggle}
           title="Expand sidebar"
           aria-label="Expand sidebar"
-          className="absolute -right-3 top-[19px] z-10 flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-[#0a1220] text-slate-400 shadow-lg transition hover:text-cyan-300"
+          className="absolute -right-3 top-[19px] z-10 flex h-7 w-7 items-center justify-center rounded-full border border-cyan-500/30 bg-[#08101e] text-slate-400 shadow-lg transition hover:text-cyan-300 hover:border-cyan-400"
         >
           <ChevronRight size={15} />
         </button>
@@ -216,7 +217,7 @@ function Sidebar({
       ================================================== */}
       <nav
         className={[
-          "flex-1 overflow-y-auto py-6",
+          "flex-1 overflow-y-auto py-5",
           collapsed
             ? "px-2"
             : "px-3",
@@ -225,10 +226,10 @@ function Sidebar({
         {navigation.map((section) => (
           <div
             key={section.label}
-            className="mb-7"
+            className="mb-6"
           >
             {!collapsed && (
-              <p className="mb-2 px-3 text-[9px] font-semibold tracking-[0.2em] text-slate-600">
+              <p className="mb-2 px-3 font-mono text-[9px] font-bold tracking-[0.2em] text-cyan-400/60 uppercase">
                 {section.label}
               </p>
             )}
@@ -248,35 +249,35 @@ function Sidebar({
                     }
                     className={({ isActive }) =>
                       [
-                        "group flex items-center rounded-xl text-sm transition-all",
+                        "relative group flex items-center rounded-xl text-xs font-semibold transition-all duration-200",
                         collapsed
                           ? "justify-center px-2 py-3"
                           : "gap-3 px-3 py-2.5",
                         isActive
-                          ? "bg-cyan-400/10 text-cyan-300 ring-1 ring-cyan-400/10"
-                          : "text-slate-400 hover:bg-white/[0.04] hover:text-slate-100",
+                          ? "bg-gradient-to-r from-cyan-500/20 via-cyan-500/10 to-transparent text-cyan-300 ring-1 ring-cyan-400/30 shadow-[0_0_15px_rgba(0,240,255,0.1)] before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-cyan-400 before:shadow-[0_0_8px_rgba(0,240,255,0.8)]"
+                          : "text-slate-400 hover:bg-white/[0.04] hover:text-white hover:translate-x-0.5",
                       ].join(" ")
                     }
                   >
                     {({ isActive }) => (
                       <>
                         <Icon
-                          size={18}
+                          size={17}
                           className={
                             isActive
-                              ? "shrink-0 text-cyan-400"
-                              : "shrink-0 text-slate-500 group-hover:text-slate-300"
+                              ? "shrink-0 text-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]"
+                              : "shrink-0 text-slate-500 transition-colors group-hover:text-cyan-300"
                           }
                         />
 
                         {!collapsed && (
                           <>
-                            <span>
+                            <span className="truncate">
                               {item.name}
                             </span>
 
                             {isActive && (
-                              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(0,240,255,1)]" />
                             )}
                           </>
                         )}
@@ -291,48 +292,51 @@ function Sidebar({
       </nav>
 
       {/* ==================================================
-          SECURITY ENGINE
+          SOC DEFENSE GRID STATUS WIDGET
       ================================================== */}
       <div
         className={[
-          "border-t border-white/10",
+          "border-t border-cyan-500/15 bg-black/40",
           collapsed
             ? "p-2"
-            : "p-4",
+            : "p-3",
         ].join(" ")}
       >
         <div
           title={
             collapsed
-              ? "Security Engine — Ready"
+              ? "SOC Defense Grid: Armed"
               : undefined
           }
           className={[
-            "rounded-xl border border-emerald-400/10 bg-emerald-400/[0.04]",
+            "cyber-corner-bracket rounded-xl border border-cyan-500/25 bg-[#071222]/80 p-3 shadow-lg",
             collapsed
-              ? "flex items-center justify-center p-3"
-              : "p-3",
+              ? "flex items-center justify-center p-2.5"
+              : "",
           ].join(" ")}
         >
-          <div className="flex items-center gap-2">
-            <span className="relative flex h-2 w-2 shrink-0">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
-
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
+          <div className="flex items-center gap-2.5">
+            <div className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-500/30">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 cyber-beacon-green" />
+              <div className="cyber-radar-beam opacity-30" />
+            </div>
 
             {!collapsed && (
-              <span className="text-xs font-medium text-emerald-300">
-                Security Engine
-              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10px] font-bold text-emerald-300 tracking-wider">
+                    GRID DEFENSE
+                  </span>
+                  <span className="font-mono text-[9px] font-bold text-cyan-400">
+                    99.8%
+                  </span>
+                </div>
+                <p className="mt-0.5 truncate font-mono text-[9px] text-slate-500">
+                  ZERO-DAY SHIELD ARMED
+                </p>
+              </div>
             )}
           </div>
-
-          {!collapsed && (
-            <p className="mt-1 pl-4 text-[10px] text-slate-500">
-              Ready for analysis
-            </p>
-          )}
         </div>
       </div>
 

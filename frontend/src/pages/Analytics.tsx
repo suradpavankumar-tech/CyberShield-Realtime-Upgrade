@@ -443,23 +443,18 @@ function Analytics() {
         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
 
           <div>
-
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-400">
-              <BarChart3 size={15} />
-              Security intelligence
+            <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400">
+              <span className="cyber-beacon-cyan inline-block h-2 w-2 rounded-full bg-cyan-400" />
+              // TELEMETRY AGGREGATOR // SECTOR 05 // REAL-TIME ANALYTICS
             </div>
 
-            <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Analytics
+            <h1 className="mt-2 text-3xl font-black tracking-tight text-white drop-shadow-[0_0_20px_rgba(0,240,255,0.2)] sm:text-4xl">
+              Security Intelligence Analytics
             </h1>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Analyze investigation volume, risk
-              patterns, threat categories, and
-              security activity using live
-              CyberShield backend data.
+            <p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-400 sm:text-sm">
+              Continuous threat volume tracking, severity trends, category breakdowns, and real-time SOC metrics.
             </p>
-
           </div>
 
           <button
@@ -471,20 +466,20 @@ function Analytics() {
               )
             }
             disabled={refreshing}
-            className="inline-flex w-fit items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs font-semibold text-slate-400 transition hover:bg-white/[0.06] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex w-fit items-center gap-2 rounded-xl border border-cyan-500/20 bg-[rgba(8,16,30,0.85)] px-4 py-2.5 font-mono text-xs font-semibold text-slate-300 backdrop-blur-md transition hover:border-cyan-400/40 hover:bg-cyan-500/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             <RefreshCw
               size={14}
               className={
                 refreshing
-                  ? "animate-spin"
-                  : ""
+                  ? "animate-spin text-cyan-400"
+                  : "text-cyan-400"
               }
             />
 
             {refreshing
-              ? "Refreshing..."
-              : "Refresh analytics"}
+              ? "Syncing Pipeline..."
+              : "Sync Telemetry"}
           </button>
 
         </div>
@@ -495,115 +490,98 @@ function Analytics() {
         <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
 
           {/* Total */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
-
+          <div className="cyber-card cyber-corner-bracket p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]">
             <div className="flex items-center justify-between">
-
               <div>
-                <p className="text-[9px] uppercase tracking-[0.16em] text-slate-600">
-                  Total investigations
+                <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-slate-400">
+                  // TOTAL SCANS
                 </p>
 
-                <p className="mt-2 text-3xl font-bold text-white">
+                <p className="mt-2 font-mono text-3xl font-black text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.15)]">
                   {total_scans}
                 </p>
               </div>
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300 ring-1 ring-cyan-400/20">
                 <Activity size={18} />
               </div>
-
             </div>
-
+            <p className="mt-2 font-mono text-[10px] text-slate-500">
+              Aggregated across all vectors
+            </p>
           </div>
 
           {/* Average risk */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
-
+          <div className="cyber-card cyber-corner-bracket p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-500/40 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]">
             <div className="flex items-center justify-between">
-
               <div>
-                <p className="text-[9px] uppercase tracking-[0.16em] text-slate-600">
-                  Average risk score
+                <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-slate-400">
+                  // AVERAGE RISK
                 </p>
 
-                <p className="mt-2 text-3xl font-bold text-amber-300">
+                <p className="mt-2 font-mono text-3xl font-black text-amber-300 drop-shadow-[0_0_12px_rgba(251,191,36,0.3)]">
                   {average_risk_score !== null
                     ? average_risk_score.toFixed(2)
                     : "—"}
                 </p>
               </div>
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/10 text-amber-300">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/10 text-amber-300 ring-1 ring-amber-400/20">
                 <TrendingUp size={18} />
               </div>
-
             </div>
 
-            <p className="mt-2 text-[10px] text-slate-600">
-              Completed scored investigations
+            <p className="mt-2 font-mono text-[10px] text-slate-500">
+              Scored investigations baseline
             </p>
-
           </div>
 
           {/* High risk */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
-
+          <div className="cyber-card cyber-corner-bracket p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(244,63,94,0.15)]">
             <div className="flex items-center justify-between">
-
               <div>
-                <p className="text-[9px] uppercase tracking-[0.16em] text-slate-600">
-                  High-risk investigations
+                <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-slate-400">
+                  // CRITICAL VECTORS
                 </p>
 
-                <p className="mt-2 text-3xl font-bold text-red-300">
+                <p className="mt-2 font-mono text-3xl font-black text-red-300 drop-shadow-[0_0_12px_rgba(248,113,113,0.3)]">
                   {risk_distribution.high}
                 </p>
               </div>
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-400/10 text-red-300">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-400/10 text-red-300 ring-1 ring-red-400/20">
                 <ShieldAlert size={18} />
               </div>
-
             </div>
 
-            <p className="mt-2 text-[10px] text-slate-600">
-              {highestRiskPercentage}% of classified investigations
+            <p className="mt-2 font-mono text-[10px] text-slate-500">
+              {highestRiskPercentage}% of classified payload signals
             </p>
-
           </div>
 
           {/* Top threat */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
-
+          <div className="cyber-card cyber-corner-bracket p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-500/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)]">
             <div className="flex items-center justify-between">
-
               <div className="min-w-0">
-
-                <p className="text-[9px] uppercase tracking-[0.16em] text-slate-600">
-                  Top threat
+                <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-slate-400">
+                  // TOP THREAT TAXONOMY
                 </p>
 
-                <p className="mt-2 truncate text-lg font-bold text-violet-300">
+                <p className="mt-2 truncate font-mono text-lg font-bold text-violet-300">
                   {formatCategory(
                     threat_intelligence.top_category,
                   )}
                 </p>
-
               </div>
 
-              <div className="ml-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-400/10 text-violet-300">
+              <div className="ml-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-400/10 text-violet-300 ring-1 ring-violet-400/20">
                 <Target size={18} />
               </div>
-
             </div>
-
-            <p className="mt-2 text-[10px] text-slate-600">
-              {threat_intelligence.top_category_count} investigations
+            <p className="mt-2 font-mono text-[10px] text-slate-500">
+              {threat_intelligence.top_category_count} investigations • Prevalent campaign vector
             </p>
-
           </div>
-
         </div>
 
         {/* ==================================================

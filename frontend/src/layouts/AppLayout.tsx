@@ -73,7 +73,14 @@ function AppLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-[#060b14] text-slate-100">
+    <div className="relative min-h-screen cyber-canvas-bg text-slate-100 overflow-x-hidden selection:bg-cyan-500/30 selection:text-white">
+      {/* Ambient background glow orbs */}
+      <div className="pointer-events-none fixed -top-40 -right-40 h-[550px] w-[550px] rounded-full bg-cyan-500/10 blur-[130px] -z-10" />
+      <div className="pointer-events-none fixed -bottom-40 -left-40 h-[550px] w-[550px] rounded-full bg-emerald-500/5 blur-[130px] -z-10" />
+      <div className="pointer-events-none fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[700px] w-[700px] rounded-full bg-sky-500/[0.03] blur-[150px] -z-10" />
+
+      {/* Subtle Laser Scanline Effect */}
+      <div className="cyber-scanline-strip" />
 
       {/* ==================================================
           TOP APPLICATION BAR

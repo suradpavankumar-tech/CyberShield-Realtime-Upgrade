@@ -356,22 +356,22 @@ export default function Dashboard() {
         ================================================== */}
         <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
           <div>
-            <div className="flex items-center gap-3">
-              <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
-                Security Operations Command Center
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="cyber-beacon-emerald inline-block h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-400">
+                // SOC COMMAND COORD: IND-80 // SECTOR 04
               </span>
-              <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[10px] font-semibold text-slate-300">
-                CyberShield 2.0
+              <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-cyan-300">
+                CYBERSHIELD 2.0 // ZERO-DAY ARMED
               </span>
             </div>
 
-            <h1 className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-black tracking-tight text-white drop-shadow-[0_0_20px_rgba(0,240,255,0.2)] sm:text-4xl">
               Threat Intelligence Command
             </h1>
 
             <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-slate-400 sm:text-sm">
-              Continuous threat detection, live infrastructure telemetry, and multi-signal triage across URLs,
+              Continuous multi-vector threat detection, live infrastructure telemetry, and multi-signal triage across URLs,
               messages, Android APKs, and compromised identity registers.
             </p>
           </div>
@@ -382,7 +382,7 @@ export default function Dashboard() {
               <select
                 value={trendDays}
                 onChange={(e) => setTrendDays(Number(e.target.value))}
-                className="min-w-[210px] appearance-none rounded-xl border border-white/10 bg-[#0a1220] py-2.5 pl-10 pr-9 text-xs font-semibold text-slate-200 outline-none transition hover:border-cyan-400/30 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20"
+                className="min-w-[210px] appearance-none rounded-xl border border-cyan-500/20 bg-[rgba(8,16,30,0.85)] py-2.5 pl-10 pr-9 font-mono text-xs font-semibold text-slate-200 outline-none backdrop-blur-md transition hover:border-cyan-400/40 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20"
                 aria-label="Dashboard date range"
               >
                 <option value={7}>{formatTrendDateRange(trends)}</option>
@@ -403,7 +403,7 @@ export default function Dashboard() {
               type="button"
               onClick={() => void loadDashboard(true)}
               disabled={refreshing}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-slate-300 transition hover:border-cyan-500/30 hover:bg-white/[0.07] hover:text-white disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-cyan-500/20 bg-[rgba(8,16,30,0.85)] px-4 py-2.5 font-mono text-xs font-semibold text-slate-300 backdrop-blur-md transition hover:border-cyan-400/40 hover:bg-cyan-500/10 hover:text-white disabled:opacity-50"
             >
               <RefreshCw size={14} className={refreshing ? "animate-spin text-cyan-400" : "text-cyan-400"} />
               {refreshing ? "Syncing…" : "Refresh"}
@@ -411,7 +411,7 @@ export default function Dashboard() {
 
             <Link
               to="/emergency"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-2.5 text-xs font-bold text-rose-300 shadow-lg shadow-rose-950/30 transition hover:bg-rose-500/20"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-2.5 font-mono text-xs font-bold text-rose-300 shadow-lg shadow-rose-950/40 transition hover:bg-rose-500/20 hover:border-rose-400"
             >
               <AlertOctagon size={14} className="text-rose-400" />
               <span>SOS 1930</span>
@@ -422,22 +422,23 @@ export default function Dashboard() {
         {/* ==================================================
             LIVE THREAT PULSE ADVISORY & MARQUEE BANNER
         ================================================== */}
-        <div className="relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-[#0d1c33] via-[#091426] to-[#0a101f] p-4 shadow-xl">
+        <div className="cyber-card cyber-corner-bracket relative overflow-hidden p-4 shadow-xl">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70 cyber-radar-beam" />
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-400 ring-1 ring-cyan-400/20">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-400 ring-1 ring-cyan-400/30">
                 <Sparkles size={16} />
               </span>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-cyan-400">
+                  <span className="font-mono text-[10px] font-black uppercase tracking-wider text-cyan-400">
                     NATIONAL CYBER RADAR
                   </span>
                   <span
-                    className={`rounded px-1.5 py-0.2 text-[9px] font-black uppercase tracking-widest ${
+                    className={`rounded px-1.5 py-0.2 font-mono text-[9px] font-black uppercase tracking-widest ${
                       threatPulse?.national_threat_level === "CRITICAL"
-                        ? "bg-rose-500 text-black"
-                        : "bg-amber-400 text-black"
+                        ? "bg-rose-500 text-black shadow-[0_0_8px_rgba(244,63,94,0.6)]"
+                        : "bg-amber-400 text-black shadow-[0_0_8px_rgba(251,191,36,0.6)]"
                     }`}
                   >
                     {threatPulse?.national_threat_level || "ELEVATED"} ADVISORY
@@ -449,7 +450,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 font-mono">
               <span className="text-[11px] text-slate-400">
                 Active Campaigns: <strong className="text-white">{threatPulse?.campaigns.length || 3}</strong>
               </span>
@@ -459,7 +460,7 @@ export default function Dashboard() {
               </span>
               <Link
                 to="/threat-pulse"
-                className="inline-flex items-center gap-1 rounded-lg bg-cyan-500/10 px-2.5 py-1 text-xs font-bold text-cyan-300 transition hover:bg-cyan-500/20"
+                className="inline-flex items-center gap-1 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-1 text-xs font-bold text-cyan-300 transition hover:bg-cyan-500/20 hover:border-cyan-400"
               >
                 <span>Live Radar</span>
                 <ArrowRight size={12} />
@@ -471,14 +472,26 @@ export default function Dashboard() {
         {/* ==================================================
             FAST TRIAGE & INSTANT ON-DASHBOARD SCANNER
         ================================================== */}
-        <div className="rounded-2xl border border-white/10 bg-[#0a1324] p-5 shadow-xl">
+        <div className="cyber-card cyber-corner-bracket relative overflow-hidden p-5 shadow-2xl">
+          <div
+            className={`pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent ${
+              triageLoading ? "cyber-radar-beam opacity-100" : "opacity-40"
+            }`}
+          />
+
           <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
-                <Zap size={16} />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/30">
+                <Zap size={17} />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white">Instant Threat Triage</h3>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 cyber-beacon-cyan" />
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-400">
+                    // INSTANT TELEMETRY SCAN
+                  </span>
+                </div>
+                <h3 className="text-sm font-bold text-white tracking-tight">Instant Threat Triage</h3>
                 <p className="text-[11px] text-slate-400">
                   Inspect suspicious URLs, SMS texts, or emails directly without navigating away
                 </p>
@@ -486,15 +499,15 @@ export default function Dashboard() {
             </div>
 
             {/* Input Type Selector */}
-            <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-black/40 p-1">
+            <div className="flex items-center gap-1 rounded-xl border border-cyan-500/20 bg-black/60 p-1">
               {(["URL", "MESSAGE", "EMAIL"] as InputType[]).map((type) => (
                 <button
                   key={type}
                   type="button"
                   onClick={() => setTriageType(type)}
-                  className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition ${
+                  className={`rounded-lg px-2.5 py-1 font-mono text-[11px] font-bold transition ${
                     triageType === type
-                      ? "bg-cyan-400 text-slate-950 font-bold"
+                      ? "bg-cyan-400 text-slate-950 shadow-[0_0_10px_rgba(0,240,255,0.4)]"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -517,13 +530,13 @@ export default function Dashboard() {
                     ? "Paste SMS or WhatsApp message text (e.g., Electricity bill overdue, call 9876543210)..."
                     : "Paste suspicious email body or header text..."
                 }
-                className="w-full rounded-xl border border-white/10 bg-[#050b14] px-4 py-2.5 font-mono text-xs text-white placeholder-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                className="w-full rounded-xl border border-cyan-500/20 bg-[#040812] px-4 py-2.5 font-mono text-xs text-white placeholder-slate-600 transition focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/50 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
               />
             </div>
             <button
               type="submit"
               disabled={triageLoading || !triageContent.trim()}
-              className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-cyan-500/20 transition hover:from-cyan-400 hover:to-blue-500 disabled:opacity-50"
+              className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 font-mono text-xs font-bold text-white shadow-lg shadow-cyan-500/30 transition hover:from-cyan-400 hover:to-blue-500 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] disabled:opacity-50"
             >
               {triageLoading ? (
                 <>
@@ -663,29 +676,32 @@ export default function Dashboard() {
         <div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                ACTIVE DEFENSE ECOSYSTEM
-              </p>
-              <h2 className="mt-0.5 text-lg font-bold text-white">Security Operations Launchpad</h2>
+              <div className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 cyber-beacon-cyan" />
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                  // ACTIVE DEFENSE ECOSYSTEM
+                </p>
+              </div>
+              <h2 className="mt-1 text-lg font-bold text-white tracking-tight">Security Operations Launchpad</h2>
             </div>
-            <span className="text-xs text-slate-400">8 Integrated Defensive Modules</span>
+            <span className="font-mono text-xs text-slate-400">8 ARMED DEFENSIVE MODULES</span>
           </div>
 
           <div className="mt-4 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
             {/* BrowserShield */}
             <Link
               to="/browser-shield"
-              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:bg-[#0c1626]"
+              className="cyber-card cyber-corner-bracket group relative overflow-hidden p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(0,240,255,0.2)]"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/20">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/30 transition-transform duration-300 group-hover:scale-110">
                   <Globe2 size={18} />
                 </div>
-                <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                <span className="rounded bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-400 ring-1 ring-emerald-500/20">
                   ONLINE
                 </span>
               </div>
-              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-cyan-300">BrowserShield</h3>
+              <h3 className="mt-3 text-sm font-bold text-white transition-colors group-hover:text-cyan-300">BrowserShield</h3>
               <p className="mt-1 text-[11px] text-slate-400">
                 Manifest V3 live extension &amp; pre-flight link interception simulator.
               </p>
@@ -694,17 +710,17 @@ export default function Dashboard() {
             {/* IdentityShield */}
             <Link
               to="/identity-shield"
-              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-violet-500/40 hover:bg-[#0c1626]"
+              className="cyber-card cyber-corner-bracket group relative overflow-hidden p-4 transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/50 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/20">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/30 transition-transform duration-300 group-hover:scale-110">
                   <UserCheck size={18} />
                 </div>
-                <span className="rounded bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold text-violet-300">
+                <span className="rounded bg-violet-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-violet-300 ring-1 ring-violet-500/20">
                   k-ANONYMITY
                 </span>
               </div>
-              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-violet-300">IdentityShield</h3>
+              <h3 className="mt-3 text-sm font-bold text-white transition-colors group-hover:text-violet-300">IdentityShield</h3>
               <p className="mt-1 text-[11px] text-slate-400">
                 Breach registry &amp; client-side SHA-1 credential exposure audit.
               </p>
@@ -713,17 +729,17 @@ export default function Dashboard() {
             {/* AppShield */}
             <Link
               to="/app-shield"
-              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/40 hover:bg-[#0c1626]"
+              className="cyber-card cyber-corner-bracket group relative overflow-hidden p-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/20">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/30 transition-transform duration-300 group-hover:scale-110">
                   <Smartphone size={18} />
                 </div>
-                <span className="rounded bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold text-blue-300">
+                <span className="rounded bg-blue-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-blue-300 ring-1 ring-blue-500/20">
                   STATIC APK
                 </span>
               </div>
-              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-blue-300">AppShield</h3>
+              <h3 className="mt-3 text-sm font-bold text-white transition-colors group-hover:text-blue-300">AppShield</h3>
               <p className="mt-1 text-[11px] text-slate-400">
                 Android APK decompilation, permissions risk &amp; trojanized payload triage.
               </p>
@@ -732,17 +748,17 @@ export default function Dashboard() {
             {/* ThreatGraph */}
             <Link
               to="/threat-graph"
-              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40 hover:bg-[#0c1626]"
+              className="cyber-card cyber-corner-bracket group relative overflow-hidden p-4 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:shadow-[0_0_20px_rgba(245,158,11,0.2)]"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/30 transition-transform duration-300 group-hover:scale-110">
                   <Network size={18} />
                 </div>
-                <span className="rounded bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-300">
+                <span className="rounded bg-amber-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-300 ring-1 ring-amber-500/20">
                   TOPOLOGY
                 </span>
               </div>
-              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-amber-300">ThreatGraph</h3>
+              <h3 className="mt-3 text-sm font-bold text-white transition-colors group-hover:text-amber-300">ThreatGraph</h3>
               <p className="mt-1 text-[11px] text-slate-400">
                 Connected threat infrastructure linking IPs, SSL certs, and campaigns.
               </p>
@@ -751,17 +767,17 @@ export default function Dashboard() {
             {/* QRShield */}
             <Link
               to="/qr-shield"
-              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40 hover:bg-[#0c1626]"
+              className="cyber-card cyber-corner-bracket group relative overflow-hidden p-4 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/30 transition-transform duration-300 group-hover:scale-110">
                   <QrCode size={18} />
                 </div>
-                <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                <span className="rounded bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-400 ring-1 ring-emerald-500/20">
                   QUISHING
                 </span>
               </div>
-              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-emerald-300">QRShield</h3>
+              <h3 className="mt-3 text-sm font-bold text-white transition-colors group-hover:text-emerald-300">QRShield</h3>
               <p className="mt-1 text-[11px] text-slate-400">
                 Decode QR screenshot payloads &amp; intercept fraudulent UPI payment URLs.
               </p>
@@ -770,17 +786,17 @@ export default function Dashboard() {
             {/* ThreatPulse */}
             <Link
               to="/threat-pulse"
-              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-500/40 hover:bg-[#0c1626]"
+              className="cyber-card cyber-corner-bracket group relative overflow-hidden p-4 transition-all duration-300 hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-[0_0_20px_rgba(244,63,94,0.2)]"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/20">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/30 transition-transform duration-300 group-hover:scale-110">
                   <Activity size={18} />
                 </div>
-                <span className="rounded bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-300">
+                <span className="rounded bg-rose-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-rose-300 ring-1 ring-rose-500/20">
                   LIVE RADAR
                 </span>
               </div>
-              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-rose-300">ThreatPulse</h3>
+              <h3 className="mt-3 text-sm font-bold text-white transition-colors group-hover:text-rose-300">ThreatPulse</h3>
               <p className="mt-1 text-[11px] text-slate-400">
                 Live scam radar tracking emerging national vectors and advisories.
               </p>
@@ -789,17 +805,17 @@ export default function Dashboard() {
             {/* Email Header Analyzer */}
             <Link
               to="/email-headers"
-              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:bg-[#0c1626]"
+              className="cyber-card cyber-corner-bracket group relative overflow-hidden p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(0,240,255,0.2)]"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/20">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/30 transition-transform duration-300 group-hover:scale-110">
                   <Mail size={18} />
                 </div>
-                <span className="rounded bg-cyan-500/10 px-2 py-0.5 text-[10px] font-bold text-cyan-300">
+                <span className="rounded bg-cyan-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-cyan-300 ring-1 ring-cyan-500/20">
                   SPF/DKIM
                 </span>
               </div>
-              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-cyan-300">Email Headers</h3>
+              <h3 className="mt-3 text-sm font-bold text-white transition-colors group-hover:text-cyan-300">Email Headers</h3>
               <p className="mt-1 text-[11px] text-slate-400">
                 Inspect raw headers for spoofed senders, DKIM alignment, and DMARC rules.
               </p>
@@ -808,17 +824,17 @@ export default function Dashboard() {
             {/* Fraud Emergency Assistant */}
             <Link
               to="/emergency"
-              className="group rounded-xl border border-rose-500/20 bg-rose-500/[0.04] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-500/40 hover:bg-rose-500/[0.08]"
+              className="cyber-card cyber-corner-bracket group relative overflow-hidden border-rose-500/30 bg-rose-500/[0.05] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-rose-400 hover:shadow-[0_0_25px_rgba(244,63,94,0.25)]"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/20 text-rose-400 ring-1 ring-rose-500/30">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/20 text-rose-400 ring-1 ring-rose-500/30 transition-transform duration-300 group-hover:scale-110">
                   <AlertOctagon size={18} />
                 </div>
-                <span className="rounded bg-rose-500 px-2 py-0.5 text-[10px] font-black text-black">
+                <span className="rounded bg-rose-500 px-2 py-0.5 font-mono text-[10px] font-black text-black shadow-[0_0_8px_rgba(244,63,94,0.6)]">
                   HOTLINE 1930
                 </span>
               </div>
-              <h3 className="mt-3 text-sm font-bold text-rose-200 group-hover:text-rose-100">Fraud Emergency</h3>
+              <h3 className="mt-3 text-sm font-bold text-rose-200 transition-colors group-hover:text-rose-100">Fraud Emergency</h3>
               <p className="mt-1 text-[11px] text-rose-300/80">
                 Urgent victim recovery workflow, bank account freezes, and formal FIR filing.
               </p>
@@ -830,41 +846,41 @@ export default function Dashboard() {
             CLASSIFICATION SUMMARY PROGRESS BARS
         ================================================== */}
         <div className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-emerald-400/10 bg-emerald-400/[0.025] p-4">
+          <div className="cyber-card p-4 transition-all duration-300 hover:border-emerald-500/40">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={16} className="text-emerald-400" />
-                <span className="text-xs font-semibold text-slate-300">Completed</span>
+                <span className="font-mono text-xs font-semibold text-slate-300">Completed Scans</span>
               </div>
-              <span className="text-lg font-bold text-white">{derivedData.completed}</span>
+              <span className="font-mono text-lg font-black text-white drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]">{derivedData.completed}</span>
             </div>
             <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
               <div
-                className="h-full rounded-full bg-emerald-400"
+                className="h-full rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]"
                 style={{ width: `${derivedData.completionRate}%` }}
               />
             </div>
-            <p className="mt-2 text-[10px] text-slate-500">{derivedData.completionRate}% completion rate</p>
+            <p className="mt-2 font-mono text-[10px] text-slate-500">{derivedData.completionRate}% completion rate</p>
           </div>
 
-          <div className="rounded-xl border border-amber-400/10 bg-amber-400/[0.025] p-4">
+          <div className="cyber-card p-4 transition-all duration-300 hover:border-amber-500/40">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Clock3 size={16} className="text-amber-400" />
-                <span className="text-xs font-semibold text-slate-300">Pending</span>
+                <span className="font-mono text-xs font-semibold text-slate-300">Pending Scans</span>
               </div>
-              <span className="text-lg font-bold text-white">{derivedData.pending}</span>
+              <span className="font-mono text-lg font-black text-white drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]">{derivedData.pending}</span>
             </div>
             <p className="mt-3 text-[10px] text-slate-500">Investigations awaiting final asynchronous analysis</p>
           </div>
 
-          <div className="rounded-xl border border-red-400/10 bg-red-400/[0.025] p-4">
+          <div className="cyber-card p-4 transition-all duration-300 hover:border-red-500/40">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <XCircle size={16} className="text-red-400" />
-                <span className="text-xs font-semibold text-slate-300">Failed</span>
+                <span className="font-mono text-xs font-semibold text-slate-300">Failed Interceptions</span>
               </div>
-              <span className="text-lg font-bold text-white">{derivedData.failed}</span>
+              <span className="font-mono text-lg font-black text-white drop-shadow-[0_0_8px_rgba(248,113,113,0.3)]">{derivedData.failed}</span>
             </div>
             <p className="mt-3 text-[10px] text-slate-500">Unresolvable hosts or network timeouts</p>
           </div>
@@ -883,15 +899,20 @@ export default function Dashboard() {
         ================================================== */}
         <div className="grid gap-5 lg:grid-cols-3">
           {/* Investigation Mix */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
+          <div className="cyber-card cyber-corner-bracket p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                  Analysis sources
-                </p>
-                <h2 className="mt-1 text-lg font-semibold text-white">Investigation mix</h2>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 cyber-beacon-cyan" />
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                    // 01 INGESTION MIX
+                  </p>
+                </div>
+                <h2 className="mt-1 text-lg font-bold text-white tracking-tight">Investigation Sources</h2>
               </div>
-              <BarChart3 size={18} className="text-cyan-400" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-400 ring-1 ring-cyan-400/20">
+                <BarChart3 size={18} />
+              </div>
             </div>
 
             <div className="mt-6 space-y-4">
@@ -920,16 +941,16 @@ export default function Dashboard() {
                 return (
                   <div key={item.label}>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-xs text-slate-400">
+                      <div className="flex items-center gap-2 font-mono text-xs text-slate-300">
                         {item.icon}
                         {item.label}
                       </div>
-                      <span className="text-xs font-semibold text-white">{item.value}</span>
+                      <span className="font-mono text-xs font-bold text-white">{item.value}</span>
                     </div>
                     <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
-                      <div className="h-full rounded-full bg-cyan-400" style={{ width: `${percentage}%` }} />
+                      <div className="h-full rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(0,240,255,0.6)]" style={{ width: `${percentage}%` }} />
                     </div>
-                    <p className="mt-1 text-right text-[9px] text-slate-500">{percentage}%</p>
+                    <p className="mt-1 text-right font-mono text-[9px] text-slate-500">{percentage}%</p>
                   </div>
                 );
               })}
@@ -937,15 +958,20 @@ export default function Dashboard() {
           </div>
 
           {/* Threat Categories */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
+          <div className="cyber-card cyber-corner-bracket p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                  Threat landscape
-                </p>
-                <h2 className="mt-1 text-lg font-semibold text-white">Category breakdown</h2>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-400 cyber-beacon-cyan" />
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                    // 02 THREAT TAXONOMY
+                  </p>
+                </div>
+                <h2 className="mt-1 text-lg font-bold text-white tracking-tight">Category Breakdown</h2>
               </div>
-              <Target size={18} className="text-violet-400" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-400/10 text-violet-300 ring-1 ring-violet-400/20">
+                <Target size={18} />
+              </div>
             </div>
 
             {derivedData.categories.length === 0 ? (
@@ -958,7 +984,7 @@ export default function Dashboard() {
                 {derivedData.categories.map(([category, count]) => (
                   <div
                     key={category}
-                    className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-2.5"
+                    className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-2.5 transition hover:border-violet-500/30 hover:bg-violet-500/[0.04]"
                   >
                     <div className="flex min-w-0 items-center gap-2.5">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-violet-400/10 text-violet-300">
@@ -968,7 +994,7 @@ export default function Dashboard() {
                         {formatCategory(category)}
                       </span>
                     </div>
-                    <span className="ml-3 text-xs font-bold text-white">{count}</span>
+                    <span className="ml-3 font-mono text-xs font-bold text-white">{count}</span>
                   </div>
                 ))}
               </div>
@@ -976,33 +1002,38 @@ export default function Dashboard() {
           </div>
 
           {/* Priority Signal / Highest Risk */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
+          <div className="cyber-card cyber-corner-bracket p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                  Priority signal
-                </p>
-                <h2 className="mt-1 text-lg font-semibold text-white">Highest-risk scan</h2>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-red-400 cyber-beacon-red" />
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                    // 03 CRITICAL SIGNAL
+                  </p>
+                </div>
+                <h2 className="mt-1 text-lg font-bold text-white tracking-tight">Highest-Risk Detection</h2>
               </div>
-              <TriangleAlert size={18} className="text-red-400" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-400/10 text-red-400 ring-1 ring-red-400/20">
+                <TriangleAlert size={18} />
+              </div>
             </div>
 
             {highestRisk ? (
               <Link
                 to={`/scan/${highestRisk.scan_id}`}
-                className="mt-5 block rounded-xl border border-red-400/10 bg-red-400/[0.035] p-4 transition hover:border-red-400/25 hover:bg-red-400/[0.055]"
+                className="mt-5 block rounded-xl border border-red-500/25 bg-red-500/[0.04] p-4 transition duration-300 hover:border-red-500/50 hover:bg-red-500/[0.08] hover:shadow-[0_0_20px_rgba(244,63,94,0.18)]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.15em] text-slate-500">
-                      Scan #{highestRisk.scan_id}
+                    <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-slate-400">
+                      // SCAN #{highestRisk.scan_id}
                     </p>
-                    <p className="mt-1 text-sm font-semibold text-white">
+                    <p className="mt-1 text-sm font-bold text-white">
                       {formatCategory(highestRisk.threat_category)}
                     </p>
                   </div>
                   <span
-                    className={`rounded-lg border px-2 py-0.5 text-[10px] font-bold ${
+                    className={`rounded-lg border px-2 py-0.5 font-mono text-[10px] font-bold ${
                       getRiskClasses(highestRisk.risk_level).badge
                     }`}
                   >
@@ -1013,33 +1044,33 @@ export default function Dashboard() {
                 <div className="mt-4 flex items-end justify-between">
                   <div>
                     <p
-                      className={`text-3xl font-black ${
+                      className={`font-mono text-3xl font-black ${
                         highestRisk.risk_level === "HIGH"
-                          ? "text-red-300"
+                          ? "text-red-400 drop-shadow-[0_0_12px_rgba(248,113,113,0.4)]"
                           : highestRisk.risk_level === "MEDIUM"
-                          ? "text-amber-300"
-                          : "text-emerald-300"
+                          ? "text-amber-400 drop-shadow-[0_0_12px_rgba(251,191,36,0.4)]"
+                          : "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.4)]"
                       }`}
                     >
                       {highestRisk.risk_score ?? "—"}
                     </p>
-                    <p className="mt-0.5 text-[10px] uppercase tracking-wider text-slate-500">Risk score</p>
+                    <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-slate-500">Risk score</p>
                   </div>
 
                   <div className="text-right">
-                    <p className="text-xs font-semibold text-slate-300">
+                    <p className="font-mono text-xs font-semibold text-slate-300">
                       {highestRisk.confidence !== null ? `${highestRisk.confidence}%` : "—"}
                     </p>
-                    <p className="text-[10px] text-slate-500">Confidence</p>
+                    <p className="font-mono text-[10px] text-slate-500">Confidence</p>
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-3 text-[10px] text-slate-400">
+                <div className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-3 font-mono text-[10px] text-slate-400">
                   <span>{highestRisk.input_type} analysis</span>
                   <span>{formatDate(highestRisk.created_at)}</span>
                 </div>
 
-                <div className="mt-3 flex items-center justify-end gap-1 text-[10px] font-semibold text-red-300">
+                <div className="mt-3 flex items-center justify-end gap-1 font-mono text-[10px] font-bold text-red-300">
                   <span>Investigate signal</span>
                   <ArrowRight size={12} />
                 </div>
@@ -1055,13 +1086,16 @@ export default function Dashboard() {
         {/* ==================================================
             RECENT INVESTIGATIONS ACTIVITY TABLE & FILTERS
         ================================================== */}
-        <div className="rounded-2xl border border-white/10 bg-[#0a1220]">
-          <div className="flex flex-col justify-between gap-4 border-b border-white/10 p-5 lg:flex-row lg:items-center">
+        <div className="cyber-card cyber-corner-bracket overflow-hidden">
+          <div className="flex flex-col justify-between gap-4 border-b border-white/[0.08] p-5 lg:flex-row lg:items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                Investigation telemetry
-              </p>
-              <h2 className="mt-1 text-lg font-bold text-white">Recent Security Scans</h2>
+              <div className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 cyber-beacon-cyan" />
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                  // 04 INCIDENT FEED: RECENT TELEMETRY
+                </p>
+              </div>
+              <h2 className="mt-1 text-lg font-bold text-white tracking-tight">Real-Time Security Investigations</h2>
             </div>
 
             {/* Table Filters & Search */}
@@ -1073,21 +1107,21 @@ export default function Dashboard() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Filter by ID, category…"
-                  className="rounded-xl border border-white/10 bg-[#060d18] py-1.5 pl-8 pr-3 text-xs text-white placeholder-slate-600 focus:border-cyan-400 focus:outline-none"
+                  className="rounded-xl border border-cyan-500/20 bg-[#040812] py-1.5 pl-8 pr-3 font-mono text-xs text-white placeholder-slate-600 focus:border-cyan-400 focus:outline-none focus:shadow-[0_0_12px_rgba(0,240,255,0.2)]"
                 />
-                <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-cyan-500/70" />
               </div>
 
               {/* Risk Level Filter */}
-              <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-black/40 p-1">
+              <div className="flex items-center gap-1 rounded-xl border border-cyan-500/20 bg-black/60 p-1">
                 {["ALL", "HIGH", "MEDIUM", "LOW"].map((level) => (
                   <button
                     key={level}
                     type="button"
                     onClick={() => setRiskFilter(level)}
-                    className={`rounded-lg px-2 py-1 text-[10px] font-bold transition ${
+                    className={`rounded-lg px-2 py-1 font-mono text-[10px] font-bold transition ${
                       riskFilter === level
-                        ? "bg-cyan-500 text-slate-950"
+                        ? "bg-cyan-400 text-slate-950 shadow-[0_0_8px_rgba(0,240,255,0.4)]"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -1103,9 +1137,9 @@ export default function Dashboard() {
                     key={source}
                     type="button"
                     onClick={() => setTypeFilter(source)}
-                    className={`rounded-lg px-2 py-1 text-[10px] font-bold transition ${
+                    className={`rounded-lg px-2 py-1 font-mono text-[10px] font-bold transition ${
                       typeFilter === source
-                        ? "bg-slate-700 text-white"
+                        ? "bg-slate-700 text-white shadow-sm"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -1116,7 +1150,7 @@ export default function Dashboard() {
 
               <Link
                 to="/history"
-                className="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 transition hover:text-cyan-300"
+                className="inline-flex items-center gap-1 font-mono text-xs font-bold text-cyan-400 transition hover:text-cyan-300"
               >
                 <span>View all</span>
                 <ArrowRight size={13} />
@@ -1134,7 +1168,7 @@ export default function Dashboard() {
               </p>
               <Link
                 to="/scanner"
-                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-4 py-2 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"
+                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-4 py-2 font-mono text-xs font-bold text-slate-950 shadow-[0_0_15px_rgba(0,240,255,0.3)] transition hover:bg-cyan-300"
               >
                 <span>Launch New Scan</span>
                 <ArrowRight size={13} />
@@ -1144,15 +1178,15 @@ export default function Dashboard() {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[900px]">
                 <thead>
-                  <tr className="border-b border-white/[0.06] text-left text-[10px] uppercase tracking-[0.14em] text-slate-500">
-                    <th className="px-5 py-3 font-semibold">Investigation</th>
-                    <th className="px-5 py-3 font-semibold">Source</th>
-                    <th className="px-5 py-3 font-semibold">Risk Level</th>
-                    <th className="px-5 py-3 font-semibold">Threat Category</th>
-                    <th className="px-5 py-3 font-semibold">Status</th>
-                    <th className="px-5 py-3 font-semibold">Confidence</th>
-                    <th className="px-5 py-3 text-right font-semibold">Created</th>
-                    <th className="px-5 py-3 text-right font-semibold">Action</th>
+                  <tr className="border-b border-white/[0.08] text-left font-mono text-[10px] uppercase tracking-[0.14em] text-slate-400">
+                    <th className="px-5 py-3 font-semibold">// INVESTIGATION</th>
+                    <th className="px-5 py-3 font-semibold">// VECTOR</th>
+                    <th className="px-5 py-3 font-semibold">// RISK SCORE</th>
+                    <th className="px-5 py-3 font-semibold">// THREAT CATEGORY</th>
+                    <th className="px-5 py-3 font-semibold">// STATUS</th>
+                    <th className="px-5 py-3 font-semibold">// CONFIDENCE</th>
+                    <th className="px-5 py-3 text-right font-semibold">// TIMESTAMP</th>
+                    <th className="px-5 py-3 text-right font-semibold">// ACTION</th>
                   </tr>
                 </thead>
 
@@ -1164,16 +1198,16 @@ export default function Dashboard() {
                     return (
                       <tr
                         key={scan.scan_id}
-                        className="border-b border-white/[0.04] transition hover:bg-white/[0.02]"
+                        className="border-b border-white/[0.04] transition hover:bg-cyan-500/[0.03]"
                       >
                         <td className="px-5 py-3.5">
-                          <Link to={`/scan/${scan.scan_id}`} className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.04] text-slate-400">
+                          <Link to={`/scan/${scan.scan_id}`} className="group flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-slate-400 group-hover:border-cyan-500/40 group-hover:text-cyan-300">
                               {getInputIcon(scan.input_type)}
                             </div>
                             <div>
-                              <p className="text-xs font-bold text-white transition hover:text-cyan-300">
-                                Scan #{scan.scan_id}
+                              <p className="font-mono text-xs font-bold text-white transition group-hover:text-cyan-300">
+                                #SCN-{scan.scan_id.toString().padStart(4, "0")}
                               </p>
                               <p className="text-[10px] text-slate-500">Security Audit</p>
                             </div>
@@ -1181,30 +1215,30 @@ export default function Dashboard() {
                         </td>
 
                         <td className="px-5 py-3.5">
-                          <span className="text-xs text-slate-300">{scan.input_type}</span>
+                          <span className="font-mono text-xs text-slate-300">{scan.input_type}</span>
                         </td>
 
                         <td className="px-5 py-3.5">
                           <div className="flex items-center gap-2">
                             <span className={`h-1.5 w-1.5 rounded-full ${risk.dot}`} />
-                            <span className={`rounded-lg border px-2 py-0.5 text-[10px] font-bold ${risk.badge}`}>
+                            <span className={`rounded-lg border px-2 py-0.5 font-mono text-[10px] font-bold ${risk.badge}`}>
                               {scan.risk_level || "UNASSESSED"}
                             </span>
                             {scan.risk_score !== null && (
-                              <span className="text-xs font-bold text-white">{scan.risk_score}</span>
+                              <span className="font-mono text-xs font-bold text-white">{scan.risk_score}</span>
                             )}
                           </div>
                         </td>
 
                         <td className="px-5 py-3.5">
-                          <span className="text-xs text-slate-300">
+                          <span className="text-xs font-medium text-slate-200">
                             {formatCategory(scan.threat_category)}
                           </span>
                         </td>
 
                         <td className="px-5 py-3.5">
                           <span
-                            className={`inline-flex items-center gap-1.5 rounded-lg border px-2 py-0.5 text-[9px] font-semibold ${status.badge}`}
+                            className={`inline-flex items-center gap-1.5 rounded-lg border px-2 py-0.5 font-mono text-[9px] font-semibold ${status.badge}`}
                           >
                             {status.icon}
                             {scan.status}
@@ -1213,20 +1247,20 @@ export default function Dashboard() {
 
                         <td className="px-5 py-3.5">
                           {scan.confidence !== null ? (
-                            <span className="text-xs font-semibold text-slate-200">{scan.confidence}%</span>
+                            <span className="font-mono text-xs font-semibold text-slate-200">{scan.confidence}%</span>
                           ) : (
-                            <span className="text-xs text-slate-500">—</span>
+                            <span className="font-mono text-xs text-slate-500">—</span>
                           )}
                         </td>
 
-                        <td className="px-5 py-3.5 text-right">
+                        <td className="px-5 py-3.5 text-right font-mono">
                           <span className="text-[10px] text-slate-400">{formatDate(scan.created_at)}</span>
                         </td>
 
                         <td className="px-5 py-3.5 text-right">
                           <Link
                             to={`/scan/${scan.scan_id}`}
-                            className="inline-flex items-center gap-1 rounded-lg border border-white/[0.07] bg-white/[0.02] px-2.5 py-1.5 text-[10px] font-semibold text-slate-400 transition hover:border-cyan-400/30 hover:bg-cyan-400/[0.05] hover:text-cyan-300"
+                            className="inline-flex items-center gap-1 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-1.5 font-mono text-[10px] font-semibold text-cyan-300 transition hover:border-cyan-400 hover:bg-cyan-500/20 hover:shadow-[0_0_10px_rgba(0,240,255,0.2)]"
                           >
                             <span>Inspect</span>
                             <ArrowRight size={11} />

@@ -35,19 +35,22 @@ function RiskDistributionChart({
   ];
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
+    <div className="cyber-card cyber-corner-bracket p-5">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-            Risk distribution
-          </p>
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 cyber-beacon-cyan" />
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+              // TELEMETRY: RISK PROFILE
+            </p>
+          </div>
 
-          <h2 className="mt-1 text-lg font-semibold text-white">
-            Classified investigations
+          <h2 className="mt-1 text-lg font-bold text-white tracking-tight">
+            Classified Investigations
           </h2>
         </div>
 
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-400/10 text-red-300">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-400/10 text-red-300 ring-1 ring-red-400/20">
           <ShieldAlert size={18} />
         </div>
       </div>

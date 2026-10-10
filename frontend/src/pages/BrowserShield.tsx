@@ -147,33 +147,34 @@ export default function BrowserShield() {
   return (
     <div className="mx-auto max-w-7xl space-y-8 px-4 py-8">
       {/* Header */}
-      <div className="relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-[#0c1a2e] via-[#080f1c] to-[#040812] p-8 shadow-2xl">
-        <div className="absolute right-0 top-0 -mr-16 -mt-16 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 -mb-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl" />
+      <div className="cyber-card cyber-corner-bracket relative overflow-hidden p-8 shadow-2xl">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-75 cyber-radar-beam" />
+        <div className="absolute right-0 top-0 -mr-16 -mt-16 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 -mb-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col justify-between gap-6 md:flex-row md:items-center">
           <div>
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/20 text-cyan-400 ring-1 ring-cyan-500/30">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/20 text-cyan-400 ring-1 ring-cyan-500/40 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
                 <Globe2 size={26} />
               </div>
               <div>
-                <h1 className="text-2xl font-black tracking-wide text-white md:text-3xl">
-                  BrowserShield
+                <h1 className="text-2xl font-black tracking-wide text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.2)] md:text-3xl">
+                  BrowserShield // MV3 RADAR
                 </h1>
-                <p className="text-xs uppercase tracking-widest text-cyan-400">
-                  Real-Time Pre-Navigation Interceptor & Manifest V3 Extension
+                <p className="font-mono text-xs uppercase tracking-widest text-cyan-400">
+                  // PRE-NAVIGATION INTERCEPTOR &amp; CHROMIUM EXTENSION ENGINE
                 </p>
               </div>
             </div>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300">
+            <p className="mt-3 max-w-2xl text-xs leading-relaxed text-slate-300 sm:text-sm">
               BrowserShield guards your browsing workflow by vetting hyperlinks before your browser
               loads them. Built with zero-knowledge telemetry, lookalike domain interception, and
               instant safe-browsing warnings.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 font-mono">
             <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-400">
               <span className="h-2 w-2 animate-ping rounded-full bg-emerald-400" />
               Manifest V3 Engine Active
@@ -188,36 +189,36 @@ export default function BrowserShield() {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-white/10 bg-[#0a1324] p-5 shadow-lg">
+        <div className="cyber-card cyber-corner-bracket p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/40 hover:shadow-[0_0_18px_rgba(52,211,153,0.15)]">
           <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-semibold uppercase tracking-wider">Engine State</span>
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">// ENGINE STATE</span>
             <ShieldCheck size={18} className="text-emerald-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-emerald-400">ONLINE</div>
+          <div className="mt-2 font-mono text-2xl font-black text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.4)]">ONLINE</div>
           <p className="mt-1 text-xs text-slate-400">127.0.0.1:8000 URL Intelligence Gateway</p>
         </div>
 
-        <div className="rounded-xl border border-white/10 bg-[#0a1324] p-5 shadow-lg">
+        <div className="cyber-card cyber-corner-bracket p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:shadow-[0_0_18px_rgba(0,240,255,0.15)]">
           <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-semibold uppercase tracking-wider">Intercept Latency</span>
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">// INTERCEPT LATENCY</span>
             <Sparkles size={18} className="text-cyan-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-white">&lt; 85 ms</div>
-          <p className="mt-1 text-xs text-slate-400">Fast local heuristics & multi-signal scan</p>
+          <div className="mt-2 font-mono text-2xl font-black text-white">&lt; 85 ms</div>
+          <p className="mt-1 text-xs text-slate-400">Fast local heuristics &amp; multi-signal scan</p>
         </div>
 
-        <div className="rounded-xl border border-white/10 bg-[#0a1324] p-5 shadow-lg">
+        <div className="cyber-card cyber-corner-bracket p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-500/40 hover:shadow-[0_0_18px_rgba(139,92,246,0.15)]">
           <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-semibold uppercase tracking-wider">Extension Support</span>
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">// EXTENSION SUPPORT</span>
             <Layers size={18} className="text-violet-400" />
           </div>
-          <div className="mt-2 text-2xl font-bold text-violet-300">Chrome &amp; Edge</div>
+          <div className="mt-2 font-mono text-2xl font-black text-violet-300">Chrome &amp; Edge</div>
           <p className="mt-1 text-xs text-slate-400">Brave, Opera, Vivaldi Chromium runtime</p>
         </div>
 
-        <div className="rounded-xl border border-white/10 bg-[#0a1324] p-5 shadow-lg">
+        <div className="cyber-card cyber-corner-bracket p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:shadow-[0_0_18px_rgba(0,240,255,0.15)]">
           <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-semibold uppercase tracking-wider">Shield Policies</span>
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">// SHIELD POLICIES</span>
             <Sliders size={18} className="text-amber-400" />
           </div>
           <div className="mt-2 text-2xl font-bold text-amber-300">

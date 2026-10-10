@@ -12,6 +12,7 @@ import {
   UserRound,
   X,
   XCircle,
+  Activity,
 } from "lucide-react";
 
 import {
@@ -152,6 +153,17 @@ function Topbar({
     useRef<HTMLDivElement | null>(
       null,
     );
+
+  const [timeString, setTimeString] = useState(() => {
+    return new Date().toISOString().slice(11, 19) + " UTC";
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeString(new Date().toISOString().slice(11, 19) + " UTC");
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
 
   /*
@@ -804,15 +816,15 @@ function Topbar({
    */
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-[#060d18]/95 px-3 shadow-[0_1px_20px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:px-5">
-
+    <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between border-b border-cyan-500/20 bg-[#040914]/95 px-3 shadow-[0_4px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:px-5 relative">
+      {/* Subtle Bottom Glow Accent */}
+      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent pointer-events-none" />
 
       {/* ==================================================
           LEFT
       ================================================== */}
 
       <div className="flex min-w-0 items-center gap-3">
-
 
         {/* Desktop hamburger */}
 
@@ -821,12 +833,12 @@ function Topbar({
           onClick={
             onMenuClick
           }
-          className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.02] text-slate-300 transition hover:border-cyan-400/20 hover:bg-cyan-400/[0.05] hover:text-white lg:flex"
+          className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.02] text-slate-300 transition hover:border-cyan-400/40 hover:bg-cyan-400/[0.08] hover:text-white lg:flex"
           aria-label="Toggle sidebar"
           title="Toggle sidebar"
         >
 
-          <Menu size={22} />
+          <Menu size={20} />
 
         </button>
 
@@ -838,12 +850,12 @@ function Topbar({
           onClick={
             onMobileMenuClick
           }
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.02] text-slate-300 transition hover:border-cyan-400/20 hover:bg-cyan-400/[0.05] hover:text-white lg:hidden"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.02] text-slate-300 transition hover:border-cyan-400/40 hover:bg-cyan-400/[0.08] hover:text-white lg:hidden"
           aria-label="Open navigation"
           title="Open navigation"
         >
 
-          <Menu size={22} />
+          <Menu size={20} />
 
         </button>
 
@@ -852,37 +864,69 @@ function Topbar({
 
         <Link
           to="/dashboard"
-          className="group flex min-w-0 items-center gap-2.5 rounded-xl px-1.5 py-1 transition hover:bg-white/[0.03]"
+          className="group flex min-w-0 items-center gap-2.5 rounded-xl px-2 py-1 transition hover:bg-cyan-500/[0.06]"
           aria-label="CyberShield dashboard"
         >
 
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-400 ring-1 ring-cyan-400/20 transition group-hover:bg-cyan-400/15">
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/30 transition group-hover:ring-cyan-400/60 group-hover:shadow-[0_0_15px_rgba(0,240,255,0.3)]">
 
-            <Shield size={21} />
+            <Shield size={21} className="relative z-10 transition group-hover:scale-105" />
+            <div className="cyber-radar-beam opacity-40 group-hover:opacity-80" />
+            <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-500" />
+            </span>
 
           </div>
 
 
           <div className="min-w-0">
 
-            <div className="text-[17px] font-bold tracking-tight text-white">
-
-              Cyber
-              <span className="text-cyan-400">
-                Shield
+            <div className="flex items-center gap-1.5">
+              <span className="text-[17px] font-black tracking-wider text-white">
+                CYBER<span className="text-cyan-400 cyber-text-glow">SHIELD</span>
               </span>
-
+              <span className="rounded bg-cyan-500/15 px-1.5 py-0.5 text-[8px] font-mono font-bold tracking-widest text-cyan-300 ring-1 ring-cyan-500/30">
+                PRO 2.0
+              </span>
             </div>
 
 
-            <div className="hidden text-[8px] font-medium uppercase tracking-[0.18em] text-slate-600 sm:block">
-              AI Threat Intelligence
+            <div className="hidden font-mono text-[8px] uppercase tracking-[0.2em] text-slate-500 sm:block">
+              DEFENSE GRID // SOC COMMAND
             </div>
 
           </div>
 
         </Link>
 
+      </div>
+
+
+      {/* ==================================================
+          CENTER: SOC TELEMETRY HUD
+      ================================================== */}
+      <div className="hidden md:flex items-center gap-4 rounded-xl border border-cyan-500/20 bg-[#06101e]/80 px-4 py-1.5 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-emerald-400 cyber-beacon-green" />
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+            GRID ACTIVE
+          </span>
+        </div>
+
+        <div className="h-3 w-px bg-white/10" />
+
+        <div className="flex items-center gap-1.5 font-mono text-[10px] text-cyan-300">
+          <Clock3 size={11} className="text-cyan-400" />
+          <span>{timeString}</span>
+        </div>
+
+        <div className="h-3 w-px bg-white/10" />
+
+        <div className="flex items-center gap-1.5 font-mono text-[10px] text-slate-400">
+          <Activity size={11} className="text-cyan-400 animate-pulse" />
+          <span>RADAR: 24/7 LIVE</span>
+        </div>
       </div>
 
 

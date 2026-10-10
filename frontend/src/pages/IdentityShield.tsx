@@ -111,38 +111,38 @@ export default function IdentityShield() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-400">
-                  IdentityShield™ Defense
+                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-cyan-400">
+                  // IDENTITYSHIELD™ CREDENTIAL VAULT
                 </span>
-                <span className="rounded-full bg-cyan-400/10 px-2 py-0.5 text-[9px] font-bold text-cyan-300">
-                  k-Anonymity Model
+                <span className="rounded-full border border-cyan-500/30 bg-cyan-400/10 px-2 py-0.5 font-mono text-[9px] font-bold text-cyan-300">
+                  k-ANONYMITY SHA-1
                 </span>
               </div>
-              <h1 className="text-2xl font-bold tracking-tight text-white">
-                Account Exposure & Compromised Credential Guard
+              <h1 className="text-2xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                Account Exposure &amp; Compromised Credential Guard
               </h1>
             </div>
           </div>
 
           {/* Tab Selector */}
-          <div className="flex rounded-xl bg-[#0a1220] p-1 border border-white/10">
+          <div className="flex rounded-xl bg-black/60 p-1 border border-cyan-500/20 font-mono">
             <button
               type="button"
               onClick={() => setActiveTab("email")}
               className={`rounded-lg px-4 py-2 text-xs font-bold transition ${
                 activeTab === "email"
-                  ? "bg-cyan-400 text-slate-950 shadow"
+                  ? "bg-cyan-400 text-slate-950 shadow-[0_0_10px_rgba(0,240,255,0.4)]"
                   : "text-slate-400 hover:text-white"
               }`}
             >
-              Email & Account Breaches
+              Email &amp; Account Breaches
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("password")}
               className={`rounded-lg px-4 py-2 text-xs font-bold transition ${
                 activeTab === "password"
-                  ? "bg-cyan-400 text-slate-950 shadow"
+                  ? "bg-cyan-400 text-slate-950 shadow-[0_0_10px_rgba(0,240,255,0.4)]"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -155,32 +155,38 @@ export default function IdentityShield() {
         {activeTab === "email" && (
           <div className="space-y-6">
             {/* Input Box */}
-            <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-6 space-y-4">
+            <div className="cyber-card cyber-corner-bracket p-6 space-y-4">
               <div>
-                <h3 className="text-sm font-bold text-white">
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 cyber-beacon-cyan" />
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-400">
+                    // DARK WEB DUMP RADAR
+                  </span>
+                </div>
+                <h3 className="mt-1 text-sm font-bold text-white tracking-tight">
                   Check Email in Known Data Breach Dumps
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Scan your email against verified enterprise breaches and dark web dumps (Domino's India, BigBasket, Air India, Canva, etc.).
+                  Scan your email against verified enterprise breaches and dark web dumps (Domino&apos;s India, BigBasket, Air India, Canva, etc.).
                 </p>
               </div>
 
               <form onSubmit={handleEmailCheck} className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
-                  <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-500/70" />
                   <input
                     type="email"
                     required
                     placeholder="Enter email address (e.g., yourname@gmail.com)"
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#060b14] pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:border-cyan-400 focus:outline-none"
+                    className="w-full rounded-xl border border-cyan-500/20 bg-[#040812] pl-10 pr-4 py-3 font-mono text-xs text-white placeholder-slate-500 focus:border-cyan-400 focus:shadow-[0_0_12px_rgba(0,240,255,0.2)] focus:outline-none"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={emailLoading}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 text-xs font-bold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-3 font-mono text-xs font-bold text-slate-950 shadow-[0_0_15px_rgba(0,240,255,0.3)] transition hover:from-cyan-300 hover:to-blue-400 disabled:opacity-50"
                 >
                   {emailLoading ? (
                     <>
