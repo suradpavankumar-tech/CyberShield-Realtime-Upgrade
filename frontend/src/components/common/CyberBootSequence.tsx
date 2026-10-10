@@ -16,57 +16,52 @@ interface CyberBootSequenceProps {
   onComplete: () => void;
 }
 
-const TOTAL_DURATION_MS = 50000; // 50.0 seconds total military boot sequence
+const TOTAL_DURATION_MS = 30000; // Exact 30.0 seconds official military sequence
 
 const BOOT_PHASES = [
-  { id: 1, name: "HARDWARE IGNITION", time: "00:00 - 00:10", desc: "Cold bus power relays & cryogenic pumps" },
-  { id: 2, name: "NEURAL PROCESSORS", time: "00:10 - 00:20", desc: "128 Heuristic cores & quantum ciphers" },
-  { id: 3, name: "THREAT ENGINES", time: "00:20 - 00:30", desc: "Multi-signal NLP & zero-day heuristics" },
-  { id: 4, name: "NATIONAL GRID", time: "00:30 - 00:40", desc: "I4C 1930 & CERT-In telemetry uplinks" },
-  { id: 5, name: "SHIELD ARMED", time: "00:40 - 00:50", desc: "Full weapons-free defense lockdown" },
+  { id: 1, name: "HARDWARE IGNITION", time: "00:00 - 00:06", desc: "Cold bus power relays & cryogenic pumps" },
+  { id: 2, name: "NEURAL PROCESSORS", time: "00:06 - 00:12", desc: "128 Heuristic cores & quantum ciphers" },
+  { id: 3, name: "THREAT ENGINES", time: "00:12 - 00:18", desc: "Multi-signal NLP & zero-day heuristics" },
+  { id: 4, name: "NATIONAL GRID", time: "00:18 - 00:24", desc: "I4C 1930 & CERT-In telemetry uplinks" },
+  { id: 5, name: "SHIELD ARMED", time: "00:24 - 00:30", desc: "Full weapons-free defense lockdown" },
 ];
 
 const BOOT_LOGS = [
-  // Phase 1 (0s - 10s): Hardware Ignition
-  { atSec: 0.8, code: "PWR_RELAY_01", text: "Energizing primary 480V high-voltage defense bus...", status: "NOMINAL", color: "text-emerald-400" },
-  { atSec: 2.2, code: "CRYO_COOLANT", text: "Liquid helium loop engaged (temperature: 18.2 Kelvin)...", status: "STABLE", color: "text-cyan-400" },
-  { atSec: 3.8, code: "ENTROPY_SEED", text: "Harvesting hardware quantum true-random noise (TRNG)...", status: "PRIMED", color: "text-cyan-400" },
-  { atSec: 5.4, code: "MEM_ECC_TEST", text: "Parity verification on 64 GB ultra-fast DMA cache...", status: "PASSED", color: "text-emerald-400" },
-  { atSec: 7.2, code: "BIOS_SECURE", text: "Validating cryptographic UEFI firmware checksums...", status: "AUTHENTIC", color: "text-cyan-300" },
-  { atSec: 9.0, code: "BUS_INTERCONNECT", text: "PCIe Gen 5 high-speed optic fabric synchronizing...", status: "LOCKED", color: "text-emerald-400" },
+  // Phase 1 (0s - 6s): Hardware Ignition
+  { atSec: 0.5, code: "PWR_RELAY_01", text: "Energizing primary 480V high-voltage defense bus...", status: "NOMINAL", color: "text-emerald-400" },
+  { atSec: 1.4, code: "CRYO_COOLANT", text: "Liquid helium loop engaged (temperature: 18.2 Kelvin)...", status: "STABLE", color: "text-cyan-400" },
+  { atSec: 2.3, code: "ENTROPY_SEED", text: "Harvesting hardware quantum true-random noise (TRNG)...", status: "PRIMED", color: "text-cyan-400" },
+  { atSec: 3.4, code: "MEM_ECC_TEST", text: "Parity verification on 64 GB ultra-fast DMA cache...", status: "PASSED", color: "text-emerald-400" },
+  { atSec: 4.5, code: "BIOS_SECURE", text: "Validating cryptographic UEFI firmware checksums...", status: "AUTHENTIC", color: "text-cyan-300" },
+  { atSec: 5.6, code: "BUS_FABRIC", text: "PCIe Gen 5 high-speed optic fabric synchronizing...", status: "LOCKED", color: "text-emerald-400" },
 
-  // Phase 2 (10s - 20s): Neural Processors & Quantum Ciphers
-  { atSec: 10.6, code: "KERNEL_SPINUP", text: "Booting 128-bit hardened defense microkernel (v2.0.4)...", status: "ONLINE", color: "text-cyan-400" },
-  { atSec: 12.3, code: "VECTOR_AVX512", text: "Enabling tensor math acceleration units across all cores...", status: "ENGAGED", color: "text-cyan-300" },
-  { atSec: 14.1, code: "KYBER_1024", text: "Post-quantum lattice encryption keys generated...", status: "SECURE", color: "text-violet-400" },
-  { atSec: 15.9, code: "CIPHER_AES_GCM", text: "Quantum cipher pool armed with 256-bit Galois counter...", status: "ARMED", color: "text-cyan-400" },
-  { atSec: 17.6, code: "ZK_PROOFS", text: "Zero-knowledge verification registers allocated...", status: "READY", color: "text-violet-300" },
-  { atSec: 19.2, code: "CORE_MATRIX", text: "128/128 Neural heuristic processing cores synchronized...", status: "100%", color: "text-emerald-400" },
+  // Phase 2 (6s - 12s): Neural Processors & Quantum Ciphers
+  { atSec: 6.8, code: "KERNEL_SPINUP", text: "Booting 128-bit hardened defense microkernel (v2.0.4)...", status: "ONLINE", color: "text-cyan-400" },
+  { atSec: 7.9, code: "VECTOR_AVX512", text: "Enabling tensor math acceleration units across all cores...", status: "ENGAGED", color: "text-cyan-300" },
+  { atSec: 9.0, code: "KYBER_1024", text: "Post-quantum lattice encryption keys generated...", status: "SECURE", color: "text-violet-400" },
+  { atSec: 10.1, code: "CIPHER_AES_GCM", text: "Quantum cipher pool armed with 256-bit Galois counter...", status: "ARMED", color: "text-cyan-400" },
+  { atSec: 11.2, code: "CORE_MATRIX", text: "128/128 Neural heuristic processing cores synchronized...", status: "100%", color: "text-emerald-400" },
 
-  // Phase 3 (20s - 30s): Threat Engines
-  { atSec: 20.8, code: "NLP_TRANSFORMER", text: "Loading 7.8B perimeter threat classification weights...", status: "LOADED", color: "text-cyan-400" },
-  { atSec: 22.5, code: "PHISH_URGENCY", text: "Calibrating multilingual social-engineering detectors...", status: "ACTIVE", color: "text-amber-400" },
-  { atSec: 24.2, code: "ZERO_DAY_AI", text: "Priming behavioral anomaly heuristic radar...", status: "ARMED", color: "text-rose-400" },
-  { atSec: 26.0, code: "APK_SANDBOX", text: "Spooling isolated Android permission analysis environment...", status: "STANDBY", color: "text-cyan-300" },
-  { atSec: 27.8, code: "QR_INSPECTOR", text: "Arming multi-hop QR redirect & deep-payload parser...", status: "READY", color: "text-emerald-400" },
-  { atSec: 29.4, code: "EMAIL_SPF_DKIM", text: "Forensic header authentication validator online...", status: "ONLINE", color: "text-cyan-400" },
+  // Phase 3 (12s - 18s): Threat Engines
+  { atSec: 12.5, code: "NLP_TRANSFORMER", text: "Loading 7.8B perimeter threat classification weights...", status: "LOADED", color: "text-cyan-400" },
+  { atSec: 13.6, code: "PHISH_URGENCY", text: "Calibrating multilingual social-engineering detectors...", status: "ACTIVE", color: "text-amber-400" },
+  { atSec: 14.8, code: "ZERO_DAY_AI", text: "Priming behavioral anomaly heuristic radar...", status: "ARMED", color: "text-rose-400" },
+  { atSec: 15.9, code: "APK_SANDBOX", text: "Spooling isolated Android permission analysis environment...", status: "STANDBY", color: "text-cyan-300" },
+  { atSec: 17.0, code: "QR_INSPECTOR", text: "Arming multi-hop QR redirect & deep-payload parser...", status: "READY", color: "text-emerald-400" },
 
-  // Phase 4 (30s - 40s): National Grid & Telemetry
-  { atSec: 30.9, code: "NAT_TELEMETRY", text: "Connecting to National Cybercrime Helpline (I4C 1930)...", status: "CONNECTED", color: "text-amber-400" },
-  { atSec: 32.6, code: "CERT_IN_SYNC", text: "Subscribing to real-time national advisory feed...", status: "STREAMING", color: "text-emerald-400" },
-  { atSec: 34.4, code: "FIN_FRAUD_RADAR", text: "RBI & NPCI banking spoofing heuristic monitors...", status: "LISTENING", color: "text-amber-300" },
-  { atSec: 36.2, code: "BGP_ROUTING", text: "Establishing global IP prefix hijack inspection socket...", status: "ACTIVE", color: "text-cyan-400" },
-  { atSec: 38.0, code: "STATE_EMERGENCY", text: "Mounting Pan-India emergency directory (Dial 112)...", status: "MAPPED", color: "text-emerald-300" },
-  { atSec: 39.5, code: "GRID_LATENCY", text: "Telemetry ping: 0.2ms latency across defense nodes...", status: "OPTIMAL", color: "text-emerald-400" },
+  // Phase 4 (18s - 24s): National Grid & Telemetry
+  { atSec: 18.4, code: "NAT_TELEMETRY", text: "Connecting to National Cybercrime Helpline (I4C 1930)...", status: "CONNECTED", color: "text-amber-400" },
+  { atSec: 19.6, code: "CERT_IN_SYNC", text: "Subscribing to real-time national advisory feed...", status: "STREAMING", color: "text-emerald-400" },
+  { atSec: 20.8, code: "FIN_FRAUD_RADAR", text: "RBI & NPCI banking spoofing heuristic monitors...", status: "LISTENING", color: "text-amber-300" },
+  { atSec: 22.0, code: "BGP_ROUTING", text: "Establishing global IP prefix hijack inspection socket...", status: "ACTIVE", color: "text-cyan-400" },
+  { atSec: 23.2, code: "GRID_LATENCY", text: "Telemetry ping: 0.2ms latency across defense nodes...", status: "OPTIMAL", color: "text-emerald-400" },
 
-  // Phase 5 (40s - 50s): Shield Arming & Final Overcharge
-  { atSec: 40.8, code: "BROWSER_SHIELD", text: "Engaging MV3 pre-navigation threat interceptor...", status: "ONLINE", color: "text-cyan-400" },
-  { atSec: 42.4, code: "IDENTITY_VAULT", text: "Locking dark web k-Anonymity credential vault...", status: "SECURE", color: "text-violet-400" },
-  { atSec: 44.0, code: "FIREWALL_STATE", text: "Activating deep packet inspection barrier filters...", status: "ARMED", color: "text-emerald-400" },
-  { atSec: 45.8, code: "THREAT_GRAPH", text: "Synchronizing multi-target threat correlation nodes...", status: "SYNCHED", color: "text-cyan-300" },
-  { atSec: 47.4, code: "REACTOR_OVERCHARGE", text: "Pumping plasma reactor core to 120% military power...", status: "OVERCHARGE", color: "text-amber-400" },
-  { atSec: 48.8, code: "GRID_LOCKDOWN", text: "All 14 tactical security subsystems synchronized...", status: "PRIMED", color: "text-emerald-400" },
-  { atSec: 49.6, code: "SYSTEM_ARMED", text: "CYBERSHIELD 2.0 FULL DEFENSE GRID ENGAGED...", status: "100% ARMED", color: "text-emerald-300" },
+  // Phase 5 (24s - 30s): Shield Arming & Final Overcharge
+  { atSec: 24.5, code: "BROWSER_SHIELD", text: "Engaging MV3 pre-navigation threat interceptor...", status: "ONLINE", color: "text-cyan-400" },
+  { atSec: 25.8, code: "IDENTITY_VAULT", text: "Locking dark web k-Anonymity credential vault...", status: "SECURE", color: "text-violet-400" },
+  { atSec: 27.0, code: "REACTOR_MAX", text: "Overcharging central hexagonal plasma reactor core...", status: "OVERCHARGE", color: "text-amber-400" },
+  { atSec: 28.4, code: "GRID_LOCKDOWN", text: "All 14 tactical security subsystems synchronized...", status: "PRIMED", color: "text-emerald-400" },
+  { atSec: 29.5, code: "SYSTEM_ARMED", text: "CYBERSHIELD 2.0 FULL DEFENSE GRID ENGAGED...", status: "100% ARMED", color: "text-emerald-300" },
 ];
 
 export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps) {
@@ -80,236 +75,74 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
   const soundEnabledRef = useRef(false);
   soundEnabledRef.current = soundEnabled;
 
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const droneOscRef = useRef<OscillatorNode | null>(null);
-  const droneSubRef = useRef<OscillatorNode | null>(null);
-  const droneFilterRef = useRef<BiquadFilterNode | null>(null);
-  const droneGainRef = useRef<GainNode | null>(null);
-  const lastPingSecRef = useRef(0);
-  const lastPhaseRef = useRef(1);
+  const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const terminalScrollRef = useRef<HTMLDivElement | null>(null);
 
-  // Initialize or resume AudioContext
-  function getAudioContext(): AudioContext | null {
+  // Play official voice cue safely via Web Speech API
+  function playVoiceCue(text: string) {
+    if (!soundEnabledRef.current) return;
     try {
-      if (!audioCtxRef.current) {
-        const AudioContextClass =
-          window.AudioContext ||
-          (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-        audioCtxRef.current = new AudioContextClass();
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.05;
+        utterance.pitch = 0.95;
+        utterance.volume = 0.85;
+
+        // Try to pick an authoritative English voice
+        const voices = window.speechSynthesis.getVoices();
+        const engVoice = voices.find((v) => v.lang.startsWith("en") && (v.name.includes("Natural") || v.name.includes("Google") || v.name.includes("Zira") || v.name.includes("David")));
+        if (engVoice) {
+          utterance.voice = engVoice;
+        }
+
+        window.speechSynthesis.speak(utterance);
       }
-      if (audioCtxRef.current.state === "suspended") {
-        void audioCtxRef.current.resume();
-      }
-      return audioCtxRef.current;
     } catch {
-      return null;
+      // Speech synthesis skipped gracefully
     }
   }
 
-  // Start continuous reactor spooling drone
-  function startContinuousDrone() {
-    const ctx = getAudioContext();
-    if (!ctx || droneOscRef.current) return;
-
+  // Start Official Soundtrack
+  function startOfficialAudio() {
     try {
-      // Primary Turbine Drone Oscillator
-      const osc = ctx.createOscillator();
-      const sub = ctx.createOscillator();
-      const filter = ctx.createBiquadFilter();
-      const gain = ctx.createGain();
-
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(42, ctx.currentTime);
-
-      sub.type = "sine";
-      sub.frequency.setValueAtTime(32, ctx.currentTime);
-
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(110, ctx.currentTime);
-      filter.Q.setValueAtTime(3.5, ctx.currentTime);
-
-      gain.gain.setValueAtTime(0.001, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.065, ctx.currentTime + 1.2);
-
-      osc.connect(filter);
-      sub.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start();
-      sub.start();
-
-      droneOscRef.current = osc;
-      droneSubRef.current = sub;
-      droneFilterRef.current = filter;
-      droneGainRef.current = gain;
+      if (!audioPlayerRef.current) {
+        const audio = new Audio("/audio/cybershield_startup.wav");
+        audio.preload = "auto";
+        audio.volume = 0.85;
+        audioPlayerRef.current = audio;
+      }
+      void audioPlayerRef.current.play();
     } catch {
-      // Audio graceful fallback
+      // Fallback
     }
   }
 
-  // Stop continuous reactor spooling drone
-  function stopContinuousDrone() {
-    if (droneGainRef.current && audioCtxRef.current) {
+  // Stop Official Soundtrack
+  function stopOfficialAudio() {
+    if (audioPlayerRef.current) {
       try {
-        const ctx = audioCtxRef.current;
-        droneGainRef.current.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.3);
-        setTimeout(() => {
-          droneOscRef.current?.stop();
-          droneSubRef.current?.stop();
-          droneOscRef.current = null;
-          droneSubRef.current = null;
-          droneFilterRef.current = null;
-          droneGainRef.current = null;
-        }, 350);
+        audioPlayerRef.current.pause();
+        audioPlayerRef.current.currentTime = 0;
+      } catch {
+        // ignore
+      }
+    }
+    if ("speechSynthesis" in window) {
+      try {
+        window.speechSynthesis.cancel();
       } catch {
         // ignore
       }
     }
   }
 
-  // Update drone pitch & filter over the 50-second timeline
-  function updateDronePitch(pct: number) {
-    if (!droneOscRef.current || !droneFilterRef.current || !audioCtxRef.current) return;
-    try {
-      const ctx = audioCtxRef.current;
-      // Spool up from 42Hz to 210Hz
-      const targetFreq = 42 + (pct / 100) * 168;
-      droneOscRef.current.frequency.setTargetAtTime(targetFreq, ctx.currentTime, 0.1);
-
-      // Sub bass follows octave below
-      if (droneSubRef.current) {
-        droneSubRef.current.frequency.setTargetAtTime(targetFreq * 0.5, ctx.currentTime, 0.1);
-      }
-
-      // Filter opens from 110Hz to 850Hz as reactor charges
-      const targetCutoff = 110 + (pct / 100) * 740;
-      droneFilterRef.current.frequency.setTargetAtTime(targetCutoff, ctx.currentTime, 0.1);
-    } catch {
-      // ignore
-    }
-  }
-
-  // Rhythmic Radar Sonar Ping
-  function playRadarPing() {
-    if (!soundEnabledRef.current) return;
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    try {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(880, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.4);
-
-      gain.gain.setValueAtTime(0.045, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.55);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start();
-      osc.stop(ctx.currentTime + 0.6);
-    } catch {
-      // ignore
-    }
-  }
-
-  // Terminal Log Packet Chirp
-  function playPacketChirp(logIndex: number) {
-    if (!soundEnabledRef.current) return;
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    try {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = logIndex % 2 === 0 ? "sine" : "triangle";
-      const baseFreq = 850 + (logIndex % 8) * 110;
-      osc.frequency.setValueAtTime(baseFreq, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(baseFreq + 240, ctx.currentTime + 0.035);
-
-      gain.gain.setValueAtTime(0.035, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start();
-      osc.stop(ctx.currentTime + 0.045);
-    } catch {
-      // ignore
-    }
-  }
-
-  // Phase Transition Chime
-  function playPhaseChime(phaseNum: number) {
-    if (!soundEnabledRef.current) return;
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    try {
-      const baseNotes = [440, 523.25, 587.33, 659.25, 783.99];
-      const note = baseNotes[phaseNum - 1] || 440;
-
-      [note, note * 1.5].forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = "triangle";
-        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
-
-        gain.gain.setValueAtTime(0.06, ctx.currentTime + idx * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.5);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(ctx.currentTime + idx * 0.08);
-        osc.stop(ctx.currentTime + idx * 0.08 + 0.55);
-      });
-    } catch {
-      // ignore
-    }
-  }
-
-  // Climax "ALL SYSTEMS ARMED" Final Overcharge Fanfare
-  function playClimaxChord() {
-    if (!soundEnabledRef.current) return;
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    try {
-      // Powerful cyber chord: C3, C4, E4, G4, C5 + Sub bass boom
-      const chord = [130.81, 261.63, 329.63, 392.0, 523.25, 659.25];
-      chord.forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = idx < 2 ? "sawtooth" : "triangle";
-        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.03);
-
-        gain.gain.setValueAtTime(0.09, ctx.currentTime + idx * 0.03);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.4);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(ctx.currentTime + idx * 0.03);
-        osc.stop(ctx.currentTime + 1.45);
-      });
-    } catch {
-      // ignore
-    }
-  }
-
-  // 50-Second Main Animation & Sound Driver
+  // 30-Second Main Animation & Sound Driver
   useEffect(() => {
     const startTime = Date.now();
+    let spokenVoice1 = false;
+    let spokenVoice2 = false;
+    let spokenVoice3 = false;
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -319,24 +152,22 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
       setElapsedMs(elapsed);
       setProgress(rawPct);
 
-      // Determine active Phase (1 to 5)
-      const phaseNum = Math.min(5, Math.floor(currentSec / 10) + 1);
+      // Determine active Phase (1 to 5, each 6 seconds)
+      const phaseNum = Math.min(5, Math.floor(currentSec / 6) + 1);
       setCurrentPhase(phaseNum);
 
-      if (phaseNum !== lastPhaseRef.current) {
-        lastPhaseRef.current = phaseNum;
-        playPhaseChime(phaseNum);
-      }
-
-      // Update Spooling Drone Pitch
+      // Voice cues at strategic milestones
       if (soundEnabledRef.current) {
-        updateDronePitch(rawPct);
-      }
-
-      // Rhythmic Sonar Ping every 2.5 seconds
-      if (currentSec - lastPingSecRef.current >= 2.5) {
-        lastPingSecRef.current = currentSec;
-        playRadarPing();
+        if (currentSec >= 1.2 && !spokenVoice1) {
+          spokenVoice1 = true;
+          playVoiceCue("CyberShield system initializing. Defense core active.");
+        } else if (currentSec >= 12.2 && !spokenVoice2) {
+          spokenVoice2 = true;
+          playVoiceCue("Threat matrix online. Synchronizing national radar.");
+        } else if (currentSec >= 26.0 && !spokenVoice3) {
+          spokenVoice3 = true;
+          playVoiceCue("All defense countermeasures online. CyberShield fully armed.");
+        }
       }
 
       // Check for newly triggered terminal logs
@@ -351,8 +182,6 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
 
       setActiveLogIndex((prev) => {
         if (newestIndex > prev) {
-          playPacketChirp(newestIndex);
-          // Auto-scroll terminal to bottom
           if (terminalScrollRef.current) {
             terminalScrollRef.current.scrollTop = terminalScrollRef.current.scrollHeight;
           }
@@ -361,23 +190,20 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
         return prev;
       });
 
-      // 50 Seconds Completed -> Armed Climax Sequence
+      // 30 Seconds Completed -> Armed Climax Sequence
       if (elapsed >= TOTAL_DURATION_MS) {
         clearInterval(interval);
-        playClimaxChord();
-        stopContinuousDrone();
-
-        // Hold armed state momentarily, then trigger warp iris dissolve
         setTimeout(() => {
           setIsWarpingOut(true);
           setTimeout(() => {
+            stopOfficialAudio();
             onComplete();
           }, 700);
-        }, 600);
+        }, 500);
       }
-    }, 40);
+    }, 35);
 
-    // Keyboard shortcut handlers (ESC or Space to Skip, M to toggle mute)
+    // Keyboard shortcut handlers (ESC to Skip, M to toggle audio)
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         handleSkip();
@@ -390,12 +216,12 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
     return () => {
       clearInterval(interval);
       window.removeEventListener("keydown", handleKeyDown);
-      stopContinuousDrone();
+      stopOfficialAudio();
     };
   }, []);
 
   function handleSkip() {
-    stopContinuousDrone();
+    stopOfficialAudio();
     setIsWarpingOut(true);
     setTimeout(() => {
       onComplete();
@@ -407,10 +233,10 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
       const next = !prev;
       soundEnabledRef.current = next;
       if (next) {
-        startContinuousDrone();
-        playRadarPing();
+        startOfficialAudio();
+        playVoiceCue("CyberShield audio engaged.");
       } else {
-        stopContinuousDrone();
+        stopOfficialAudio();
       }
       return next;
     });
@@ -459,7 +285,7 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
         <div className="flex items-center gap-2.5">
           <span className="cyber-beacon-cyan inline-block h-2 w-2 rounded-full bg-cyan-400" />
           <span className="text-[10px] font-bold tracking-[0.2em] text-cyan-400 sm:text-[11px]">
-            // CYBERSHIELD BIOS 2.0.4 // 50s TACTICAL POWER-ON
+            // CYBERSHIELD BIOS 2.0.4 // 30s OFFICIAL SOC POWER-ON
           </span>
           <span className="hidden md:inline-block text-[9px] text-slate-500">
             [SYS_STATE: FULL_GRID_INITIALIZATION]
@@ -467,7 +293,7 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Prominent Audio Toggle */}
+          {/* Official Audio Toggle */}
           <button
             type="button"
             onClick={(e) => {
@@ -479,10 +305,10 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
                 ? "border-emerald-400 bg-emerald-500/20 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.4)]"
                 : "border-cyan-500/30 bg-cyan-500/10 text-cyan-300 hover:border-cyan-400 hover:text-white"
             }`}
-            title="Toggle military reactor audio synthesis (Shortcut: M)"
+            title="Toggle official studio audio soundtrack & tactical AI voice (Shortcut: M)"
           >
             {soundEnabled ? <Volume2 size={13} className="text-emerald-400" /> : <VolumeX size={13} />}
-            <span>AUDIO {soundEnabled ? "ON [TACTICAL]" : "OFF (CLICK TO ENABLE)"}</span>
+            <span>AUDIO {soundEnabled ? "ON [OFFICIAL]" : "OFF (CLICK TO ENABLE)"}</span>
           </button>
 
           {/* Fast Forward / Skip Button */}
@@ -502,7 +328,7 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
       </header>
 
       {/* ==================================================
-          5-PHASE STEPPER HUD BAR
+          5-PHASE STEPPER HUD BAR (6 SECONDS PER PHASE)
       ================================================== */}
       <div className="relative z-20 border-b border-white/5 bg-black/40 px-4 py-2 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-1 overflow-x-auto text-[9px] sm:text-[10px]">
@@ -557,7 +383,7 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
               className="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-950/70 px-4 py-1 text-[10px] font-bold text-cyan-300 shadow-[0_0_15px_rgba(0,240,255,0.3)] transition hover:border-cyan-300 hover:bg-cyan-900"
             >
               <Volume2 size={13} className="text-cyan-400 animate-bounce" />
-              <span>[🔊 CLICK ANYWHERE OR PRESS &apos;M&apos; TO ENGAGE TACTICAL AUDIO STREAM]</span>
+              <span>[🔊 CLICK ANYWHERE OR PRESS &apos;M&apos; FOR OFFICIAL STUDIO AUDIO]</span>
             </button>
           </div>
         )}
@@ -583,11 +409,11 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
           {/* Pulsing Shockwave Rings */}
           <div
             className="pointer-events-none absolute inset-0 rounded-full border border-cyan-400"
-            style={{ animation: "cyber-shockwave-expand 2.5s ease-out infinite" }}
+            style={{ animation: "cyber-shockwave-expand 2.2s ease-out infinite" }}
           />
           <div
             className="pointer-events-none absolute inset-0 rounded-full border border-emerald-400"
-            style={{ animation: "cyber-shockwave-expand 2.5s ease-out 1.25s infinite" }}
+            style={{ animation: "cyber-shockwave-expand 2.2s ease-out 1.1s infinite" }}
           />
 
           {/* Center Hexagonal Reactor Glow Core */}
@@ -608,7 +434,7 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
             <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
           </div>
           <p className="text-[9px] font-bold tracking-[0.3em] text-cyan-400 sm:text-xs">
-            // NATIONAL SOC DEFENSE SUITE // 50s POWER-ON INITIALIZATION
+            // NATIONAL SOC DEFENSE SUITE // 30s POWER-ON PROCESS
           </p>
         </div>
 
@@ -620,7 +446,7 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
               <span className="text-slate-200">{BOOT_PHASES[currentPhase - 1]?.name}</span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-slate-400">T+{currentSeconds}s / 50.0s</span>
+              <span className="text-slate-400">T+{currentSeconds}s / 30.0s</span>
               <span className="font-mono text-cyan-300 drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]">
                 {progress}%
               </span>
@@ -646,7 +472,7 @@ export default function CyberBootSequence({ onComplete }: CyberBootSequenceProps
           <div className="mb-2 flex items-center justify-between border-b border-white/10 pb-1.5 text-[9px] text-slate-400">
             <div className="flex items-center gap-1.5 text-cyan-400">
               <Terminal size={12} />
-              <span className="font-bold tracking-wider">// KERNEL BOOT STREAM (30 MODULES)</span>
+              <span className="font-bold tracking-wider">// KERNEL BOOT STREAM (25 MODULES)</span>
             </div>
             <span className="text-[8px] text-slate-500">
               ACTIVE LOGS: {activeLogIndex + 1}/{BOOT_LOGS.length}
