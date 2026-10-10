@@ -52,9 +52,14 @@ from fastapi.responses import FileResponse
 
 # Check potential locations for frontend/dist
 possible_dist_paths = [
+    Path(__file__).resolve().parent.parent / "dist",
     Path(__file__).resolve().parent.parent.parent / "frontend" / "dist",
+    Path("/app/backend/dist"),
     Path("/app/frontend/dist"),
+    Path("/app/dist"),
+    Path("dist"),
     Path("frontend/dist"),
+    Path("../frontend/dist"),
 ]
 
 dist_path = None
