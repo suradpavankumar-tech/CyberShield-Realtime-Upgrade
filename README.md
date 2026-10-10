@@ -124,3 +124,7 @@ GitHub Actions runs both backend tests and the frontend build on the feature bra
 Backend requires a PostgreSQL connection and a strong `JWT_SECRET_KEY`. Optional threat-intelligence configuration is documented in `backend/.env.example`.
 
 Frontend requires only the API base URL. Browser extension credentials are configured by the user in extension-local storage and are not committed to the repository.
+
+## 🚀 Live Cloud Deployment
+Experience CyberShield 2.0 live on Railway:
+👉 [https://cybershield-realtime-upgrade-production-daaf.up.railway.app](https://cybershield-realtime-upgrade-production-daaf.up.railway.app)
