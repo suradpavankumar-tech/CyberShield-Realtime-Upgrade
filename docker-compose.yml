@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # =========================================================
+  # CyberShield FastAPI Backend Service
+  # =========================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cybershield-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=CyberShield
+      - APP_ENV=production
+      - DEBUG=False
+      - DATABASE_URL=sqlite:////app/data/cybershield.db
+      - JWT_SECRET_KEY=P9ZQZnBzAUescn9KgfVDUpqA3rZCdBD5xWozvRe1fOyl_1_wbfN5UwnwJGVrB1--og7YQ21nCv59l6anhyxSmw
+      - JWT_ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+      - CORS_ORIGINS=http://localhost,http://localhost:80,http://localhost:5173,http://127.0.0.1
+    volumes:
+      - cybershield-db:/app/data
+    networks:
+      - cybershield-net
+
+  # =========================================================
+  # CyberShield React 19 Frontend Web Service
+  # =========================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cybershield-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - cybershield-net
+
+volumes:
+  cybershield-db:
+
+networks:
+  cybershield-net:
+    driver: bridge
