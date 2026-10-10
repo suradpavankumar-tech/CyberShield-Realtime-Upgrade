@@ -13,6 +13,7 @@ import {
   X,
   XCircle,
   Activity,
+  Power,
 } from "lucide-react";
 
 import {
@@ -927,6 +928,19 @@ function Topbar({
           <Activity size={11} className="text-cyan-400 animate-pulse" />
           <span>RADAR: 24/7 LIVE</span>
         </div>
+
+        <div className="h-3 w-px bg-white/10" />
+
+        {/* Tactical Reboot / Power-On Animation Trigger */}
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent("cybershield:reboot"))}
+          className="flex items-center gap-1.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 font-mono text-[9px] font-bold text-cyan-300 transition hover:border-cyan-400 hover:bg-cyan-500/20 hover:text-white hover:shadow-[0_0_10px_rgba(0,240,255,0.4)]"
+          title="Reboot CyberShield SOC (Replay Powering-On Animation)"
+        >
+          <Power size={10} className="text-cyan-400" />
+          <span>REBOOT SOC</span>
+        </button>
       </div>
 
 
@@ -935,6 +949,17 @@ function Topbar({
       ================================================== */}
 
       <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+
+        {/* Mobile Reboot Button */}
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent("cybershield:reboot"))}
+          className="flex md:hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 transition hover:border-cyan-400 hover:bg-cyan-500/20 hover:text-white hover:shadow-[0_0_10px_rgba(0,240,255,0.4)]"
+          title="Reboot CyberShield SOC (Replay Powering-On Animation)"
+          aria-label="Reboot CyberShield SOC"
+        >
+          <Power size={18} />
+        </button>
 
 
         {/* ==================================================
