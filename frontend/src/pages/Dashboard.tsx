@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-
 import {
   Activity,
   AlertTriangle,
@@ -18,8 +17,17 @@ import {
   TrendingUp,
   TriangleAlert,
   XCircle,
+  Globe2,
+  UserCheck,
+  Smartphone,
+  Network,
+  QrCode,
+  AlertOctagon,
+  Zap,
+  Sparkles,
+  ExternalLink,
+  Shield,
 } from "lucide-react";
-
 import { Link } from "react-router-dom";
 
 import DashboardStatCard from "../components/ui/DashboardStatCard";
@@ -30,281 +38,163 @@ import {
   getDashboard,
   getDashboardTrends,
 } from "../services/dashboardService";
+import {
+  getThreatPulseTrends,
+  type ThreatPulseResponse,
+} from "../services/securityModules";
+import { analyze } from "../services/analysisService";
 
 import type {
   DashboardResponse,
   DashboardTrendsResponse,
   DashboardScan,
 } from "../types/dashboard";
+import type { AnalysisResponse, InputType } from "../types/analysis";
 
-function formatCategory(
-  category: string | null,
-) {
-  if (!category) {
-    return "Unclassified";
-  }
-
+function formatCategory(category: string | null) {
+  if (!category) return "Unclassified";
   return category
     .toLowerCase()
     .split("_")
-    .map(
-      (word) =>
-        word.charAt(0).toUpperCase() +
-        word.slice(1),
-    )
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
 
-function formatDate(
-  date: string | null,
-) {
-  if (!date) {
-    return "—";
-  }
-
+function formatDate(date: string | null) {
+  if (!date) return "—";
   const parsed = new Date(date);
-
-  if (Number.isNaN(parsed.getTime())) {
-    return "—";
-  }
-
-  return new Intl.DateTimeFormat(
-    "en-IN",
-    {
-      dateStyle: "medium",
-      timeStyle: "short",
-    },
-  ).format(parsed);
+  if (Number.isNaN(parsed.getTime())) return "—";
+  return new Intl.DateTimeFormat("en-IN", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(parsed);
 }
 
-function formatTrendDateRange(
-  trends: DashboardTrendsResponse | null,
-) {
-  if (
-    !trends ||
-    trends.trends.length === 0
-  ) {
-    return "Last 7 days";
-  }
-
-  const first =
-    trends.trends[0]?.date;
-
-  const last =
-    trends.trends[
-      trends.trends.length - 1
-    ]?.date;
-
-  if (!first || !last) {
-    return `Last ${trends.period_days} days`;
-  }
+function formatTrendDateRange(trends: DashboardTrendsResponse | null) {
+  if (!trends || trends.trends.length === 0) return "Last 7 days";
+  const first = trends.trends[0]?.date;
+  const last = trends.trends[trends.trends.length - 1]?.date;
+  if (!first || !last) return `Last ${trends.period_days} days`;
 
   const firstDate = new Date(first);
   const lastDate = new Date(last);
-
-  if (
-    Number.isNaN(firstDate.getTime()) ||
-    Number.isNaN(lastDate.getTime())
-  ) {
+  if (Number.isNaN(firstDate.getTime()) || Number.isNaN(lastDate.getTime())) {
     return `Last ${trends.period_days} days`;
   }
 
-  const formatter =
-    new Intl.DateTimeFormat(
-      "en-IN",
-      {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      },
-    );
-
-  return `${formatter.format(
-    firstDate,
-  )} - ${formatter.format(lastDate)}`;
+  const formatter = new Intl.DateTimeFormat("en-IN", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  return `${formatter.format(firstDate)} - ${formatter.format(lastDate)}`;
 }
 
-function getRiskClasses(
-  riskLevel: string | null,
-) {
+function getRiskClasses(riskLevel: string | null) {
   switch (riskLevel) {
     case "HIGH":
       return {
-        badge:
-          "border-red-400/20 bg-red-400/10 text-red-300",
+        badge: "border-red-400/20 bg-red-400/10 text-red-300",
         dot: "bg-red-400",
       };
-
     case "MEDIUM":
       return {
-        badge:
-          "border-amber-400/20 bg-amber-400/10 text-amber-300",
+        badge: "border-amber-400/20 bg-amber-400/10 text-amber-300",
         dot: "bg-amber-400",
       };
-
     case "LOW":
       return {
-        badge:
-          "border-emerald-400/20 bg-emerald-400/10 text-emerald-300",
+        badge: "border-emerald-400/20 bg-emerald-400/10 text-emerald-300",
         dot: "bg-emerald-400",
       };
-
     default:
       return {
-        badge:
-          "border-slate-400/20 bg-slate-400/10 text-slate-400",
+        badge: "border-slate-400/20 bg-slate-400/10 text-slate-400",
         dot: "bg-slate-400",
       };
   }
 }
 
-function getInputIcon(
-  inputType: DashboardScan["input_type"],
-) {
-  if (inputType === "URL") {
-    return <Search size={15} />;
-  }
-
-  if (inputType === "MESSAGE") {
-    return <FileWarning size={15} />;
-  }
-
+function getInputIcon(inputType: DashboardScan["input_type"]) {
+  if (inputType === "URL") return <Search size={15} />;
+  if (inputType === "MESSAGE") return <FileWarning size={15} />;
   return <Mail size={15} />;
 }
 
-function getStatusClasses(
-  status: string,
-) {
+function getStatusClasses(status: string) {
   switch (status) {
     case "COMPLETED":
       return {
-        badge:
-          "border-emerald-400/15 bg-emerald-400/[0.05] text-emerald-300",
-        icon: (
-          <CheckCircle2
-            size={14}
-            className="text-emerald-400"
-          />
-        ),
+        badge: "border-emerald-400/15 bg-emerald-400/[0.05] text-emerald-300",
+        icon: <CheckCircle2 size={14} className="text-emerald-400" />,
       };
-
     case "FAILED":
       return {
-        badge:
-          "border-red-400/15 bg-red-400/[0.05] text-red-300",
-        icon: (
-          <XCircle
-            size={14}
-            className="text-red-400"
-          />
-        ),
+        badge: "border-red-400/15 bg-red-400/[0.05] text-red-300",
+        icon: <XCircle size={14} className="text-red-400" />,
       };
-
     case "PENDING":
       return {
-        badge:
-          "border-amber-400/15 bg-amber-400/[0.05] text-amber-300",
-        icon: (
-          <Clock3
-            size={14}
-            className="text-amber-400"
-          />
-        ),
+        badge: "border-amber-400/15 bg-amber-400/[0.05] text-amber-300",
+        icon: <Clock3 size={14} className="text-amber-400" />,
       };
-
     default:
       return {
-        badge:
-          "border-white/10 bg-white/[0.03] text-slate-400",
-        icon: (
-          <Clock3
-            size={14}
-            className="text-slate-500"
-          />
-        ),
+        badge: "border-white/10 bg-white/[0.03] text-slate-400",
+        icon: <Clock3 size={14} className="text-slate-500" />,
       };
   }
 }
 
 function getErrorMessage(error: any) {
-  const detail =
-    error?.response?.data?.detail;
-
-  if (typeof detail === "string") {
-    return detail;
+  const detail = error?.response?.data?.detail;
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail) && detail.length > 0) {
+    return detail[0]?.msg || "The backend rejected the dashboard request.";
   }
-
-  if (
-    Array.isArray(detail) &&
-    detail.length > 0
-  ) {
-    return (
-      detail[0]?.msg ||
-      "The backend rejected the dashboard request."
-    );
-  }
-
-  if (
-    typeof error?.response?.data
-      ?.message === "string"
-  ) {
+  if (typeof error?.response?.data?.message === "string") {
     return error.response.data.message;
   }
-
-  if (
-    typeof error?.message === "string"
-  ) {
-    return error.message;
-  }
-
+  if (typeof error?.message === "string") return error.message;
   return "Unable to load security intelligence.";
 }
 
-function Dashboard() {
-  const [trendDays, setTrendDays] =
-    useState(7);
+export default function Dashboard() {
+  const [trendDays, setTrendDays] = useState(7);
+  const [dashboard, setDashboard] = useState<DashboardResponse | null>(null);
+  const [trends, setTrends] = useState<DashboardTrendsResponse | null>(null);
+  const [threatPulse, setThreatPulse] = useState<ThreatPulseResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState("");
 
-  const [dashboard, setDashboard] =
-    useState<DashboardResponse | null>(
-      null,
-    );
+  // Instant Triage State
+  const [triageType, setTriageType] = useState<InputType>("URL");
+  const [triageContent, setTriageContent] = useState("");
+  const [triageLoading, setTriageLoading] = useState(false);
+  const [triageResult, setTriageResult] = useState<AnalysisResponse | null>(null);
+  const [triageError, setTriageError] = useState<string | null>(null);
 
-  const [trends, setTrends] =
-    useState<DashboardTrendsResponse | null>(
-      null,
-    );
+  // Recent Scans Filter State
+  const [riskFilter, setRiskFilter] = useState<string>("ALL");
+  const [typeFilter, setTypeFilter] = useState<string>("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [refreshing, setRefreshing] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
-
-  async function loadDashboard(
-    refresh = false,
-  ) {
+  async function loadDashboard(refresh = false) {
     try {
-      if (refresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
-
+      if (refresh) setRefreshing(true);
+      else setLoading(true);
       setError("");
 
-      const [
-        dashboardData,
-        trendsData,
-      ] = await Promise.all([
+      const [dashboardData, trendsData, pulseData] = await Promise.all([
         getDashboard(),
         getDashboardTrends(trendDays),
+        getThreatPulseTrends().catch(() => null),
       ]);
 
       setDashboard(dashboardData);
       setTrends(trendsData);
+      setThreatPulse(pulseData);
     } catch (err: any) {
       setError(getErrorMessage(err));
     } finally {
@@ -317,61 +207,30 @@ function Dashboard() {
     void loadDashboard();
   }, [trendDays]);
 
+  // Derived Analytics Data
   const derivedData = useMemo(() => {
-    if (!dashboard) {
-      return null;
-    }
+    if (!dashboard) return null;
 
-    const total =
-      dashboard.total_scans;
+    const total = dashboard.total_scans;
+    const completed = dashboard.status_distribution.completed;
+    const failed = dashboard.status_distribution.failed;
+    const pending = dashboard.status_distribution.pending;
+    const highRisk = dashboard.risk_distribution.high;
+    const mediumRisk = dashboard.risk_distribution.medium;
+    const lowRisk = dashboard.risk_distribution.low;
+    const classified = highRisk + mediumRisk + lowRisk;
 
-    const completed =
-      dashboard.status_distribution
-        .completed;
+    const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+    const highRiskRate = total > 0 ? Math.round((highRisk / total) * 100) : 0;
 
-    const failed =
-      dashboard.status_distribution
-        .failed;
+    // Posture score: percentage of safe/low-risk interactions weighted against high risk
+    const postureScore =
+      classified > 0
+        ? Math.max(10, Math.min(99, Math.round(((lowRisk * 1.0 + mediumRisk * 0.4) / classified) * 100)))
+        : 95;
 
-    const pending =
-      dashboard.status_distribution
-        .pending;
-
-    const highRisk =
-      dashboard.risk_distribution.high;
-
-    const mediumRisk =
-      dashboard.risk_distribution.medium;
-
-    const lowRisk =
-      dashboard.risk_distribution.low;
-
-    const classified =
-      highRisk +
-      mediumRisk +
-      lowRisk;
-
-    const completionRate =
-      total > 0
-        ? Math.round(
-            (completed / total) * 100,
-          )
-        : 0;
-
-    const highRiskRate =
-      total > 0
-        ? Math.round(
-            (highRisk / total) * 100,
-          )
-        : 0;
-
-    const categories = Object.entries(
-      dashboard.threat_categories,
-    )
-      .sort(
-        ([, first], [, second]) =>
-          second - first,
-      )
+    const categories = Object.entries(dashboard.threat_categories)
+      .sort(([, first], [, second]) => second - first)
       .slice(0, 5);
 
     return {
@@ -385,217 +244,375 @@ function Dashboard() {
       classified,
       completionRate,
       highRiskRate,
+      postureScore,
       categories,
     };
   }, [dashboard]);
 
-  /* ==================================================
-      LOADING
-  ================================================== */
+  // Filtered recent scans
+  const filteredScans = useMemo(() => {
+    if (!dashboard) return [];
+    return dashboard.recent_scans.filter((scan) => {
+      // Risk filter
+      if (riskFilter !== "ALL" && (scan.risk_level || "UNASSESSED") !== riskFilter) {
+        return false;
+      }
+      // Type filter
+      if (typeFilter !== "ALL" && scan.input_type !== typeFilter) {
+        return false;
+      }
+      // Search query
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        const matchesId = scan.scan_id.toString().includes(query);
+        const matchesCat = (scan.threat_category || "").toLowerCase().includes(query);
+        const matchesType = scan.input_type.toLowerCase().includes(query);
+        if (!matchesId && !matchesCat && !matchesType) return false;
+      }
+      return true;
+    });
+  }, [dashboard, riskFilter, typeFilter, searchQuery]);
 
+  // Handle Instant Triage submission
+  async function handleInstantTriage(e: React.FormEvent) {
+    e.preventDefault();
+    if (!triageContent.trim()) return;
+
+    setTriageLoading(true);
+    setTriageError(null);
+    setTriageResult(null);
+
+    try {
+      const res = await analyze(triageType, triageContent.trim());
+      setTriageResult(res);
+      // Refresh dashboard background stats
+      void loadDashboard(true);
+    } catch (err: any) {
+      setTriageError(err?.response?.data?.detail || err.message || "Triage inspection failed.");
+    } finally {
+      setTriageLoading(false);
+    }
+  }
+
+  /* ==================================================
+      LOADING STATE
+  ================================================== */
   if (loading) {
     return (
       <section className="p-5 sm:p-6">
         <div className="mx-auto max-w-[1500px]">
-
           <div className="flex min-h-[70vh] items-center justify-center">
-
             <div className="text-center">
-
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10">
-
-                <RefreshCw
-                  size={21}
-                  className="animate-spin text-cyan-400"
-                />
-
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 shadow-lg shadow-cyan-500/10">
+                <RefreshCw size={24} className="animate-spin text-cyan-400" />
               </div>
-
-              <p className="mt-4 text-sm font-medium text-white">
-                Loading security intelligence
-              </p>
-
-              <p className="mt-1 text-xs text-slate-500">
-                Retrieving your latest scan
-                analytics...
-              </p>
-
+              <p className="mt-4 text-base font-bold text-white">Initializing CyberShield Command Center</p>
+              <p className="mt-1 text-xs text-slate-400">Aggregating telemetry, live radar, and threat models…</p>
             </div>
-
           </div>
-
         </div>
       </section>
     );
   }
 
   /* ==================================================
-      ERROR
+      ERROR STATE
   ================================================== */
-
-  if (
-    error ||
-    !dashboard ||
-    !trends ||
-    !derivedData
-  ) {
+  if (error || !dashboard || !trends || !derivedData) {
     return (
       <section className="p-5 sm:p-6">
         <div className="mx-auto max-w-[1500px]">
-
           <div className="flex min-h-[70vh] items-center justify-center">
-
-            <div className="w-full max-w-md rounded-2xl border border-red-400/15 bg-red-400/[0.04] p-7 text-center">
-
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-red-400/10 text-red-300">
-                <TriangleAlert size={22} />
+            <div className="w-full max-w-md rounded-2xl border border-red-400/20 bg-red-400/[0.04] p-7 text-center shadow-xl">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-red-400/10 text-red-300 ring-1 ring-red-400/20">
+                <TriangleAlert size={24} />
               </div>
-
-              <h2 className="mt-4 text-lg font-semibold text-white">
-                Dashboard unavailable
-              </h2>
-
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                {error ||
-                  "Security analytics could not be retrieved."}
+              <h2 className="mt-4 text-lg font-bold text-white">Dashboard Telemetry Offline</h2>
+              <p className="mt-2 text-xs leading-5 text-slate-400">
+                {error || "Security analytics could not be retrieved from the intelligence gateway."}
               </p>
-
               <button
                 type="button"
-                onClick={() =>
-                  void loadDashboard()
-                }
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300"
+                onClick={() => void loadDashboard()}
+                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2.5 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"
               >
-                <RefreshCw size={15} />
-
-                Try again
+                <RefreshCw size={14} />
+                Reconnect Gateway
               </button>
-
             </div>
-
           </div>
-
         </div>
       </section>
     );
   }
 
-  const highestRisk =
-    dashboard.highest_risk_scan;
+  const highestRisk = dashboard.highest_risk_scan;
 
   return (
     <section className="p-5 sm:p-6">
-      <div className="mx-auto max-w-[1500px]">
-
+      <div className="mx-auto max-w-[1500px] space-y-7">
         {/* ==================================================
-            DASHBOARD HEADER
+            COMMAND CENTER EXECUTIVE HEADER
         ================================================== */}
         <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
-
-          {/* Heading */}
           <div>
-
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-400">
-              <ShieldCheck size={15} />
-
-              Security overview
+            <div className="flex items-center gap-3">
+              <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
+                Security Operations Command Center
+              </span>
+              <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[10px] font-semibold text-slate-300">
+                CyberShield 2.0
+              </span>
             </div>
 
-            <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Threat intelligence dashboard
+            <h1 className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl">
+              Threat Intelligence Command
             </h1>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Monitor investigation activity,
-              risk classifications, and
-              emerging threat patterns across
-              your CyberShield workspace.
+            <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-slate-400 sm:text-sm">
+              Continuous threat detection, live infrastructure telemetry, and multi-signal triage across URLs,
+              messages, Android APKs, and compromised identity registers.
             </p>
-
           </div>
 
-          {/* ==================================================
-              DATE RANGE + REFRESH
-          ================================================== */}
-          <div className="flex flex-wrap items-center gap-2">
-
-            {/* Date range */}
+          {/* Controls: Date range & Refresh */}
+          <div className="flex flex-wrap items-center gap-2.5">
             <div className="relative">
-
               <select
                 value={trendDays}
-                onChange={(event) =>
-                  setTrendDays(
-                    Number(event.target.value),
-                  )
-                }
-                className="min-w-[220px] appearance-none rounded-xl border border-white/10 bg-[#0a1220] py-3 pl-11 pr-10 text-xs font-semibold text-slate-200 outline-none transition hover:border-cyan-400/20 focus:border-cyan-400/30 focus:ring-2 focus:ring-cyan-400/10"
+                onChange={(e) => setTrendDays(Number(e.target.value))}
+                className="min-w-[210px] appearance-none rounded-xl border border-white/10 bg-[#0a1220] py-2.5 pl-10 pr-9 text-xs font-semibold text-slate-200 outline-none transition hover:border-cyan-400/30 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20"
                 aria-label="Dashboard date range"
               >
-
-                <option value={7}>
-                  {formatTrendDateRange(
-                    trends,
-                  )}
-                </option>
-
-                <option value={14}>
-                  Last 14 days
-                </option>
-
-                <option value={30}>
-                  Last 30 days
-                </option>
-
+                <option value={7}>{formatTrendDateRange(trends)}</option>
+                <option value={14}>Last 14 days</option>
+                <option value={30}>Last 30 days</option>
               </select>
-
               <CalendarDays
-                size={17}
-                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300"
+                size={16}
+                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-400"
               />
-
               <ChevronDown
-                size={15}
-                className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                size={14}
+                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
               />
-
             </div>
 
-            {/* Refresh */}
             <button
               type="button"
-              onClick={() =>
-                void loadDashboard(true)
-              }
+              onClick={() => void loadDashboard(true)}
               disabled={refreshing}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs font-semibold text-slate-300 transition hover:bg-white/[0.06] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-slate-300 transition hover:border-cyan-500/30 hover:bg-white/[0.07] hover:text-white disabled:opacity-50"
             >
-
-              <RefreshCw
-                size={15}
-                className={
-                  refreshing
-                    ? "animate-spin"
-                    : ""
-                }
-              />
-
-              {refreshing
-                ? "Refreshing..."
-                : "Refresh intelligence"}
-
+              <RefreshCw size={14} className={refreshing ? "animate-spin text-cyan-400" : "text-cyan-400"} />
+              {refreshing ? "Syncing…" : "Refresh"}
             </button>
 
+            <Link
+              to="/emergency"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-2.5 text-xs font-bold text-rose-300 shadow-lg shadow-rose-950/30 transition hover:bg-rose-500/20"
+            >
+              <AlertOctagon size={14} className="text-rose-400" />
+              <span>SOS 1930</span>
+            </Link>
           </div>
-
         </div>
 
         {/* ==================================================
-            MAIN STATS
+            LIVE THREAT PULSE ADVISORY & MARQUEE BANNER
         ================================================== */}
-        <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-[#0d1c33] via-[#091426] to-[#0a101f] p-4 shadow-xl">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-400 ring-1 ring-cyan-400/20">
+                <Sparkles size={16} />
+              </span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-cyan-400">
+                    NATIONAL CYBER RADAR
+                  </span>
+                  <span
+                    className={`rounded px-1.5 py-0.2 text-[9px] font-black uppercase tracking-widest ${
+                      threatPulse?.national_threat_level === "CRITICAL"
+                        ? "bg-rose-500 text-black"
+                        : "bg-amber-400 text-black"
+                    }`}
+                  >
+                    {threatPulse?.national_threat_level || "ELEVATED"} ADVISORY
+                  </span>
+                </div>
+                <p className="mt-0.5 text-xs font-semibold text-slate-200">
+                  Active Threat Waves: Coercive Digital Arrest Extortion &amp; Trojanized Banking APK Smishing
+                </p>
+              </div>
+            </div>
 
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-[11px] text-slate-400">
+                Active Campaigns: <strong className="text-white">{threatPulse?.campaigns.length || 3}</strong>
+              </span>
+              <span className="text-slate-600">•</span>
+              <span className="text-[11px] text-slate-400">
+                Helpline: <strong className="text-rose-400">1930</strong>
+              </span>
+              <Link
+                to="/threat-pulse"
+                className="inline-flex items-center gap-1 rounded-lg bg-cyan-500/10 px-2.5 py-1 text-xs font-bold text-cyan-300 transition hover:bg-cyan-500/20"
+              >
+                <span>Live Radar</span>
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* ==================================================
+            FAST TRIAGE & INSTANT ON-DASHBOARD SCANNER
+        ================================================== */}
+        <div className="rounded-2xl border border-white/10 bg-[#0a1324] p-5 shadow-xl">
+          <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+                <Zap size={16} />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white">Instant Threat Triage</h3>
+                <p className="text-[11px] text-slate-400">
+                  Inspect suspicious URLs, SMS texts, or emails directly without navigating away
+                </p>
+              </div>
+            </div>
+
+            {/* Input Type Selector */}
+            <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-black/40 p-1">
+              {(["URL", "MESSAGE", "EMAIL"] as InputType[]).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => setTriageType(type)}
+                  className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition ${
+                    triageType === type
+                      ? "bg-cyan-400 text-slate-950 font-bold"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <form onSubmit={handleInstantTriage} className="mt-4 flex flex-col gap-2.5 sm:flex-row">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={triageContent}
+                onChange={(e) => setTriageContent(e.target.value)}
+                placeholder={
+                  triageType === "URL"
+                    ? "Paste URL (e.g., https://secure-bank-login.fraud-site.cc/verify)..."
+                    : triageType === "MESSAGE"
+                    ? "Paste SMS or WhatsApp message text (e.g., Electricity bill overdue, call 9876543210)..."
+                    : "Paste suspicious email body or header text..."
+                }
+                className="w-full rounded-xl border border-white/10 bg-[#050b14] px-4 py-2.5 font-mono text-xs text-white placeholder-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={triageLoading || !triageContent.trim()}
+              className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-cyan-500/20 transition hover:from-cyan-400 hover:to-blue-500 disabled:opacity-50"
+            >
+              {triageLoading ? (
+                <>
+                  <RefreshCw size={14} className="animate-spin" />
+                  <span>Evaluating…</span>
+                </>
+              ) : (
+                <>
+                  <Search size={14} />
+                  <span>Triage Now</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Triage Inline Feedback */}
+          {triageError && (
+            <div className="mt-3 flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300">
+              <AlertTriangle size={15} className="shrink-0 text-rose-400" />
+              <span>{triageError}</span>
+            </div>
+          )}
+
+          {triageResult && (
+            <div className="mt-4 rounded-xl border border-white/10 bg-[#080f1c] p-4 transition-all">
+              <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg font-black ${
+                      triageResult.risk_level === "HIGH" || triageResult.risk_level === "CRITICAL"
+                        ? "bg-rose-500/20 text-rose-400 ring-1 ring-rose-500/40"
+                        : triageResult.risk_level === "MEDIUM"
+                        ? "bg-amber-500/20 text-amber-400 ring-1 ring-amber-500/40"
+                        : "bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/40"
+                    }`}
+                  >
+                    {triageResult.risk_score ?? "0"}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-white">Scan #{triageResult.scan_id}</span>
+                      <span
+                        className={`rounded px-1.5 py-0.5 text-[9px] font-black uppercase ${
+                          getRiskClasses(triageResult.risk_level).badge
+                        }`}
+                      >
+                        {triageResult.risk_level || "LOW"}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        Category: <strong className="text-slate-200">{triageResult.threat_category || "General"}</strong>
+                      </span>
+                    </div>
+                    <p className="mt-0.5 text-xs text-slate-300">
+                      {triageResult.analysis_details?.recommendation ||
+                        triageResult.analysis_details?.recommendations?.[0] ||
+                        triageResult.verdict ||
+                        "Analysis complete. Review indicators below."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTriageResult(null);
+                      setTriageContent("");
+                    }}
+                    className="rounded-lg px-3 py-1.5 text-xs text-slate-400 hover:text-white"
+                  >
+                    Dismiss
+                  </button>
+                  <Link
+                    to={`/scan/${triageResult.scan_id}`}
+                    className="flex items-center gap-1.5 rounded-lg bg-cyan-400 px-3 py-1.5 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"
+                  >
+                    <span>Full Forensic Report</span>
+                    <ExternalLink size={12} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ==================================================
+            MAIN STATS & CYBER POSTURE COMMAND GRID
+        ================================================== */}
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
           <DashboardStatCard
             label="Total investigations"
             value={dashboard.total_scans}
@@ -605,386 +622,369 @@ function Dashboard() {
 
           <DashboardStatCard
             label="Average risk score"
-            value={
-              dashboard.average_risk_score !==
-              null
-                ? dashboard.average_risk_score.toFixed(
-                    2,
-                  )
-                : "—"
-            }
+            value={dashboard.average_risk_score !== null ? dashboard.average_risk_score.toFixed(2) : "—"}
             description="Across risk-classified investigations"
             icon={TrendingUp}
             iconClassName="bg-amber-400/10 text-amber-300"
           />
 
           <DashboardStatCard
-            label="High-risk investigations"
+            label="High-risk detections"
             value={derivedData.highRisk}
-            description={`${derivedData.highRiskRate}% of all investigations`}
+            description={`${derivedData.highRiskRate}% of overall workspace scans`}
             icon={AlertTriangle}
             iconClassName="bg-red-400/10 text-red-300"
           />
 
           <DashboardStatCard
-            label="Top threat category"
-            value={
-              dashboard.threat_intelligence
-                .top_category_count
-            }
+            label="Defense Posture"
+            value={`${derivedData.postureScore}%`}
+            description="Workspace safety & hygiene index"
+            icon={Shield}
+            iconClassName="bg-emerald-400/10 text-emerald-300"
+          />
+
+          <DashboardStatCard
+            label="Top threat vector"
+            value={dashboard.threat_intelligence.top_category_count}
             description={
-              dashboard.threat_intelligence
-                .top_category
-                ? formatCategory(
-                    dashboard
-                      .threat_intelligence
-                      .top_category,
-                  )
+              dashboard.threat_intelligence.top_category
+                ? formatCategory(dashboard.threat_intelligence.top_category)
                 : "No classified category"
             }
             icon={Target}
             iconClassName="bg-violet-400/10 text-violet-300"
           />
-
         </div>
 
         {/* ==================================================
-            CLASSIFICATION SUMMARY
+            CYBERSHIELD 2.0 SECURITY OPERATIONS LAUNCHPAD
         ================================================== */}
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
-
-          {/* Completed */}
-          <div className="rounded-xl border border-emerald-400/10 bg-emerald-400/[0.025] p-4">
-
-            <div className="flex items-center justify-between">
-
-              <div className="flex items-center gap-2">
-
-                <CheckCircle2
-                  size={16}
-                  className="text-emerald-400"
-                />
-
-                <span className="text-xs font-semibold text-slate-300">
-                  Completed
-                </span>
-
-              </div>
-
-              <span className="text-lg font-bold text-white">
-                {derivedData.completed}
-              </span>
-
+        <div>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                ACTIVE DEFENSE ECOSYSTEM
+              </p>
+              <h2 className="mt-0.5 text-lg font-bold text-white">Security Operations Launchpad</h2>
             </div>
+            <span className="text-xs text-slate-400">8 Integrated Defensive Modules</span>
+          </div>
 
+          <div className="mt-4 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+            {/* BrowserShield */}
+            <Link
+              to="/browser-shield"
+              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:bg-[#0c1626]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/20">
+                  <Globe2 size={18} />
+                </div>
+                <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                  ONLINE
+                </span>
+              </div>
+              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-cyan-300">BrowserShield</h3>
+              <p className="mt-1 text-[11px] text-slate-400">
+                Manifest V3 live extension &amp; pre-flight link interception simulator.
+              </p>
+            </Link>
+
+            {/* IdentityShield */}
+            <Link
+              to="/identity-shield"
+              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-violet-500/40 hover:bg-[#0c1626]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/20">
+                  <UserCheck size={18} />
+                </div>
+                <span className="rounded bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold text-violet-300">
+                  k-ANONYMITY
+                </span>
+              </div>
+              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-violet-300">IdentityShield</h3>
+              <p className="mt-1 text-[11px] text-slate-400">
+                Breach registry &amp; client-side SHA-1 credential exposure audit.
+              </p>
+            </Link>
+
+            {/* AppShield */}
+            <Link
+              to="/app-shield"
+              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/40 hover:bg-[#0c1626]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/20">
+                  <Smartphone size={18} />
+                </div>
+                <span className="rounded bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold text-blue-300">
+                  STATIC APK
+                </span>
+              </div>
+              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-blue-300">AppShield</h3>
+              <p className="mt-1 text-[11px] text-slate-400">
+                Android APK decompilation, permissions risk &amp; trojanized payload triage.
+              </p>
+            </Link>
+
+            {/* ThreatGraph */}
+            <Link
+              to="/threat-graph"
+              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40 hover:bg-[#0c1626]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20">
+                  <Network size={18} />
+                </div>
+                <span className="rounded bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-300">
+                  TOPOLOGY
+                </span>
+              </div>
+              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-amber-300">ThreatGraph</h3>
+              <p className="mt-1 text-[11px] text-slate-400">
+                Connected threat infrastructure linking IPs, SSL certs, and campaigns.
+              </p>
+            </Link>
+
+            {/* QRShield */}
+            <Link
+              to="/qr-shield"
+              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40 hover:bg-[#0c1626]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20">
+                  <QrCode size={18} />
+                </div>
+                <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                  QUISHING
+                </span>
+              </div>
+              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-emerald-300">QRShield</h3>
+              <p className="mt-1 text-[11px] text-slate-400">
+                Decode QR screenshot payloads &amp; intercept fraudulent UPI payment URLs.
+              </p>
+            </Link>
+
+            {/* ThreatPulse */}
+            <Link
+              to="/threat-pulse"
+              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-500/40 hover:bg-[#0c1626]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/20">
+                  <Activity size={18} />
+                </div>
+                <span className="rounded bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-300">
+                  LIVE RADAR
+                </span>
+              </div>
+              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-rose-300">ThreatPulse</h3>
+              <p className="mt-1 text-[11px] text-slate-400">
+                Live scam radar tracking emerging national vectors and advisories.
+              </p>
+            </Link>
+
+            {/* Email Header Analyzer */}
+            <Link
+              to="/email-headers"
+              className="group rounded-xl border border-white/10 bg-[#0a1220] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:bg-[#0c1626]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/20">
+                  <Mail size={18} />
+                </div>
+                <span className="rounded bg-cyan-500/10 px-2 py-0.5 text-[10px] font-bold text-cyan-300">
+                  SPF/DKIM
+                </span>
+              </div>
+              <h3 className="mt-3 text-sm font-bold text-white group-hover:text-cyan-300">Email Headers</h3>
+              <p className="mt-1 text-[11px] text-slate-400">
+                Inspect raw headers for spoofed senders, DKIM alignment, and DMARC rules.
+              </p>
+            </Link>
+
+            {/* Fraud Emergency Assistant */}
+            <Link
+              to="/emergency"
+              className="group rounded-xl border border-rose-500/20 bg-rose-500/[0.04] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-500/40 hover:bg-rose-500/[0.08]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/20 text-rose-400 ring-1 ring-rose-500/30">
+                  <AlertOctagon size={18} />
+                </div>
+                <span className="rounded bg-rose-500 px-2 py-0.5 text-[10px] font-black text-black">
+                  HOTLINE 1930
+                </span>
+              </div>
+              <h3 className="mt-3 text-sm font-bold text-rose-200 group-hover:text-rose-100">Fraud Emergency</h3>
+              <p className="mt-1 text-[11px] text-rose-300/80">
+                Urgent victim recovery workflow, bank account freezes, and formal FIR filing.
+              </p>
+            </Link>
+          </div>
+        </div>
+
+        {/* ==================================================
+            CLASSIFICATION SUMMARY PROGRESS BARS
+        ================================================== */}
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-emerald-400/10 bg-emerald-400/[0.025] p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={16} className="text-emerald-400" />
+                <span className="text-xs font-semibold text-slate-300">Completed</span>
+              </div>
+              <span className="text-lg font-bold text-white">{derivedData.completed}</span>
+            </div>
             <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
-
               <div
                 className="h-full rounded-full bg-emerald-400"
-                style={{
-                  width: `${derivedData.completionRate}%`,
-                }}
+                style={{ width: `${derivedData.completionRate}%` }}
               />
-
             </div>
-
-            <p className="mt-2 text-[10px] text-slate-600">
-              {derivedData.completionRate}%
-              completion rate
-            </p>
-
+            <p className="mt-2 text-[10px] text-slate-500">{derivedData.completionRate}% completion rate</p>
           </div>
 
-          {/* Pending */}
           <div className="rounded-xl border border-amber-400/10 bg-amber-400/[0.025] p-4">
-
             <div className="flex items-center justify-between">
-
               <div className="flex items-center gap-2">
-
-                <Clock3
-                  size={16}
-                  className="text-amber-400"
-                />
-
-                <span className="text-xs font-semibold text-slate-300">
-                  Pending
-                </span>
-
+                <Clock3 size={16} className="text-amber-400" />
+                <span className="text-xs font-semibold text-slate-300">Pending</span>
               </div>
-
-              <span className="text-lg font-bold text-white">
-                {derivedData.pending}
-              </span>
-
+              <span className="text-lg font-bold text-white">{derivedData.pending}</span>
             </div>
-
-            <p className="mt-3 text-[10px] text-slate-600">
-              Investigations awaiting final
-              analysis
-            </p>
-
+            <p className="mt-3 text-[10px] text-slate-500">Investigations awaiting final asynchronous analysis</p>
           </div>
 
-          {/* Failed */}
           <div className="rounded-xl border border-red-400/10 bg-red-400/[0.025] p-4">
-
             <div className="flex items-center justify-between">
-
               <div className="flex items-center gap-2">
-
-                <XCircle
-                  size={16}
-                  className="text-red-400"
-                />
-
-                <span className="text-xs font-semibold text-slate-300">
-                  Failed
-                </span>
-
+                <XCircle size={16} className="text-red-400" />
+                <span className="text-xs font-semibold text-slate-300">Failed</span>
               </div>
-
-              <span className="text-lg font-bold text-white">
-                {derivedData.failed}
-              </span>
-
+              <span className="text-lg font-bold text-white">{derivedData.failed}</span>
             </div>
-
-            <p className="mt-3 text-[10px] text-slate-600">
-              Backend investigations that
-              failed
-            </p>
-
+            <p className="mt-3 text-[10px] text-slate-500">Unresolvable hosts or network timeouts</p>
           </div>
-
         </div>
 
         {/* ==================================================
-            ANALYTICS
+            ANALYTICS: CHARTS & RADAR TRENDS
         ================================================== */}
-        <div className="mt-5 grid gap-5 xl:grid-cols-[1fr_1.35fr]">
-
-          <RiskDistributionChart
-            distribution={
-              dashboard.risk_distribution
-            }
-          />
-
-          <ThreatTrendChart
-            trends={trends.trends}
-          />
-
+        <div className="grid gap-5 xl:grid-cols-[1fr_1.35fr]">
+          <RiskDistributionChart distribution={dashboard.risk_distribution} />
+          <ThreatTrendChart trends={trends.trends} />
         </div>
 
         {/* ==================================================
-            INTELLIGENCE PANELS
+            INTELLIGENCE PANELS: SOURCE MIX, CATEGORIES, PRIORITY
         ================================================== */}
-        <div className="mt-5 grid gap-5 lg:grid-cols-3">
-
+        <div className="grid gap-5 lg:grid-cols-3">
           {/* Investigation Mix */}
           <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
-
             <div className="flex items-center justify-between">
-
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
                   Analysis sources
                 </p>
-
-                <h2 className="mt-1 text-lg font-semibold text-white">
-                  Investigation mix
-                </h2>
+                <h2 className="mt-1 text-lg font-semibold text-white">Investigation mix</h2>
               </div>
-
-              <BarChart3
-                size={18}
-                className="text-cyan-400"
-              />
-
+              <BarChart3 size={18} className="text-cyan-400" />
             </div>
 
             <div className="mt-6 space-y-4">
-
               {[
                 {
                   label: "URLs",
-                  value:
-                    dashboard
-                      .input_distribution
-                      .url,
-                  icon: (
-                    <Search size={15} />
-                  ),
+                  value: dashboard.input_distribution.url,
+                  icon: <Search size={15} />,
                 },
                 {
                   label: "Messages",
-                  value:
-                    dashboard
-                      .input_distribution
-                      .message,
-                  icon: (
-                    <FileWarning
-                      size={15}
-                    />
-                  ),
+                  value: dashboard.input_distribution.message,
+                  icon: <FileWarning size={15} />,
                 },
                 {
                   label: "Emails",
-                  value:
-                    dashboard
-                      .input_distribution
-                      .email,
-                  icon: (
-                    <Mail size={15} />
-                  ),
+                  value: dashboard.input_distribution.email,
+                  icon: <Mail size={15} />,
                 },
               ].map((item) => {
-
                 const percentage =
                   dashboard.total_scans > 0
-                    ? Math.round(
-                        (item.value /
-                          dashboard.total_scans) *
-                          100,
-                      )
+                    ? Math.round((item.value / dashboard.total_scans) * 100)
                     : 0;
 
                 return (
                   <div key={item.label}>
-
                     <div className="flex items-center justify-between">
-
                       <div className="flex items-center gap-2 text-xs text-slate-400">
-
                         {item.icon}
-
                         {item.label}
-
                       </div>
-
-                      <span className="text-xs font-semibold text-white">
-                        {item.value}
-                      </span>
-
+                      <span className="text-xs font-semibold text-white">{item.value}</span>
                     </div>
-
                     <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
-
-                      <div
-                        className="h-full rounded-full bg-cyan-400"
-                        style={{
-                          width: `${percentage}%`,
-                        }}
-                      />
-
+                      <div className="h-full rounded-full bg-cyan-400" style={{ width: `${percentage}%` }} />
                     </div>
-
-                    <p className="mt-1 text-right text-[9px] text-slate-700">
-                      {percentage}%
-                    </p>
-
+                    <p className="mt-1 text-right text-[9px] text-slate-500">{percentage}%</p>
                   </div>
                 );
               })}
-
             </div>
-
           </div>
 
-          {/* Threat Intelligence */}
+          {/* Threat Categories */}
           <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
-
             <div className="flex items-center justify-between">
-
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                  Threat intelligence
+                  Threat landscape
                 </p>
-
-                <h2 className="mt-1 text-lg font-semibold text-white">
-                  Category landscape
-                </h2>
+                <h2 className="mt-1 text-lg font-semibold text-white">Category breakdown</h2>
               </div>
-
-              <Target
-                size={18}
-                className="text-violet-400"
-              />
-
+              <Target size={18} className="text-violet-400" />
             </div>
 
-            {derivedData.categories.length ===
-            0 ? (
+            {derivedData.categories.length === 0 ? (
               <div className="mt-5 rounded-xl border border-white/[0.06] bg-white/[0.02] p-6 text-center">
-
-                <Target
-                  size={20}
-                  className="mx-auto text-slate-700"
-                />
-
-                <p className="mt-3 text-xs text-slate-600">
-                  No threat categories have
-                  been classified yet.
-                </p>
-
+                <Target size={20} className="mx-auto text-slate-700" />
+                <p className="mt-3 text-xs text-slate-500">No threat categories classified yet.</p>
               </div>
             ) : (
-              <div className="mt-5 space-y-3">
-
-                {derivedData.categories.map(
-                  ([category, count]) => (
-                    <div
-                      key={category}
-                      className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-3"
-                    >
-
-                      <div className="flex min-w-0 items-center gap-3">
-
-                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-violet-400/10 text-violet-300">
-                          <Target size={13} />
-                        </span>
-
-                        <span className="truncate text-xs font-medium text-slate-300">
-                          {formatCategory(
-                            category,
-                          )}
-                        </span>
-
-                      </div>
-
-                      <span className="ml-3 text-sm font-bold text-white">
-                        {count}
+              <div className="mt-5 space-y-2.5">
+                {derivedData.categories.map(([category, count]) => (
+                  <div
+                    key={category}
+                    className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-2.5"
+                  >
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-violet-400/10 text-violet-300">
+                        <Target size={12} />
                       </span>
-
+                      <span className="truncate text-xs font-medium text-slate-300">
+                        {formatCategory(category)}
+                      </span>
                     </div>
-                  ),
-                )}
-
+                    <span className="ml-3 text-xs font-bold text-white">{count}</span>
+                  </div>
+                ))}
               </div>
             )}
-
           </div>
 
-          {/* Highest Risk */}
+          {/* Priority Signal / Highest Risk */}
           <div className="rounded-2xl border border-white/10 bg-[#0a1220] p-5">
-
             <div className="flex items-center justify-between">
-
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                  Highest-risk investigation
-                </p>
-
-                <h2 className="mt-1 text-lg font-semibold text-white">
                   Priority signal
-                </h2>
+                </p>
+                <h2 className="mt-1 text-lg font-semibold text-white">Highest-risk scan</h2>
               </div>
-
-              <TriangleAlert
-                size={18}
-                className="text-red-400"
-              />
-
+              <TriangleAlert size={18} className="text-red-400" />
             </div>
 
             {highestRisk ? (
@@ -992,417 +992,276 @@ function Dashboard() {
                 to={`/scan/${highestRisk.scan_id}`}
                 className="mt-5 block rounded-xl border border-red-400/10 bg-red-400/[0.035] p-4 transition hover:border-red-400/25 hover:bg-red-400/[0.055]"
               >
-
                 <div className="flex items-start justify-between gap-3">
-
                   <div>
-
-                    <p className="text-[10px] uppercase tracking-[0.15em] text-slate-600">
+                    <p className="text-[10px] uppercase tracking-[0.15em] text-slate-500">
                       Scan #{highestRisk.scan_id}
                     </p>
-
                     <p className="mt-1 text-sm font-semibold text-white">
-                      {formatCategory(
-                        highestRisk.threat_category,
-                      )}
+                      {formatCategory(highestRisk.threat_category)}
                     </p>
-
                   </div>
-
                   <span
-                    className={`rounded-lg border px-2 py-1 text-[10px] font-bold ${
-                      getRiskClasses(
-                        highestRisk.risk_level,
-                      ).badge
+                    className={`rounded-lg border px-2 py-0.5 text-[10px] font-bold ${
+                      getRiskClasses(highestRisk.risk_level).badge
                     }`}
                   >
-                    {highestRisk.risk_level ||
-                      "UNASSESSED"}
+                    {highestRisk.risk_level || "UNASSESSED"}
                   </span>
-
                 </div>
 
-                <div className="mt-5 flex items-end justify-between">
-
+                <div className="mt-4 flex items-end justify-between">
                   <div>
-
                     <p
-                      className={`text-4xl font-bold ${
-                        highestRisk.risk_level ===
-                        "HIGH"
+                      className={`text-3xl font-black ${
+                        highestRisk.risk_level === "HIGH"
                           ? "text-red-300"
-                          : highestRisk.risk_level ===
-                              "MEDIUM"
-                            ? "text-amber-300"
-                            : "text-emerald-300"
+                          : highestRisk.risk_level === "MEDIUM"
+                          ? "text-amber-300"
+                          : "text-emerald-300"
                       }`}
                     >
-                      {highestRisk.risk_score ??
-                        "—"}
+                      {highestRisk.risk_score ?? "—"}
                     </p>
-
-                    <p className="mt-1 text-[10px] uppercase tracking-wider text-slate-600">
-                      Risk score
-                    </p>
-
+                    <p className="mt-0.5 text-[10px] uppercase tracking-wider text-slate-500">Risk score</p>
                   </div>
 
                   <div className="text-right">
-
                     <p className="text-xs font-semibold text-slate-300">
-                      {highestRisk.confidence !==
-                      null
-                        ? `${highestRisk.confidence}%`
-                        : "—"}
+                      {highestRisk.confidence !== null ? `${highestRisk.confidence}%` : "—"}
                     </p>
-
-                    <p className="text-[10px] text-slate-600">
-                      Confidence
-                    </p>
-
+                    <p className="text-[10px] text-slate-500">Confidence</p>
                   </div>
-
                 </div>
 
-                <div className="mt-5 flex items-center justify-between border-t border-white/[0.06] pt-3 text-[10px] text-slate-600">
-
-                  <span>
-                    {highestRisk.input_type}{" "}
-                    analysis
-                  </span>
-
-                  <span>
-                    {formatDate(
-                      highestRisk.created_at,
-                    )}
-                  </span>
-
+                <div className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-3 text-[10px] text-slate-400">
+                  <span>{highestRisk.input_type} analysis</span>
+                  <span>{formatDate(highestRisk.created_at)}</span>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end gap-1 text-[10px] font-semibold text-red-300">
-
-                  Investigate signal
-
+                <div className="mt-3 flex items-center justify-end gap-1 text-[10px] font-semibold text-red-300">
+                  <span>Investigate signal</span>
                   <ArrowRight size={12} />
-
                 </div>
-
               </Link>
             ) : (
-              <div className="mt-5 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 text-center text-xs text-slate-600">
-                No risk-classified investigation
-                available.
+              <div className="mt-5 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 text-center text-xs text-slate-500">
+                No risk-classified investigation recorded.
               </div>
             )}
-
           </div>
-
         </div>
 
         {/* ==================================================
-            RECENT INVESTIGATIONS
+            RECENT INVESTIGATIONS ACTIVITY TABLE & FILTERS
         ================================================== */}
-        <div className="mt-5 rounded-2xl border border-white/10 bg-[#0a1220]">
-
-          <div className="flex flex-col justify-between gap-3 border-b border-white/10 p-5 sm:flex-row sm:items-center">
-
+        <div className="rounded-2xl border border-white/10 bg-[#0a1220]">
+          <div className="flex flex-col justify-between gap-4 border-b border-white/10 p-5 lg:flex-row lg:items-center">
             <div>
-
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                Investigation activity
+                Investigation telemetry
               </p>
-
-              <h2 className="mt-1 text-lg font-semibold text-white">
-                Recent scans
-              </h2>
-
+              <h2 className="mt-1 text-lg font-bold text-white">Recent Security Scans</h2>
             </div>
 
-            <div className="flex items-center gap-4">
+            {/* Table Filters & Search */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              {/* Search */}
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Filter by ID, category…"
+                  className="rounded-xl border border-white/10 bg-[#060d18] py-1.5 pl-8 pr-3 text-xs text-white placeholder-slate-600 focus:border-cyan-400 focus:outline-none"
+                />
+                <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+              </div>
 
-              <div className="flex items-center gap-2 text-[10px] text-slate-600">
+              {/* Risk Level Filter */}
+              <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-black/40 p-1">
+                {["ALL", "HIGH", "MEDIUM", "LOW"].map((level) => (
+                  <button
+                    key={level}
+                    type="button"
+                    onClick={() => setRiskFilter(level)}
+                    className={`rounded-lg px-2 py-1 text-[10px] font-bold transition ${
+                      riskFilter === level
+                        ? "bg-cyan-500 text-slate-950"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
 
-                <Clock3 size={13} />
-
-                Latest database records
-
+              {/* Source Type Filter */}
+              <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-black/40 p-1">
+                {["ALL", "URL", "MESSAGE", "EMAIL"].map((source) => (
+                  <button
+                    key={source}
+                    type="button"
+                    onClick={() => setTypeFilter(source)}
+                    className={`rounded-lg px-2 py-1 text-[10px] font-bold transition ${
+                      typeFilter === source
+                        ? "bg-slate-700 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    {source}
+                  </button>
+                ))}
               </div>
 
               <Link
                 to="/history"
-                className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-cyan-400 transition hover:text-cyan-300"
+                className="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 transition hover:text-cyan-300"
               >
-                View all
-
-                <ArrowRight size={12} />
-              </Link>
-
-            </div>
-
-          </div>
-
-          {dashboard.recent_scans.length ===
-          0 ? (
-            <div className="p-10 text-center">
-
-              <ShieldCheck
-                size={24}
-                className="mx-auto text-slate-700"
-              />
-
-              <p className="mt-3 text-sm text-slate-500">
-                No investigations have been
-                recorded yet.
-              </p>
-
-              <Link
-                to="/scanner"
-                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-4 py-2.5 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"
-              >
-                Start investigation
-
+                <span>View all</span>
                 <ArrowRight size={13} />
               </Link>
+            </div>
+          </div>
 
+          {filteredScans.length === 0 ? (
+            <div className="p-10 text-center">
+              <ShieldCheck size={28} className="mx-auto text-slate-600" />
+              <p className="mt-3 text-sm text-slate-400">
+                {searchQuery || riskFilter !== "ALL" || typeFilter !== "ALL"
+                  ? "No investigations match your active filter."
+                  : "No investigations recorded yet."}
+              </p>
+              <Link
+                to="/scanner"
+                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-4 py-2 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"
+              >
+                <span>Launch New Scan</span>
+                <ArrowRight size={13} />
+              </Link>
             </div>
           ) : (
             <div className="overflow-x-auto">
-
               <table className="w-full min-w-[900px]">
-
                 <thead>
-
-                  <tr className="border-b border-white/[0.06] text-left text-[10px] uppercase tracking-[0.14em] text-slate-600">
-
-                    <th className="px-5 py-3 font-semibold">
-                      Investigation
-                    </th>
-
-                    <th className="px-5 py-3 font-semibold">
-                      Source
-                    </th>
-
-                    <th className="px-5 py-3 font-semibold">
-                      Risk
-                    </th>
-
-                    <th className="px-5 py-3 font-semibold">
-                      Category
-                    </th>
-
-                    <th className="px-5 py-3 font-semibold">
-                      Status
-                    </th>
-
-                    <th className="px-5 py-3 font-semibold">
-                      Confidence
-                    </th>
-
-                    <th className="px-5 py-3 text-right font-semibold">
-                      Created
-                    </th>
-
-                    <th className="px-5 py-3 text-right font-semibold">
-                      Action
-                    </th>
-
+                  <tr className="border-b border-white/[0.06] text-left text-[10px] uppercase tracking-[0.14em] text-slate-500">
+                    <th className="px-5 py-3 font-semibold">Investigation</th>
+                    <th className="px-5 py-3 font-semibold">Source</th>
+                    <th className="px-5 py-3 font-semibold">Risk Level</th>
+                    <th className="px-5 py-3 font-semibold">Threat Category</th>
+                    <th className="px-5 py-3 font-semibold">Status</th>
+                    <th className="px-5 py-3 font-semibold">Confidence</th>
+                    <th className="px-5 py-3 text-right font-semibold">Created</th>
+                    <th className="px-5 py-3 text-right font-semibold">Action</th>
                   </tr>
-
                 </thead>
 
                 <tbody>
+                  {filteredScans.map((scan) => {
+                    const risk = getRiskClasses(scan.risk_level);
+                    const status = getStatusClasses(scan.status);
 
-                  {dashboard.recent_scans.map(
-                    (scan) => {
-
-                      const risk =
-                        getRiskClasses(
-                          scan.risk_level,
-                        );
-
-                      const status =
-                        getStatusClasses(
-                          scan.status,
-                        );
-
-                      return (
-                        <tr
-                          key={scan.scan_id}
-                          className="border-b border-white/[0.04] transition hover:bg-white/[0.02]"
-                        >
-
-                          <td className="px-5 py-4">
-
-                            <Link
-                              to={`/scan/${scan.scan_id}`}
-                              className="flex items-center gap-3"
-                            >
-
-                              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.04] text-slate-400">
-                                {getInputIcon(
-                                  scan.input_type,
-                                )}
-                              </div>
-
-                              <div>
-
-                                <p className="text-xs font-semibold text-white transition hover:text-cyan-300">
-                                  Scan #
-                                  {scan.scan_id}
-                                </p>
-
-                                <p className="mt-0.5 text-[10px] text-slate-600">
-                                  Investigation
-                                </p>
-
-                              </div>
-
-                            </Link>
-
-                          </td>
-
-                          <td className="px-5 py-4">
-
-                            <span className="text-xs text-slate-400">
-                              {scan.input_type}
-                            </span>
-
-                          </td>
-
-                          <td className="px-5 py-4">
-
-                            <div className="flex items-center gap-2">
-
-                              <span
-                                className={`h-1.5 w-1.5 rounded-full ${risk.dot}`}
-                              />
-
-                              <span
-                                className={`rounded-lg border px-2 py-1 text-[10px] font-semibold ${risk.badge}`}
-                              >
-                                {scan.risk_level ||
-                                  "UNASSESSED"}
-                              </span>
-
-                              {scan.risk_score !==
-                                null && (
-                                <span className="text-xs font-bold text-white">
-                                  {
-                                    scan.risk_score
-                                  }
-                                </span>
-                              )}
-
+                    return (
+                      <tr
+                        key={scan.scan_id}
+                        className="border-b border-white/[0.04] transition hover:bg-white/[0.02]"
+                      >
+                        <td className="px-5 py-3.5">
+                          <Link to={`/scan/${scan.scan_id}`} className="flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.04] text-slate-400">
+                              {getInputIcon(scan.input_type)}
                             </div>
+                            <div>
+                              <p className="text-xs font-bold text-white transition hover:text-cyan-300">
+                                Scan #{scan.scan_id}
+                              </p>
+                              <p className="text-[10px] text-slate-500">Security Audit</p>
+                            </div>
+                          </Link>
+                        </td>
 
-                          </td>
+                        <td className="px-5 py-3.5">
+                          <span className="text-xs text-slate-300">{scan.input_type}</span>
+                        </td>
 
-                          <td className="px-5 py-4">
-
-                            <span className="text-xs text-slate-400">
-                              {formatCategory(
-                                scan.threat_category,
-                              )}
+                        <td className="px-5 py-3.5">
+                          <div className="flex items-center gap-2">
+                            <span className={`h-1.5 w-1.5 rounded-full ${risk.dot}`} />
+                            <span className={`rounded-lg border px-2 py-0.5 text-[10px] font-bold ${risk.badge}`}>
+                              {scan.risk_level || "UNASSESSED"}
                             </span>
-
-                          </td>
-
-                          <td className="px-5 py-4">
-
-                            <span
-                              className={`inline-flex items-center gap-1.5 rounded-lg border px-2 py-1 text-[9px] font-semibold ${status.badge}`}
-                            >
-
-                              {status.icon}
-
-                              {scan.status}
-
-                            </span>
-
-                          </td>
-
-                          <td className="px-5 py-4">
-
-                            {scan.confidence !==
-                            null ? (
-                              <span className="text-xs font-medium text-slate-300">
-                                {scan.confidence}%
-                              </span>
-                            ) : (
-                              <span className="text-xs text-slate-600">
-                                —
-                              </span>
+                            {scan.risk_score !== null && (
+                              <span className="text-xs font-bold text-white">{scan.risk_score}</span>
                             )}
+                          </div>
+                        </td>
 
-                          </td>
+                        <td className="px-5 py-3.5">
+                          <span className="text-xs text-slate-300">
+                            {formatCategory(scan.threat_category)}
+                          </span>
+                        </td>
 
-                          <td className="px-5 py-4 text-right">
+                        <td className="px-5 py-3.5">
+                          <span
+                            className={`inline-flex items-center gap-1.5 rounded-lg border px-2 py-0.5 text-[9px] font-semibold ${status.badge}`}
+                          >
+                            {status.icon}
+                            {scan.status}
+                          </span>
+                        </td>
 
-                            <span className="text-[10px] text-slate-600">
-                              {formatDate(
-                                scan.created_at,
-                              )}
-                            </span>
+                        <td className="px-5 py-3.5">
+                          {scan.confidence !== null ? (
+                            <span className="text-xs font-semibold text-slate-200">{scan.confidence}%</span>
+                          ) : (
+                            <span className="text-xs text-slate-500">—</span>
+                          )}
+                        </td>
 
-                          </td>
+                        <td className="px-5 py-3.5 text-right">
+                          <span className="text-[10px] text-slate-400">{formatDate(scan.created_at)}</span>
+                        </td>
 
-                          <td className="px-5 py-4 text-right">
-
-                            <Link
-                              to={`/scan/${scan.scan_id}`}
-                              className="inline-flex items-center gap-1 rounded-lg border border-white/[0.07] bg-white/[0.02] px-2.5 py-1.5 text-[9px] font-semibold text-slate-500 transition hover:border-cyan-400/20 hover:bg-cyan-400/[0.04] hover:text-cyan-300"
-                            >
-                              Investigate
-
-                              <ArrowRight
-                                size={11}
-                              />
-                            </Link>
-
-                          </td>
-
-                        </tr>
-                      );
-                    },
-                  )}
-
+                        <td className="px-5 py-3.5 text-right">
+                          <Link
+                            to={`/scan/${scan.scan_id}`}
+                            className="inline-flex items-center gap-1 rounded-lg border border-white/[0.07] bg-white/[0.02] px-2.5 py-1.5 text-[10px] font-semibold text-slate-400 transition hover:border-cyan-400/30 hover:bg-cyan-400/[0.05] hover:text-cyan-300"
+                          >
+                            <span>Inspect</span>
+                            <ArrowRight size={11} />
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
-
               </table>
-
             </div>
           )}
-
         </div>
 
         {/* ==================================================
-            FOOTER
+            FOOTER: SYSTEM HEARTBEAT
         ================================================== */}
-        <div className="mt-6 flex flex-col gap-2 border-t border-white/[0.05] pt-5 text-[10px] text-slate-700 sm:flex-row sm:items-center sm:justify-between">
-
-          <span>
-            CyberShield Threat Intelligence
-          </span>
+        <div className="flex flex-col gap-2 border-t border-white/[0.05] pt-4 text-[10px] text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <span>CyberShield 2.0 Unified Threat Engine</span>
+            <span>•</span>
+            <span>Zero-Knowledge Telemetry</span>
+            <span>•</span>
+            <span>National Cybercrime Helpline: 1930</span>
+          </div>
 
           <span className="flex items-center gap-1.5">
-
             <span className="relative flex h-1.5 w-1.5">
-
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
-
               <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-400" />
-
             </span>
-
-            Live backend data
-
+            <span className="text-emerald-400">All Defensive Gateways Synchronized</span>
           </span>
-
         </div>
-
       </div>
     </section>
   );
 }
-
-export default Dashboard;
