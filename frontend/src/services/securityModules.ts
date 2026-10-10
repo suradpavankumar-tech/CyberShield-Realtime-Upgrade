@@ -267,3 +267,112 @@ export async function getThreatPulseTrends() {
   return (await api.get<ThreatPulseResponse>("/threat-pulse/trends")).data;
 }
 
+/* ==================================================
+   IDENTITYSHIELD INTERFACES & API
+================================================== */
+export interface BreachRecord {
+  id: string;
+  title: string;
+  breach_date: string;
+  pwn_count: number;
+  description: string;
+  data_classes: string[];
+  severity: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
+  is_verified: boolean;
+  source: string;
+}
+
+export interface EmailBreachResponse {
+  email: string;
+  is_compromised: boolean;
+  breach_count: number;
+  risk_score: number;
+  risk_level: string;
+  data_classes_exposed: string[];
+  breaches: BreachRecord[];
+  recommendations: string[];
+  checked_at: string;
+}
+
+export interface PwnedPasswordPrefixResponse {
+  prefix: string;
+  count: number;
+  suffixes: Array<{
+    hash_suffix: string;
+    count: number;
+  }>;
+}
+
+export async function checkEmailBreach(email: string) {
+  return (
+    await api.post<EmailBreachResponse>("/identity/check-email", { email })
+  ).data;
+}
+
+export async function checkPwnedPasswordPrefix(prefix: string) {
+  return (
+    await api.get<PwnedPasswordPrefixResponse>(
+      "/identity/pwned-password-range/" + prefix
+    )
+  ).data;
+}
+
+/* ==================================================
+   THREATGRAPH INTERFACES & API
+================================================== */
+export interface GraphNode {
+  id: string;
+  type: "URL" | "DOMAIN" | "IP_ADDRESS" | "SSL_CERTIFICATE" | "TARGET_BRAND" | "CAMPAIGN" | "VULNERABILITY";
+  label: string;
+  full_name: string;
+  risk_level: string;
+  metadata: Record<string, any>;
+}
+
+export interface GraphEdge {
+  id: string;
+  source: string;
+  target: string;
+  label: string;
+  type: string;
+}
+
+export interface ThreatGraphResponse {
+  target: string;
+  scan_id: number | null;
+  graph_id: string;
+  node_count: number;
+  edge_count: number;
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  generated_at: string;
+}
+
+export interface RecentGraphTarget {
+  scan_id: number;
+  target: string;
+  risk_level: string;
+  risk_score: number;
+  threat_category: string | null;
+  created_at: string | null;
+}
+
+export async function analyzeThreatGraph(target: string) {
+  return (
+    await api.post<ThreatGraphResponse>("/threat-graph/analyze", { target })
+  ).data;
+}
+
+export async function getScanThreatGraph(scanId: number) {
+  return (
+    await api.get<ThreatGraphResponse>("/threat-graph/scan/" + scanId)
+  ).data;
+}
+
+export async function getRecentGraphTargets() {
+  return (
+    await api.get<RecentGraphTarget[]>("/threat-graph/recent-targets")
+  ).data;
+}
+
+

@@ -25,6 +25,9 @@ import FraudEmergencyAssistant from "../pages/FraudEmergencyAssistant";
 import QRShield from "../pages/QRShield";
 import AppShield from "../pages/AppShield";
 import ThreatPulse from "../pages/ThreatPulse";
+import IdentityShield from "../pages/IdentityShield";
+import ThreatGraph from "../pages/ThreatGraph";
+import BrowserShield from "../pages/BrowserShield";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -94,6 +97,9 @@ function AppRoutes() {
           <Route path="/mobile-scanner" element={<AppShield />} />
           <Route path="/app-shield" element={<AppShield />} />
           <Route path="/url-guard" element={<UrlGuard />} />
+          <Route path="/browser-shield" element={<BrowserShield />} />
+          <Route path="/identity-shield" element={<IdentityShield />} />
+          <Route path="/threat-graph" element={<ThreatGraph />} />
           <Route path="/vulnerability-scanner" element={<VulnerabilityScanner />} />
           <Route path="/security-awareness" element={<SecurityAwareness />} />
           <Route path="/emergency" element={<FraudEmergencyAssistant />} />
