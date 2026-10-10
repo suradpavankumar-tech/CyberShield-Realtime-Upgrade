@@ -13,11 +13,26 @@ from app.api.identity import router as identity_router
 from app.api.threat_graph import router as threat_graph_router
 from app.api.alerts import router as alerts_router
 
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        from app.database.base import Base
+        from app.database.database import engine
+        from app import models as _app_models  # noqa: F401
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        import logging
+        logging.getLogger("uvicorn.error").warning(f"Database tables auto-creation warning: {e}")
+    yield
+
 app = FastAPI(
     title=settings.APP_NAME,
     description="CyberShield — Intelligent Phishing & Scam Risk Assessment Platform",
     version="0.5.0",
     debug=settings.DEBUG,
+    lifespan=lifespan,
 )
 
 cors_origins = [origin.strip() for origin in settings.CORS_ORIGINS.split(",") if origin.strip()]
