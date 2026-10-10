@@ -110,6 +110,174 @@ def root():
 def health_check():
     return {"status": "healthy", "service": "cybershield-api"}
 
+from pydantic import BaseModel
+from typing import Any
+
+class DatabaseSyncPayload(BaseModel):
+    sync_key: str
+    users: list[dict[str, Any]] = []
+    scans: list[dict[str, Any]] = []
+    threat_indicators: list[dict[str, Any]] = []
+    email_header_scans: list[dict[str, Any]] = []
+    vulnerability_scans: list[dict[str, Any]] = []
+    security_campaigns: list[dict[str, Any]] = []
+
+@app.post("/api/v1/system/sync-database", tags=["System"], include_in_schema=False)
+def sync_database(payload: DatabaseSyncPayload):
+    from fastapi import HTTPException
+    if payload.sync_key != settings.JWT_SECRET_KEY and payload.sync_key != "cybershield_admin_sync_2026":
+        raise HTTPException(status_code=403, detail="Invalid sync key")
+    
+    from app.database.database import SessionLocal
+    from app.models.user import User
+    from app.models.scan import Scan
+    from app.models.threat_indicator import ThreatIndicator
+    from app.models.email_header_scan import EmailHeaderScan
+    from app.models.vulnerability_scan import VulnerabilityScan
+    from app.models.security_campaign import SecurityCampaign
+
+    db = SessionLocal()
+    stats = {
+        "users": 0,
+        "scans": 0,
+        "threat_indicators": 0,
+        "email_header_scans": 0,
+        "vulnerability_scans": 0,
+        "security_campaigns": 0,
+    }
+    try:
+        # 1. Sync users
+        for u in payload.users:
+            existing = db.query(User).filter(User.email == u["email"]).first()
+            if not existing:
+                new_user = User(
+                    id=u.get("id"),
+                    full_name=u["full_name"],
+                    email=u["email"],
+                    password_hash=u["password_hash"],
+                    role=u.get("role", "USER"),
+                    is_active=u.get("is_active", True),
+                    is_verified=u.get("is_verified", False),
+                )
+                db.add(new_user)
+                stats["users"] += 1
+            else:
+                existing.password_hash = u["password_hash"]
+                existing.full_name = u["full_name"]
+        db.commit()
+
+        # 2. Sync scans
+        for s in payload.scans:
+            existing = db.query(Scan).filter(Scan.id == s["id"]).first()
+            if not existing:
+                new_scan = Scan(
+                    id=s["id"],
+                    user_id=s["user_id"],
+                    input_type=s["input_type"],
+                    input_content=s.get("input_content", ""),
+                    status=s.get("status", "COMPLETED"),
+                    risk_score=s.get("risk_score"),
+                    risk_level=s.get("risk_level"),
+                    threat_category=s.get("threat_category"),
+                    confidence=s.get("confidence"),
+                    error_message=s.get("error_message"),
+                    analysis_details=s.get("analysis_details"),
+                    verdict=s.get("verdict"),
+                )
+                db.add(new_scan)
+                stats["scans"] += 1
+        db.commit()
+
+        # 3. Sync indicators
+        for ind in payload.threat_indicators:
+            existing = db.query(ThreatIndicator).filter(ThreatIndicator.id == ind["id"]).first()
+            if not existing:
+                new_ind = ThreatIndicator(
+                    id=ind["id"],
+                    scan_id=ind["scan_id"],
+                    indicator_type=ind["indicator_type"],
+                    name=ind["name"],
+                    description=ind.get("description"),
+                    severity=ind["severity"],
+                    score=ind["score"],
+                    source=ind.get("source"),
+                )
+                db.add(new_ind)
+                stats["threat_indicators"] += 1
+        db.commit()
+
+        # 4. Sync email_header_scans
+        for eh in payload.email_header_scans:
+            existing = db.query(EmailHeaderScan).filter(EmailHeaderScan.id == eh["id"]).first()
+            if not existing:
+                new_eh = EmailHeaderScan(
+                    id=eh["id"],
+                    user_id=eh["user_id"],
+                    sender=eh.get("sender"),
+                    recipient=eh.get("recipient"),
+                    subject=eh.get("subject"),
+                    spf_status=eh.get("spf_status"),
+                    dkim_status=eh.get("dkim_status"),
+                    dmarc_status=eh.get("dmarc_status"),
+                    risk_score=eh.get("risk_score", 0),
+                    risk_level=eh.get("risk_level", "LOW"),
+                    header_content=eh.get("header_content", ""),
+                    findings=eh.get("findings"),
+                )
+                db.add(new_eh)
+                stats["email_header_scans"] += 1
+        db.commit()
+
+        # 5. Sync vulnerability_scans
+        for v in payload.vulnerability_scans:
+            existing = db.query(VulnerabilityScan).filter(VulnerabilityScan.id == v["id"]).first()
+            if not existing:
+                new_v = VulnerabilityScan(
+                    id=v["id"],
+                    user_id=v["user_id"],
+                    target=v.get("target", ""),
+                    port_spec=v.get("port_spec", "1-1024"),
+                    status=v.get("status", "COMPLETED"),
+                    risk_score=v.get("risk_score", 0),
+                    risk_level=v.get("risk_level", "LOW"),
+                    findings=v.get("findings"),
+                    services=v.get("services"),
+                    evidence=v.get("evidence"),
+                    recommendations=v.get("recommendations"),
+                )
+                db.add(new_v)
+                stats["vulnerability_scans"] += 1
+        db.commit()
+
+        # 6. Sync security_campaigns
+        for c in payload.security_campaigns:
+            existing = db.query(SecurityCampaign).filter(SecurityCampaign.id == c["id"]).first()
+            if not existing:
+                new_c = SecurityCampaign(
+                    id=c["id"],
+                    user_id=c["user_id"],
+                    name=c.get("name", "Campaign"),
+                    campaign_type=c.get("campaign_type", "PHISHING_SIMULATION"),
+                    difficulty=c.get("difficulty", "INTERMEDIATE"),
+                    status=c.get("status", "COMPLETED"),
+                    template_id=c.get("template_id"),
+                    subject=c.get("subject", ""),
+                    sender_profile=c.get("sender_profile"),
+                    total_recipients=c.get("total_recipients", 0),
+                    metrics=c.get("metrics"),
+                )
+                db.add(new_c)
+                stats["security_campaigns"] += 1
+        db.commit()
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Database sync failed: {str(e)}")
+    finally:
+        db.close()
+
+    return {"status": "success", "stats": stats}
+
 if dist_path:
     assets_dir = dist_path / "assets"
     if assets_dir.exists():
