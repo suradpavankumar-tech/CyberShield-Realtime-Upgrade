@@ -30,26 +30,15 @@ const USER_KEY =
  */
 
 const configuredBaseUrl =
-  import.meta.env.VITE_API_BASE_URL?.trim();
+  import.meta.env.VITE_API_BASE_URL?.trim() || "/api/v1";
 
 
 function normalizeBaseUrl(
   value: string | undefined,
 ): string {
 
-  /*
-   * An empty API URL is a configuration problem.
-   *
-   * Do not silently fall back to a fake or unknown
-   * backend.
-   */
-
   if (!value) {
-
-    throw new Error(
-      "CyberShield API configuration is missing. Set VITE_API_BASE_URL before starting the frontend.",
-    );
-
+    return "/api/v1";
   }
 
 
