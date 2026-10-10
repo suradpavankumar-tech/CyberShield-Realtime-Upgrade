@@ -375,4 +375,69 @@ export async function getRecentGraphTargets() {
   ).data;
 }
 
+/* ==================================================
+   REAL-TIME ALERTS & WEBHOOK DISPATCHER
+================================================== */
+export interface TestAlertRequest {
+  channel_type: "generic" | "slack" | "discord" | "telegram";
+  webhook_url?: string;
+  telegram_bot_token?: string;
+  telegram_chat_id?: string;
+  severity?: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
+  sample_target?: string;
+}
+
+export interface TestAlertResponse {
+  id: string;
+  delivered: boolean;
+  channel_type: string;
+  destination: string;
+  status_code: number | null;
+  latency_ms: number;
+  mode: string;
+  message: string;
+  payload: Record<string, any>;
+}
+
+export interface DispatchScanAlertRequest {
+  scan_id: number;
+  channel_type: "generic" | "slack" | "discord" | "telegram";
+  webhook_url?: string;
+  telegram_bot_token?: string;
+  telegram_chat_id?: string;
+}
+
+export interface AlertAuditLogItem {
+  id: string;
+  timestamp: string;
+  channel_type: string;
+  destination: string;
+  severity: string;
+  status: "DELIVERED" | "FAILED";
+  status_code: number | null;
+  latency_ms: number;
+  message: string;
+}
+
+export interface AlertAuditLogResponse {
+  total: number;
+  logs: AlertAuditLogItem[];
+}
+
+export async function testAlertChannel(data: TestAlertRequest) {
+  return (await api.post<TestAlertResponse>("/alerts/test", data)).data;
+}
+
+export async function dispatchScanAlert(data: DispatchScanAlertRequest) {
+  return (await api.post<any>("/alerts/dispatch-scan", data)).data;
+}
+
+export async function getRecentAlertLogs() {
+  return (await api.get<AlertAuditLogResponse>("/alerts/recent")).data;
+}
+
+export async function getAlertTemplates() {
+  return (await api.get<Record<string, any>>("/alerts/templates")).data;
+}
+
 

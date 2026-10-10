@@ -26,6 +26,8 @@ export interface AppSettings {
   dataRetention: "30_DAYS" | "90_DAYS" | "1_YEAR" | "INDEFINITE";
   alertThreshold: "CRITICAL_ONLY" | "HIGH_AND_CRITICAL" | "ALL";
   webhookUrl: string;
+  telegramBotToken: string;
+  telegramChatId: string;
   externalLookupEnabled: boolean;
 }
 
@@ -43,6 +45,8 @@ export const defaultSettings: AppSettings = {
   dataRetention: "90_DAYS",
   alertThreshold: "HIGH_AND_CRITICAL",
   webhookUrl: "",
+  telegramBotToken: "",
+  telegramChatId: "",
   externalLookupEnabled: true,
 };
 

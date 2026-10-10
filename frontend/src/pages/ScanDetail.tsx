@@ -13,6 +13,8 @@ import {
   ShieldCheck,
   Trash2,
   X,
+  Bell,
+  Send,
 } from "lucide-react";
 
 import {
@@ -29,6 +31,7 @@ import {
   deleteScan,
   getScan,
 } from "../services/analysisService";
+import { dispatchScanAlert } from "../services/securityModules";
 
 import type {
   AnalysisResponse,
@@ -299,6 +302,40 @@ function ScanDetail() {
     setPolling,
   ] =
     useState(false);
+
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertChannel, setAlertChannel] = useState<"slack" | "discord" | "telegram" | "generic">("slack");
+  const [alertWebhookUrl, setAlertWebhookUrl] = useState("");
+  const [alertTgToken, setAlertTgToken] = useState("");
+  const [alertTgChatId, setAlertTgChatId] = useState("");
+  const [dispatchingAlert, setDispatchingAlert] = useState(false);
+  const [alertDispatchResult, setAlertDispatchResult] = useState<{ success: boolean; message: string } | null>(null);
+
+  async function handleDispatchAlert() {
+    if (!scan) return;
+    setDispatchingAlert(true);
+    setAlertDispatchResult(null);
+    try {
+      const res = await dispatchScanAlert({
+        scan_id: scan.scan_id,
+        channel_type: alertChannel,
+        webhook_url: alertWebhookUrl.trim() || undefined,
+        telegram_bot_token: alertTgToken.trim() || undefined,
+        telegram_chat_id: alertTgChatId.trim() || undefined,
+      });
+      setAlertDispatchResult({
+        success: res.success,
+        message: res.message || "Alert dispatched successfully.",
+      });
+    } catch (err: any) {
+      setAlertDispatchResult({
+        success: false,
+        message: err?.response?.data?.detail || err.message || "Alert dispatch failed.",
+      });
+    } finally {
+      setDispatchingAlert(false);
+    }
+  }
 
 
   /*
@@ -877,6 +914,22 @@ function ScanDetail() {
 
                 Refresh
 
+              </button>
+
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowAlertModal(true);
+                  setAlertDispatchResult(null);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[10px] font-bold text-amber-300 transition hover:bg-amber-500/20"
+              >
+                <Bell
+                  size={13}
+                  className="text-amber-400"
+                />
+                Broadcast Alert
               </button>
 
 
@@ -1553,6 +1606,146 @@ function ScanDetail() {
 
         </div>
 
+      )}
+
+      {/* ==================================================
+          BROADCAST SOC ALERT MODAL
+      ================================================== */}
+      {showAlertModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[#091322] p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
+                  <Bell size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Broadcast Real-time Incident Alert</h3>
+                  <p className="text-[11px] text-slate-400">Dispatch finding to SIEM, Slack, or Telegram</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAlertModal(false)}
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-4">
+              {/* Channel Selector */}
+              <div>
+                <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  Select Channel
+                </label>
+                <div className="mt-1.5 grid grid-cols-4 gap-2">
+                  {(["slack", "discord", "telegram", "generic"] as const).map((ch) => (
+                    <button
+                      key={ch}
+                      type="button"
+                      onClick={() => setAlertChannel(ch)}
+                      className={`rounded-lg py-2 text-center text-xs font-bold uppercase transition ${
+                        alertChannel === ch
+                          ? "bg-cyan-500/20 text-cyan-300 ring-1 ring-cyan-500/40"
+                          : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      {ch}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Endpoint configuration */}
+              {alertChannel === "telegram" ? (
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-[11px] font-semibold text-slate-400">Telegram Bot Token (or leave blank to use default)</label>
+                    <input
+                      type="password"
+                      value={alertTgToken}
+                      onChange={(e) => setAlertTgToken(e.target.value)}
+                      placeholder="bot123456789:ABC-DEF..."
+                      className="mt-1 w-full rounded-xl border border-white/10 bg-[#050b14] px-3 py-2 text-xs text-white placeholder-slate-600 focus:border-cyan-400 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-semibold text-slate-400">Target Chat ID / Handle</label>
+                    <input
+                      type="text"
+                      value={alertTgChatId}
+                      onChange={(e) => setAlertTgChatId(e.target.value)}
+                      placeholder="@SOC_Threat_Feed or 123456789"
+                      className="mt-1 w-full rounded-xl border border-white/10 bg-[#050b14] px-3 py-2 text-xs text-white placeholder-slate-600 focus:border-cyan-400 focus:outline-none"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <label className="text-[11px] font-semibold text-slate-400">
+                    Webhook Destination URL (or leave blank to use settings default)
+                  </label>
+                  <input
+                    type="url"
+                    value={alertWebhookUrl}
+                    onChange={(e) => setAlertWebhookUrl(e.target.value)}
+                    placeholder="https://test-webhook.example.com/alerts or https://siem..."
+                    className="mt-1 w-full rounded-xl border border-white/10 bg-[#050b14] px-3 py-2 font-mono text-xs text-white placeholder-slate-600 focus:border-cyan-400 focus:outline-none"
+                  />
+                </div>
+              )}
+
+              {/* Finding Summary Preview */}
+              <div className="rounded-xl border border-white/5 bg-[#050b14] p-3 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-slate-400">Scan #{scan?.scan_id}</span>
+                  <span className={`font-bold ${scan?.risk_level === "CRITICAL" ? "text-red-400" : "text-amber-400"}`}>
+                    {scan?.risk_level} ({scan?.risk_score}/100)
+                  </span>
+                </div>
+                <p className="mt-1 truncate font-mono text-[11px] text-slate-300">
+                  {scan?.verdict || scan?.threat_category || `${scan?.input_type} Incident #${scan?.scan_id}`}
+                </p>
+              </div>
+
+              {/* Result banner */}
+              {alertDispatchResult && (
+                <div
+                  className={`rounded-xl border p-3 text-xs font-semibold ${
+                    alertDispatchResult.success
+                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                      : "border-red-500/30 bg-red-500/10 text-red-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    {alertDispatchResult.success ? <CheckCircle2 size={15} /> : <AlertCircle size={15} />}
+                    <span>{alertDispatchResult.message}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 flex justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowAlertModal(false)}
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-400 hover:bg-white/10 hover:text-white"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                onClick={handleDispatchAlert}
+                disabled={dispatchingAlert}
+                className="flex items-center gap-1.5 rounded-xl bg-amber-400 px-4 py-2 text-xs font-bold text-slate-950 transition hover:bg-amber-300 disabled:opacity-50"
+              >
+                {dispatchingAlert ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
+                <span>{dispatchingAlert ? "Broadcasting..." : "Dispatch Now"}</span>
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
     </>

@@ -8,6 +8,7 @@ from app.models.user import User
 from app.models.threat_indicator import ThreatIndicator
 from app.schemas.analysis import AnalysisRequest, InputType
 
+from app.core.config import settings
 from app.intelligence.url_risk_engine import analyze_url_hybrid
 from ml.risk_engine import calculate_final_score
 from ml.nlp.analyzer import analyze_message
@@ -426,6 +427,41 @@ def create_scan(
                 "Unsupported analysis input type."
             ),
         )
+
+    # ------------------------------------------------------
+    # AUTOMATIC REAL-TIME THREAT ALERT DISPATCH
+    # ------------------------------------------------------
+    if scan.status == "COMPLETED" and scan.risk_score is not None:
+        if (scan.risk_score >= 70 or scan.risk_level in ["HIGH", "CRITICAL"]) and getattr(settings, "DEFAULT_ALERT_WEBHOOK_URL", ""):
+            try:
+                from app.intelligence.alert_dispatcher import (
+                    format_generic_webhook_payload,
+                    send_http_webhook,
+                    record_dispatched_alert,
+                )
+                webhook_payload = format_generic_webhook_payload({
+                    "scan_id": scan.id,
+                    "risk_level": scan.risk_level,
+                    "risk_score": scan.risk_score,
+                    "threat_category": scan.threat_category,
+                    "input_type": scan.input_type,
+                    "target": scan.input_content,
+                    "verdict": scan.verdict,
+                })
+                res = send_http_webhook(settings.DEFAULT_ALERT_WEBHOOK_URL, webhook_payload)
+                record_dispatched_alert({
+                    "id": res["id"],
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "channel_type": "DEFAULT_WEBHOOK",
+                    "destination": settings.DEFAULT_ALERT_WEBHOOK_URL[:60],
+                    "severity": scan.risk_level or "HIGH",
+                    "status": "DELIVERED" if res["delivered"] else "FAILED",
+                    "status_code": res.get("status_code"),
+                    "latency_ms": res.get("latency_ms", 0.0),
+                    "message": res.get("message", ""),
+                })
+            except Exception:
+                pass
 
     return scan
 

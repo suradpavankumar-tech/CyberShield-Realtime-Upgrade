@@ -16,6 +16,11 @@ class Settings(BaseSettings):
     # Keep false for internet-facing deployments. Enable only when the operator explicitly authorizes private-network scanning.
     ALLOW_PRIVATE_SCAN_TARGETS: bool = False
 
+    # Real-time incident alert routing
+    DEFAULT_ALERT_WEBHOOK_URL: str = ""
+    TELEGRAM_BOT_TOKEN: str = ""
+    TELEGRAM_CHAT_ID: str = ""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True,

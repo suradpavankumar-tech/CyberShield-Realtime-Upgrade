@@ -11,6 +11,7 @@ from app.api.security_campaigns import router as security_campaigns_router
 from app.api.threat_pulse import router as threat_pulse_router
 from app.api.identity import router as identity_router
 from app.api.threat_graph import router as threat_graph_router
+from app.api.alerts import router as alerts_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -46,3 +47,4 @@ app.include_router(security_campaigns_router)
 app.include_router(threat_pulse_router)
 app.include_router(identity_router)
 app.include_router(threat_graph_router)
+app.include_router(alerts_router)
