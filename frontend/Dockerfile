@@ -24,8 +24,11 @@ RUN npm run build
 # Stage 2: Serve with lightweight Nginx Alpine
 FROM nginx:alpine
 
-# Copy custom Nginx configuration with SPA fallback routing
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy custom Nginx configuration template with dynamic PORT substitution for Railway
+COPY nginx.conf /etc/nginx/templates/default.conf.template
+
+# Default PORT fallback if not provided by Railway
+ENV PORT=80
 
 # Copy production assets from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
