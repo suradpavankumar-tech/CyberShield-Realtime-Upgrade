@@ -30,13 +30,41 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import os
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# Check potential locations for frontend/dist
+possible_dist_paths = [
+    Path(__file__).resolve().parent.parent.parent / "frontend" / "dist",
+    Path("/app/frontend/dist"),
+    Path("frontend/dist"),
+]
+
+dist_path = None
+for p in possible_dist_paths:
+    if p.exists() and (p / "index.html").exists():
+        dist_path = p
+        break
+
 @app.get("/", tags=["System"])
 def root():
+    if dist_path and (dist_path / "index.html").exists():
+        return FileResponse(str(dist_path / "index.html"))
     return {"name": "CyberShield", "message": "CyberShield API is running", "version": "0.5.0"}
 
 @app.get("/health", tags=["System"])
 def health_check():
     return {"status": "healthy", "service": "cybershield-api"}
+
+if dist_path:
+    assets_dir = dist_path / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+    audio_dir = dist_path / "audio"
+    if audio_dir.exists():
+        app.mount("/audio", StaticFiles(directory=str(audio_dir)), name="audio")
 
 app.include_router(auth_router)
 app.include_router(analysis_router)
@@ -48,3 +76,13 @@ app.include_router(threat_pulse_router)
 app.include_router(identity_router)
 app.include_router(threat_graph_router)
 app.include_router(alerts_router)
+
+if dist_path:
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_spa_route(full_path: str):
+        if full_path.startswith("api/") or full_path.startswith("docs") or full_path == "openapi.json":
+            return None
+        candidate = dist_path / full_path
+        if candidate.is_file():
+            return FileResponse(str(candidate))
+        return FileResponse(str(dist_path / "index.html"))
